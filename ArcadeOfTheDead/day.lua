@@ -18,8 +18,10 @@ function scene:show( event )
 	local phase = event.phase;
 	local wall = display.newGroup();
 	local block = display.newGroup( );
+	local timer1;
 	sceneGroup:insert(wall);
 	sceneGroup:insert(block);
+	print(display.contentHeight)
 
 	function spawnBrickStyle1( x, y, group )
 		--local seqData = {
@@ -56,11 +58,12 @@ function scene:show( event )
 		end
 	end
 
+	--now has animation!! woo!
 	function spawnBlock1()
 		display.remove( block );
 		block = display.newGroup( );
 		sceneGroup:insert(block);
-		local x = 10;
+		local x = 220;
 		for i=1,4 do
 			spawnBrickStyle1(x,brickSize, "block");
 			x=x+brickSize;
@@ -71,7 +74,7 @@ function scene:show( event )
 		display.remove( block );
 		block = display.newGroup( );
 		sceneGroup:insert(block);
-		local x=10;
+		local x=290;
 		local y=brickSize;
 		for i=1,2 do
 			for j=1,2 do
@@ -83,11 +86,11 @@ function scene:show( event )
 		end
 	end
 
-	function spawnBlock3(  )
+	function spawnBlock3()
 		display.remove( block );
 		block = display.newGroup( );
 		sceneGroup:insert(block);
-		local x=10;
+		local x=290;
 		local y=brickSize;
 		spawnBrickStyle1(x,y, "block");
 		y=y+brickSize;
@@ -97,21 +100,95 @@ function scene:show( event )
 		end
 	end
 
+	function spawnBlock4()		
+		display.remove( block );
+		block = display.newGroup( );
+		sceneGroup:insert(block);
+		local x=430;
+		local y=brickSize;
+		spawnBrickStyle1(x,y,"block");
+		y=y+brickSize;
+		x=290;
+		for i=1,3 do
+			spawnBrickStyle1(x,y,"block");
+			x=x+brickSize;
+		end
+	end
+
+	function spawnBlock5()
+		display.remove( block );
+		block = display.newGroup( );
+		sceneGroup:insert(block);
+		local x=360;
+		local y=brickSize;
+		spawnBrickStyle1(x,y,"block");
+		y=y+brickSize;
+		x=290;
+		for i=1,3 do
+			spawnBrickStyle1(x,y,"block");
+			x=x+brickSize;
+		end
+	end
+
+	function spawnBlock6(  )
+		display.remove(block);
+		block = display.newGroup();
+		sceneGroup: insert(block);
+		local x = 360;
+		local y = brickSize;
+		for i=1,2 do
+			spawnBrickStyle1(x,y,"block");
+			x=x+brickSize;
+		end
+		y=y+brickSize;
+		x=290;
+		for i=1,2 do
+			spawnBrickStyle1(x,y,"block");
+			x=x+brickSize;
+		end
+			
+	end
+
+	function spawnBlock7(  )
+		display.remove(block);
+		block = display.newGroup();
+		sceneGroup: insert(block);
+		local x = 290;
+		local y = brickSize;
+		for i=1,2 do
+			spawnBrickStyle1(x,y,"block");
+			x=x+brickSize;
+		end
+		y=y+brickSize;
+		x=360;
+		for i=1,2 do
+			spawnBrickStyle1(x,y,"block");
+			x=x+brickSize;
+		end
+	end
+
 	if ( phase == "will" ) then
 		local text = display.newText( sceneGroup, "day scene", display.contentCenterX, display.contentCenterY, native.systemFont, 25 );
 
-		spawnWall();
+		--spawnWall();
 		--spawnBlock1();
 		--spawnBlock2();
-		spawnBlock3();
+		--spawnBlock3();
+		--spawnBlock4();
+		--spawnBlock5();
+		--spawnBlock6();
+		spawnBlock7();
 
-		local crossLine = display.newRect( sceneGroup, 0, display.contentHeight-180, display.contentWidth, 2 );
-		crossLine.anchorX=0; crossLine.anchorY=0;
-		local heroGuy = display.newRect( sceneGroup, display.contentCenterX, display.contentHeight-140, brickSize, 100 );
-		heroGuy.anchorX=0; heroGuy.anchorY=0;
-		local zombie = display.newRect( sceneGroup, display.contentCenterX, 140, brickSize, 100 );
-		zombie:setFillColor( 1,0,0 );
-		zombie.anchorY=0; zombie.anchorX = 0;
+		--testing
+		transition.to( block, {time=500, delay=2500, y=display.contentCenterY});
+
+		--local crossLine = display.newRect( sceneGroup, 0, display.contentHeight-180, display.contentWidth, 2 );
+		--crossLine.anchorX=0; crossLine.anchorY=0;
+		--local heroGuy = display.newRect( sceneGroup, display.contentCenterX, display.contentHeight-140, brickSize, 100 );
+		--heroGuy.anchorX=0; heroGuy.anchorY=0;
+		--local zombie = display.newRect( sceneGroup, display.contentCenterX, 140, brickSize, 100 );
+		--zombie:setFillColor( 1,0,0 );
+		--zombie.anchorY=0; zombie.anchorX = 0;
 
 	elseif ( phase == "did" ) then	
 
