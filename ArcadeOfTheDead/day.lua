@@ -19,6 +19,7 @@ function scene:show( event )
 	local wall = display.newGroup();
 	local block = display.newGroup( );
 	sceneGroup:insert(wall);
+	sceneGroup:insert(block);
 
 	function spawnBrickStyle1( x, y, group )
 		--local seqData = {
@@ -58,6 +59,7 @@ function scene:show( event )
 	function spawnBlock1()
 		display.remove( block );
 		block = display.newGroup( );
+		sceneGroup:insert(block);
 		local x = 10;
 		for i=1,4 do
 			spawnBrickStyle1(x,brickSize, "block");
@@ -68,6 +70,7 @@ function scene:show( event )
 	function spawnBlock2()
 		display.remove( block );
 		block = display.newGroup( );
+		sceneGroup:insert(block);
 		local x=10;
 		local y=brickSize;
 		for i=1,2 do
@@ -83,6 +86,7 @@ function scene:show( event )
 	function spawnBlock3(  )
 		display.remove( block );
 		block = display.newGroup( );
+		sceneGroup:insert(block);
 		local x=10;
 		local y=brickSize;
 		spawnBrickStyle1(x,y, "block");
@@ -94,20 +98,7 @@ function scene:show( event )
 	end
 
 	if ( phase == "will" ) then
-
-	elseif ( phase == "did" ) then	
 		local text = display.newText( sceneGroup, "day scene", display.contentCenterX, display.contentCenterY, native.systemFont, 25 );
-
-		local function next (event)
-			local sceneOpt = {
-				effect = "fade",
-				time = 800,
-				params = params
-			}
-			Runtime:removeEventListener("tap", next);
-			composer.gotoScene( "night", sceneOpt);
-		end
-		Runtime:addEventListener("tap", next);
 
 		spawnWall();
 		--spawnBlock1();
@@ -121,6 +112,20 @@ function scene:show( event )
 		local zombie = display.newRect( sceneGroup, display.contentCenterX, 140, brickSize, 100 );
 		zombie:setFillColor( 1,0,0 );
 		zombie.anchorY=0; zombie.anchorX = 0;
+
+	elseif ( phase == "did" ) then	
+
+		local function next (event)
+			local sceneOpt = {
+				effect = "fade",
+				time = 800,
+				params = params
+			}
+			Runtime:removeEventListener("tap", next);
+			composer.gotoScene( "night", sceneOpt);
+		end
+		Runtime:addEventListener("tap", next);
+
 	end
 end
 

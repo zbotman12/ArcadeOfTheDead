@@ -16,9 +16,8 @@ function scene:show( event )
 	local phase = event.phase;
 
 	if ( phase == "will" ) then
-
-	elseif ( phase == "did" ) then	
 		local text = display.newText( sceneGroup, "night scene", display.contentCenterX, display.contentCenterY, native.systemFont, 25 );
+	elseif ( phase == "did" ) then			
 		local function next (event)
 			local sceneOpt = {
 				effect = "fade",
