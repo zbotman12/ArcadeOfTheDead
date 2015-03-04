@@ -26,7 +26,7 @@ function scene:show( event )
 				params = params
 			}
 			Runtime:removeEventListener("tap", next);
-			composer.gotoScene( "day", sceneOpt);
+			composer.gotoScene( "shop", sceneOpt);
 		end
 		Runtime:addEventListener("tap", next);
 	end
