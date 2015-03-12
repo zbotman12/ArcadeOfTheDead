@@ -1,6 +1,7 @@
 local composer = require( "composer" );
 local widget = require("widget");
 local scene = composer.newScene();
+local Brick = require("Brick");
 local params;
 
 local brickSize = 70;
@@ -21,24 +22,19 @@ function scene:show( event )
 	local timer1;
 	sceneGroup:insert(wall);
 	sceneGroup:insert(block);
-	print(display.contentHeight)
+	
 
 	function spawnBrickStyle1( x, y, group )
-		--local seqData = {
-		  	--{name = "full", frames={1}},
-		    --{name = "twothirds", frames={2}},
-		    --{name = "onethird", frames={3}},
-		--}
-		--local brick1 = display.newSprite (params.brickSheet, seqData);
-		local brick1 = display.newRect( wall, x, y, brickSize, brickSize );
-		brick1:setFillColor( math.random( ), math.random(  ),math.random(  ) );
+
+		local brick1 = Brick:new({xPos=x, yPos=y} );
+		brick1:spawn();
+		
 		if(group == "wall") then
-			wall:insert(brick1);
+			wall:insert(brick1.shape);
 		else
-			block:insert(brick1);
+			block:insert(brick1.shape);
 		end
-		brick1.anchorX = 0; brick1.anchorY = 60;
-		--brick1.x = x; brick1.y = y;	
+			
 		--add physics collision thing here for zombies
 	end
 
@@ -167,10 +163,11 @@ function scene:show( event )
 		end
 	end
 
+	
 	if ( phase == "will" ) then
 		local text = display.newText( sceneGroup, "day scene", display.contentCenterX, display.contentCenterY, native.systemFont, 25 );
 
-		--spawnWall();
+		spawnWall();
 		--spawnBlock1();
 		--spawnBlock2();
 		--spawnBlock3();
@@ -180,7 +177,7 @@ function scene:show( event )
 		spawnBlock7();
 
 		--testing
-		transition.to( block, {time=500, delay=2500, y=display.contentCenterY});
+		trans1=transition.to( block, {time=500, delay=1000, y=70, onComplete=fallingBlock});
 
 		--local crossLine = display.newRect( sceneGroup, 0, display.contentHeight-180, display.contentWidth, 2 );
 		--crossLine.anchorX=0; crossLine.anchorY=0;
