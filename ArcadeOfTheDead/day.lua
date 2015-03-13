@@ -3,7 +3,7 @@ local widget = require("widget");
 local scene = composer.newScene();
 local Brick = require("Brick");
 local params;
-
+local block = display.newGroup( );
 local brickSize = 70;
 
 --scene:create
@@ -18,11 +18,10 @@ function scene:show( event )
 	local sceneGroup = self.view;
 	local phase = event.phase;
 	local wall = display.newGroup();
-	local block = display.newGroup( );
+	
 	local timer1;
 	sceneGroup:insert(wall);
 	sceneGroup:insert(block);
-	
 
 	function spawnBrickStyle1( x, y, group )
 
@@ -177,10 +176,8 @@ function scene:show( event )
 		spawnBlock7();
 
 		--testing
-		trans1=transition.to( block, {time=500, delay=1000, y=70, onComplete=fallingBlock});
+		transition.to( block, {time=500, delay=1000, y=70});
 
-		--local crossLine = display.newRect( sceneGroup, 0, display.contentHeight-180, display.contentWidth, 2 );
-		--crossLine.anchorX=0; crossLine.anchorY=0;
 		--local heroGuy = display.newRect( sceneGroup, display.contentCenterX, display.contentHeight-140, brickSize, 100 );
 		--heroGuy.anchorX=0; heroGuy.anchorY=0;
 		--local zombie = display.newRect( sceneGroup, display.contentCenterX, 140, brickSize, 100 );
@@ -188,6 +185,10 @@ function scene:show( event )
 		--zombie.anchorY=0; zombie.anchorX = 0;
 
 	elseif ( phase == "did" ) then	
+		local width = display.contentHeight - (display.contentHeight-180);
+		local crossLine = display.newRect( sceneGroup, 0, display.contentHeight-180, display.contentWidth, width );
+		crossLine.anchorX=0; crossLine.anchorY=0;
+		--crossLine:setFillColor(0,0,0,0);
 
 		local function next (event)
 			local sceneOpt = {
@@ -198,7 +199,28 @@ function scene:show( event )
 			Runtime:removeEventListener("tap", next);
 			composer.gotoScene( "night", sceneOpt);
 		end
-		Runtime:addEventListener("tap", next);
+
+		function moveBlock( event )
+			if event.phase == "began" then		
+				block.markX = block.x 
+			elseif event.phase == "moved" then	 	
+				
+				local x = (event.x-event.xStart) + block.markX;
+				block.x = x;		
+			end
+		end
+
+		function rotateBlock( event )
+			print("in here ");
+			if event.phase == "began" then
+				block.rotation=45;
+			end
+		end
+		--Runtime:addEventListener("tap", next);
+		crossLine:addEventListener("touch", moveBlock);
+		crossLine:addEventListener("tap", rotateBlock);
+
+
 
 	end
 end
