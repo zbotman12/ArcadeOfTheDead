@@ -3,8 +3,7 @@ local widget = require("widget");
 local scene = composer.newScene();
 local Brick = require("Brick");
 local params;
-local block = display.newGroup( );
-local brickSize = 70;
+
 
 --scene:create
 function scene:create( event )
@@ -18,8 +17,9 @@ function scene:show( event )
 	local sceneGroup = self.view;
 	local phase = event.phase;
 	local wall = display.newGroup();
+	local block = display.newGroup( );
+	local brickSize = 70;
 	
-	local timer1;
 	sceneGroup:insert(wall);
 	sceneGroup:insert(block);
 
@@ -176,19 +176,18 @@ function scene:show( event )
 		spawnBlock7();
 
 		--testing
-		transition.to( block, {time=500, delay=1000, y=70});
+		
 
-		--local heroGuy = display.newRect( sceneGroup, display.contentCenterX, display.contentHeight-140, brickSize, 100 );
-		--heroGuy.anchorX=0; heroGuy.anchorY=0;
-		--local zombie = display.newRect( sceneGroup, display.contentCenterX, 140, brickSize, 100 );
-		--zombie:setFillColor( 1,0,0 );
-		--zombie.anchorY=0; zombie.anchorX = 0;
+		local heroGuy = display.newRect( sceneGroup, display.contentCenterX, display.contentHeight-140, brickSize, 100 );
+		heroGuy.anchorX=0; heroGuy.anchorY=0;
+		
 
 	elseif ( phase == "did" ) then	
+		-----------Cross over line------------------
 		local width = display.contentHeight - (display.contentHeight-180);
 		local crossLine = display.newRect( sceneGroup, 0, display.contentHeight-180, display.contentWidth, width );
 		crossLine.anchorX=0; crossLine.anchorY=0;
-		--crossLine:setFillColor(0,0,0,0);
+		crossLine:setFillColor(0,0,0,0.1);
 
 		local function next (event)
 			local sceneOpt = {
@@ -218,7 +217,9 @@ function scene:show( event )
 		end
 		--Runtime:addEventListener("tap", next);
 		crossLine:addEventListener("touch", moveBlock);
-		crossLine:addEventListener("tap", rotateBlock);
+		--crossLine:addEventListener("tap", rotateBlock);
+
+		transition.to( block, {time=500, delay=1000, y=70});
 
 
 

@@ -1,6 +1,24 @@
 --BRICK CLASS
+
+--Bricks-------------------------------
+--[[
+local brickOpts = {
+	frames = {
+		--need coordinates
+		{}, --style 1 full
+		{}, --style 1 2/3
+		{}, --style 1 1/3
+		{}, --style 2 full
+		{}, --style 2 2/3
+		{}, --style 2 1/3
+	}
+};
+
+local brickSheet = graphics.newImageSheet("images/bricks.png", brickOpts);
+]]--
+
 --Prototype
-local Brick = {tag="brick", HP=3, xPos=0, yPos=0};
+local Brick = {tag="Brick", HP=2, xPos=0, yPos=0};
 
 --Constructor
 function Brick:new (o)
@@ -35,14 +53,16 @@ function Brick:hit ()
 		self.shape:setFillColor(0.75,0.75,0.75);
 	else
 		--audio.play( soundTable["explodeSound"] );
-		if (self.timerRef ~= nil) then
-			timer.cancel ( self.timerRef );
+		if(self.shape ~= nil) then
+			self.shape:removeSelf();
 		end
-		-- die
-		self.shape:removeSelf();
 		self.shape=nil;
 		self = nil;
 	end
+end
+
+function Brick:addPhysics(  )
+	physics.addBody( self.shape , "static" );
 end
 
 return Brick;
