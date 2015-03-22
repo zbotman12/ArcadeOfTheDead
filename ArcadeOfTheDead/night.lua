@@ -40,8 +40,8 @@ function scene:show( event )
 			--add physics collision thing here for zombies
 			brick1:addPhysics();
 			local function zombieDamage( event )
-				brick1:hit();
 				if (event.other.tag == "Zombie") then
+					brick1:hit();
 					event.other.pp:stop();
 					timer.performWithDelay( 1000, 
 						function () brick1:hit(); end );
@@ -77,6 +77,38 @@ function scene:show( event )
 		local crossLine = display.newRect( sceneGroup, 0, display.contentHeight-180, display.contentWidth, width );
 		crossLine.anchorX=0; crossLine.anchorY=0;
 		crossLine:setFillColor(0,0,0,0.1);
+
+		local heroGuy = display.newRect( sceneGroup, display.contentCenterX, display.contentHeight-140, brickSize, 100 );
+		heroGuy.anchorY=0;
+
+		----- Shooting
+		local cnt = 0;
+
+		local function movePlayer( event )
+			heroGuy.x = event.x;
+			local bullet = display.newCircle (heroGuy.x, heroGuy.y-16, 5);
+			bullet.anchorY = 1;
+			bullet:setFillColor(0,1,0);
+			physics.addBody (bullet, "dynamic", {radius=5} );
+			--bullet.isSensor = true;
+			bullet.isBullet =true;
+			bullet:applyForce(0, -2, bullet.x, bullet.y);
+			--audio.play( soundTable["shootSound"] );
+
+			bullet.tag = "shot";
+
+			local function bulletHandler (event)
+				-- remove the bullet
+				bullet:removeSelf();
+				bullet=nil;
+				if (event.other.tag == "Zombie") then
+					event.other.pp:hit();
+				end
+			end
+			bullet:addEventListener("collision", bulletHandler);
+		end
+
+		crossLine:addEventListener("tap", movePlayer);
 
 	elseif ( phase == "did" ) then	
 		local function next (event)
