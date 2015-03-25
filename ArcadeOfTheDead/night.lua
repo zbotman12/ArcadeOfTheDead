@@ -26,14 +26,7 @@ function scene:show( event )
 		physics.setGravity(0,0);
 		local text = display.newText( sceneGroup, "night scene", display.contentCenterX, display.contentCenterY, native.systemFont, 25 );
 
-		function spawnZombie( x, y )
-			local zombie = Zombie:new({xPos=x, yPos=y});
-			zombie:spawn();
-			zombie:move();
-			zombie:addPhysics();
-		end
-
-
+		----------WALL -------------------------
 		function spawnBrickStyle1( x, y )
 			local brick1 = Brick:new({xPos=x, yPos=y} );
 			brick1:spawn();						
@@ -70,7 +63,6 @@ function scene:show( event )
 		end
 
 		spawnWall();
-		spawnZombie(5,0);
 
 		-----------Cross over line------------------
 		local width = display.contentHeight - (display.contentHeight-180);
@@ -81,7 +73,7 @@ function scene:show( event )
 		local heroGuy = display.newRect( sceneGroup, display.contentCenterX, display.contentHeight-140, brickSize, 100 );
 		heroGuy.anchorY=0;
 
-		----- Shooting
+		----- Shooting -------------------------------
 		local cnt = 0;
 
 		local function movePlayer( event )
@@ -110,6 +102,7 @@ function scene:show( event )
 
 		crossLine:addEventListener("tap", movePlayer);
 
+
 	elseif ( phase == "did" ) then	
 		local function next (event)
 			local sceneOpt = {
@@ -121,6 +114,22 @@ function scene:show( event )
 			composer.gotoScene( "shop", sceneOpt);
 		end
 		--Runtime:addEventListener("tap", next);
+
+		function spawnZombie( x, y )
+			local zombie = Zombie:new({xPos=x, yPos=y});
+			zombie:spawn();			
+			--zombie:move();
+			zombie:addPhysics();
+			sceneGroup:insert( zombie.shape );
+		end
+
+		spawnZombie(5,100);
+
+		---------Status Bar ----------------
+		local statusBar = display.newRect( sceneGroup, 0, 0, display.contentWidth, 35 );
+		statusBar.anchorX=0; statusBar.anchorY=0;
+		statusBar:setFillColor( 0,0,1,0.35 );
+		statusBar:toFront( );
 	end
 end
 

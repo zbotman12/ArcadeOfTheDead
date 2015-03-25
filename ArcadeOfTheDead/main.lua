@@ -15,4 +15,4 @@ local sceneOpt = {
 	params = {buttonSheet = buttonSheet}
 }
 -- load first scene
-composer.gotoScene( "shop", sceneOpt);
+composer.gotoScene( "day", sceneOpt);
