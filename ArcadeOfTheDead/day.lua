@@ -18,7 +18,8 @@ function scene:show( event )
 	local sceneGroup = self.view;
 	local phase = event.phase;
 	local wall = display.newGroup();
-	local brickSize = 70;		
+	local brickSize = 70;	
+	local shiftNum = 0;	
 
 	if ( phase == "will" ) then	
 
@@ -82,7 +83,8 @@ function scene:show( event )
 				x=x+brickSize;
 				y=brickSize;
 			end
-			block.x=display.contentCenterX;block.y=70;
+			block.x=display.contentCenterX;block.y=700;
+			block.tag="doNotRotate";
 		end
 
 		function spawnBlock3()
@@ -171,22 +173,54 @@ function scene:show( event )
 		end
 
 		-----------Cross over line------------------
-		local width = display.contentHeight - (display.contentHeight-180);
-		local crossLine = display.newRect( sceneGroup, 0, display.contentHeight-180, display.contentWidth, width );
-		crossLine.anchorX=0; crossLine.anchorY=0;
-		crossLine:setFillColor(0,0,0,0.1);
+		local height = display.contentHeight - (display.contentHeight-180);
+		local leftArrow = display.newRect( sceneGroup, 0, display.contentHeight-180, 200, height );
+		leftArrow.anchorX=0; leftArrow.anchorY=0;
+		leftArrow:setFillColor(1,0,0);
+		local height = display.contentHeight - (display.contentHeight-180);
+		local rightArrow = display.newRect( sceneGroup, display.contentWidth-200, display.contentHeight-180, 200, height );
+		rightArrow.anchorX=0; rightArrow.anchorY=0;
+		rightArrow:setFillColor(0,0,1);
 
-		function moveBlock( event )
-			print("in here");
-			
+		function moveBlockLeft( event )
+			if event.phase == "began" then
+				if(block.x==115)then
+					block.x=block.x;
+				else
+					block.x=block.x-70;
+				end
+			end
+		end
+
+		function moveBlockRight( event )
+			if event.phase == "began" then
+				if(block.x==605)then
+					block.x=block.x;
+				else
+					block.x=block.x+70;
+				end
+			end
 		end
 
 		function rotateBlock( event )	
-			block:rotate(90);
+			if(block.tag == "doNotRotate") then
+				block:rotate(90);
+			else
+				if(shiftNum == 0) then
+					block.x=block.x - 35;
+					block:rotate(90);
+					shiftNum = 1;
+				elseif (shiftNum == 1) then
+					block.x=block.x + 35;
+					block:rotate(90);
+					shiftNum = 0;
+				end
+			end
 		end
 		--Runtime:addEventListener("tap", next);
-		--crossLine:addEventListener("touch", moveBlock);
-		crossLine:addEventListener("tap", rotateBlock);
+		leftArrow:addEventListener("touch", moveBlockLeft);
+		rightArrow:addEventListener("touch", moveBlockRight);
+		--
 
 	elseif ( phase == "did" ) then
 		local text = display.newText( sceneGroup, "day scene", display.contentCenterX, display.contentCenterY, native.systemFont, 25 );
@@ -209,6 +243,7 @@ function scene:show( event )
 
 		local heroGuy = display.newRect( sceneGroup, display.contentCenterX, display.contentHeight-140, brickSize, 100 );
 		heroGuy.anchorX=0; heroGuy.anchorY=0;
+		heroGuy:addEventListener("tap", rotateBlock);
 
 		
 
@@ -223,7 +258,7 @@ function scene:show( event )
 		end
 
 		
-		--transition.to( block, {time=500, delay=1000, y=70});
+		--transition.to( block, {time=3000, delay=1000, y=700});
 
 
 
