@@ -1,7 +1,7 @@
 --BRICK CLASS
 
 --Prototype
-local Brick = {tag="Brick", HP=2, xPos=0, yPos=0};
+local Brick = {tag="Brick", HP=4, xPos=0, yPos=0};
 
 --Constructor
 function Brick:new (o)
@@ -13,11 +13,11 @@ end
 
 function Brick:spawn(spriteSheet)
 	local seqData = {
-	  	{name = "1", frames={1}},
-	    {name = "2", frames={2}},
-	    {name = "3", frames={3}},
-	    {name = "4", frames={4}},
-	    {name = "5", frames={5}}
+	  	{name = "4", frames={1}},
+	    {name = "3", frames={2}},
+	    {name = "2", frames={3}},
+	    {name = "1", frames={4}},
+	    {name = "0", frames={5}}
 	}
 	self.shape = display.newSprite(spriteSheet, seqData);
 	self.shape:setSequence("1");

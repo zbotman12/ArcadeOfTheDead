@@ -190,7 +190,7 @@ function scene:show( event )
 
 		function moveBlockLeft( event )
 			if event.phase == "began" then
-				if(block.x==115)then
+				if(block.x <= 115)then
 					block.x=block.x;
 				else
 					block.x=block.x-70;
@@ -200,7 +200,7 @@ function scene:show( event )
 
 		function moveBlockRight( event )
 			if event.phase == "began" then
-				if(block.x==605)then
+				if(block.x >= 605)then
 					block.x=block.x;
 				else
 					block.x=block.x+70;
