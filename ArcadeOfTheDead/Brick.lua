@@ -1,22 +1,5 @@
 --BRICK CLASS
 
---Bricks-------------------------------
---[[
-local brickOpts = {
-	frames = {
-		--need coordinates
-		{}, --style 1 full
-		{}, --style 1 2/3
-		{}, --style 1 1/3
-		{}, --style 2 full
-		{}, --style 2 2/3
-		{}, --style 2 1/3
-	}
-};
-
-local brickSheet = graphics.newImageSheet("images/bricks.png", brickOpts);
-]]--
-
 --Prototype
 local Brick = {tag="Brick", HP=2, xPos=0, yPos=0};
 
@@ -28,20 +11,23 @@ function Brick:new (o)
 	return o;
 end
 
-function Brick:spawn()
-	--local seqData = {
-	  	--{name = "full", frames={1}},
-	    --{name = "twothirds", frames={2}},
-	    --{name = "onethird", frames={3}},
-	--}
-	--local brick1 = display.newSprite (params.brickSheet, seqData);
-	
-	self.shape=display.newRect(self.xPos, self.yPos,70,70);
+function Brick:spawn(spriteSheet)
+	local seqData = {
+	  	{name = "1", frames={1}},
+	    {name = "2", frames={2}},
+	    {name = "3", frames={3}},
+	    {name = "4", frames={4}},
+	    {name = "5", frames={5}}
+	}
+	self.shape = display.newSprite(spriteSheet, seqData);
+	self.shape:setSequence("1");
 	self.shape.pp = self; -- parent object
 	self.shape.tag = self.tag; -- “brick”
-	self.shape:setFillColor (math.random( ), math.random(  ),math.random(  ));
+	self.shape:setFillColor (math.random(), math.random(), math.random() );
 	self.shape.anchorX = 0; 
 	self.shape.anchorY = 60;
+	self.shape.x = self.xPos;
+	self.shape.y = self.yPos;
 	--physics.addBody(self.shape, "kinematic");
 	return self.shape;
 end

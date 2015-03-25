@@ -26,10 +26,16 @@ function scene:show( event )
 		sceneGroup:insert(wall);
 		sceneGroup:insert(block);
 
+		local DayBackground = display.newImage(sceneGroup, "images/Grass.jpg");
+		 DayBackground.anchorX = 0;
+		 DayBackground.anchorY = 0;
+		 DayBackground.yScale = DayBackground.yScale * 2;
+		 DayBackground:toBack();
+
 		function spawnBrickStyle1( x, y, group )
 
 			local brick1 = Brick:new({xPos=x, yPos=y} );
-			brick1:spawn();
+			brick1:spawn(params.spriteSheet);
 			
 			if(group == "wall") then
 				wall:insert(brick1.shape);
