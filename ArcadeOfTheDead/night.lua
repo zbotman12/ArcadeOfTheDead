@@ -20,7 +20,7 @@ function scene:show( event )
 	local phase = event.phase;
 	local wall = display.newGroup();
 	local brickSize = 70;
-	sceneGroup:insert( params.wall );
+	--COMMENTED OUT FOR TESTING sceneGroup:insert( params.wall );
 
 	if ( phase == "will" ) then
 		physics.start();
@@ -33,7 +33,31 @@ function scene:show( event )
 		crossLine.anchorX=0; crossLine.anchorY=0;
 		crossLine:setFillColor(0,0,0,0.1);
 
-		local heroGuy = display.newRect( sceneGroup, display.contentCenterX, display.contentHeight-140, brickSize, 100 );
+
+		----------Create the player display object group--------
+		local playerSeqData = {
+	  		{name = "idle", frames={6}}
+		}
+
+		local pistolSeqData = {
+	  		{name = "idle", frames={7}},
+	  		{name = "shoot", start=7, count= 9, time = 200}
+		}
+
+		local playerSpt = display.newSprite(params.spriteSheet, playerSeqData )
+		playerSpt:setSequence( "idle" );
+
+		local pistolSpt = display.newSprite(params.spriteSheet, pistolSeqData )
+		pistolSpt.x =  pistolSpt.x  + 35;
+		pistolSpt:setSequence( "idle" );
+
+		local heroGuy = display.newGroup( )
+		heroGuy.x =   display.contentCenterX;
+		heroGuy.y = display.contentHeight-140;
+		heroGuy:insert(playerSpt);
+		heroGuy:insert(pistolSpt);
+		sceneGroup:insert( heroGuy );
+
 		heroGuy.anchorY=0;
 
 		----- Shooting -------------------------------
@@ -41,14 +65,18 @@ function scene:show( event )
 
 		local function movePlayer( event )
 			heroGuy.x = event.x;
-			local bullet = display.newCircle (heroGuy.x, heroGuy.y-16, 5);
+			local bullet = display.newCircle (heroGuy.x + 30, heroGuy.y-16, 5);
 			bullet.anchorY = 1;
 			bullet:setFillColor(0,1,0);
+			pistolSpt:setSequence( "shoot" );
+			pistolSpt:play( );
+			timer.performWithDelay( 200, function () pistolSpt:setSequence( "idle" ); pistolSpt:play( ); end )
 			physics.addBody (bullet, "dynamic", {radius=5} );
 			--bullet.isSensor = true;
 			bullet.isBullet =true;
 			bullet:applyForce(0, -2, bullet.x, bullet.y);
 			--audio.play( soundTable["shootSound"] );
+
 
 			bullet.tag = "shot";
 
