@@ -20,7 +20,7 @@ function Brick:spawn(spriteSheet)
 	    {name = "0", frames={5}}
 	}
 	self.shape = display.newSprite(spriteSheet, seqData);
-	self.shape:setSequence("1");
+	self.shape:setSequence("4");
 	self.shape.pp = self; -- parent object
 	self.shape.tag = self.tag; -- “brick”
 	self.shape:setFillColor (math.random(), math.random(), math.random() );
