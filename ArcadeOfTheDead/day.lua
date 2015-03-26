@@ -2,7 +2,8 @@ local composer = require( "composer" );
 local widget = require("widget");
 local scene = composer.newScene();
 local Brick = require("Brick");
-local block = display.newGroup( );
+local physics = require("physics");
+local currentBlock=nil;
 local params;
 
 
@@ -18,13 +19,16 @@ function scene:show( event )
 	local sceneGroup = self.view;
 	local phase = event.phase;
 	local wall = display.newGroup();
+	params.wall=wall;
 	local brickSize = 70;	
 	local shiftNum = 0;	
+	local fallingBlock;
 
 	if ( phase == "will" ) then	
-
+		physics.start();
+		physics.setGravity(0,0);
+		physics.setDrawMode( "hybrid" );
 		sceneGroup:insert(wall);
-		sceneGroup:insert(block);
 
 		local DayBackground = display.newImage(sceneGroup, "images/Grass.jpg");
 		 DayBackground.anchorX = 0;
@@ -32,18 +36,12 @@ function scene:show( event )
 		 DayBackground.yScale = DayBackground.yScale * 2;
 		 DayBackground:toBack();
 
-		function spawnBrickStyle1( x, y, group )
+		function spawnBrick( x, y, group )
 
-			local brick1 = Brick:new({xPos=x, yPos=y} );
-			brick1:spawn(params.spriteSheet);
-			
-			if(group == "wall") then
-				wall:insert(brick1.shape);
-			else
-				block:insert(brick1.shape);
-			end
-				
-			--add physics collision thing here for zombies
+			local brick = Brick:new({xPos=x, yPos=y} );
+			brick:spawn(params.spriteSheet);		
+			group:insert(brick.shape);		
+
 		end
 
 		function spawnWall(  )
@@ -54,7 +52,7 @@ function scene:show( event )
 				for j=1,5 do
 					--if metatable entry is not zero then spawn block
 					--pass in flag/metatable data to set brick animation sequence based on health of brick
-					spawnBrickStyle1(x,y,"wall");
+					spawnBrick(x,y, wall);
 					y=y-brickSize;
 				end
 				x=x+brickSize;
@@ -62,163 +60,153 @@ function scene:show( event )
 			end
 		end
 
-		--now has animation!! woo!
-		function spawnBlock1()
-			display.remove( block );
-			block = display.newGroup( );
-			sceneGroup:insert(block);
-			local x = 220;
-			for i=1,4 do
-				spawnBrickStyle1(x,brickSize, "block");
-				x=x+brickSize;
-			end
-			block.x=display.contentCenterX;block.y=35;
-		end
-
-		function spawnBlock2()
-			display.remove( block );
-			block = display.newGroup( );
-			sceneGroup:insert(block);
-			local x=290;
+		function spawnBlock( blockNum )
 			local y=brickSize;
-			for i=1,2 do
-				for j=1,2 do
-					spawnBrickStyle1(x,y, "block");
-					y=y+brickSize;
+			if (blockNum == 1)then
+				local block1 = display.newGroup( );
+				local x = 220;
+				for i=1,4 do
+					spawnBrick(x,brickSize, block1);
+					x=x+brickSize;
 				end
-				x=x+brickSize;
-				y=brickSize;
+				block1.x=display.contentCenterX;block1.y=35;
+				block1.anchorChildren = true;
+				return block1;
+			elseif (blockNum == 2)then
+				local block2 = display.newGroup( );
+				local x=290;				
+				for i=1,2 do
+					for j=1,2 do
+						spawnBrick(x,y,block2);
+						y=y+brickSize;
+					end
+					x=x+brickSize;
+					y=brickSize;
+				end
+				block2.x=display.contentCenterX;block2.y=70;
+				block2.tag="doNotRotate";
+				block2.anchorChildren = true;
+				return block2;
+			elseif (blockNum == 3) then
+				local block3 = display.newGroup( );
+				local x=290;
+				spawnBrick(x,y, block3);
+				y=y+brickSize;
+				for i=1,3 do
+					spawnBrick(x,y, block3);
+					x=x+brickSize;
+				end
+				block3.x=display.contentCenterX-35;block3.y=70;
+				block3.anchorChildren = true;
+				return block3;
+			elseif (blockNum == 4) then
+				local block4 = display.newGroup( );
+				local x=430;
+				spawnBrick(x,y,block4);
+				y=y+brickSize;
+				x=290;
+				for i=1,3 do
+					spawnBrick(x,y,block4);
+					x=x+brickSize;
+				end
+				block4.x=display.contentCenterX-35;block4.y=70;
+				block4.anchorChildren = true;
+				return block4;
+			elseif (blockNum == 5) then
+				local block5 = display.newGroup( );
+				local x=360;
+				spawnBrick(x,y,block5);
+				y=y+brickSize;
+				x=290;
+				for i=1,3 do
+					spawnBrick(x,y,block5);
+					x=x+brickSize;
+				end
+				block5.x=display.contentCenterX-35;block5.y=70;
+				block5.anchorChildren = true;
+				return block5;
+			elseif (blockNum == 6) then
+				local block6 = display.newGroup();
+				local x = 360;
+				for i=1,2 do
+					spawnBrick(x,y,block6);
+					x=x+brickSize;
+				end
+				y=y+brickSize;
+				x=290;
+				for i=1,2 do
+					spawnBrick(x,y,block6);
+					x=x+brickSize;
+				end
+				block6.x=display.contentCenterX-35;block6.y=70;
+				block6.anchorChildren = true;
+				return block6;
+			elseif (blockNum == 7) then
+				local block7 = display.newGroup();
+				local x = 290;
+				for i=1,2 do
+					spawnBrick(x,y,block7);
+					x=x+brickSize;
+				end
+				y=y+brickSize;
+				x=360;
+				for i=1,2 do
+					spawnBrick(x,y,block7);
+					x=x+brickSize;
+				end
+				block7.x=display.contentCenterX-35;block7.y=70;
+				block7.anchorChildren = true;
+				return block7;
 			end
-			block.x=display.contentCenterX;block.y=700;
-			block.tag="doNotRotate";
-		end
 
-		function spawnBlock3()
-			display.remove( block );
-			block = display.newGroup( );
-			sceneGroup:insert(block);
-			local x=290;
-			local y=brickSize;
-			spawnBrickStyle1(x,y, "block");
-			y=y+brickSize;
-			for i=1,3 do
-				spawnBrickStyle1(x,y, "block");
-				x=x+brickSize;
-			end
-			block.x=display.contentCenterX-35;block.y=70;
-		end
-
-		function spawnBlock4()		
-			display.remove( block );
-			block = display.newGroup( );
-			sceneGroup:insert(block);
-			local x=430;
-			local y=brickSize;
-			spawnBrickStyle1(x,y,"block");
-			y=y+brickSize;
-			x=290;
-			for i=1,3 do
-				spawnBrickStyle1(x,y,"block");
-				x=x+brickSize;
-			end
-			block.x=display.contentCenterX-35;block.y=70;
-		end
-
-		function spawnBlock5()
-			display.remove( block );
-			block = display.newGroup( );
-			sceneGroup:insert(block);
-			local x=360;
-			local y=brickSize;
-			spawnBrickStyle1(x,y,"block");
-			y=y+brickSize;
-			x=290;
-			for i=1,3 do
-				spawnBrickStyle1(x,y,"block");
-				x=x+brickSize;
-			end
-			block.x=display.contentCenterX-35;block.y=70;
-		end
-
-		function spawnBlock6(  )
-			display.remove(block);
-			block = display.newGroup();
-			sceneGroup: insert(block);
-			local x = 360;
-			local y = brickSize;
-			for i=1,2 do
-				spawnBrickStyle1(x,y,"block");
-				x=x+brickSize;
-			end
-			y=y+brickSize;
-			x=290;
-			for i=1,2 do
-				spawnBrickStyle1(x,y,"block");
-				x=x+brickSize;
-			end
-			block.x=display.contentCenterX-35;block.y=70;	
-		end
-
-		function spawnBlock7(  )
-			display.remove(block);
-			block = display.newGroup();
-			sceneGroup: insert(block);
-			local x = 290;
-			local y = brickSize;
-			for i=1,2 do
-				spawnBrickStyle1(x,y,"block");
-				x=x+brickSize;
-			end
-			y=y+brickSize;
-			x=360;
-			for i=1,2 do
-				spawnBrickStyle1(x,y,"block");
-				x=x+brickSize;
-			end
-			block.x=display.contentCenterX-35;block.y=70;
 		end
 
 		-----------Cross over line------------------
 		local height = display.contentHeight - (display.contentHeight-180);
+		local crossLine = display.newRect( sceneGroup, 0, display.contentHeight-180, display.contentWidth, 5 );
+		crossLine.anchorX=0; crossLine.anchorY=0;
+		physics.addBody( crossLine , "static" );
+		crossLine:setFillColor( 1,0,0 );
+
 		local leftArrow = display.newRect( sceneGroup, 0, display.contentHeight-180, 200, height );
 		leftArrow.anchorX=0; leftArrow.anchorY=0;
 		leftArrow:setFillColor(1,0,0);
-		local height = display.contentHeight - (display.contentHeight-180);
+
 		local rightArrow = display.newRect( sceneGroup, display.contentWidth-200, display.contentHeight-180, 200, height );
 		rightArrow.anchorX=0; rightArrow.anchorY=0;
 		rightArrow:setFillColor(0,0,1);
 
 		function moveBlockLeft( event )
 			if event.phase == "began" then
-				if(block.x <= 115)then
-					block.x=block.x;
+				if(currentBlock.x <= 115)then
+					currentBlock.x=currentBlock.x;
 				else
-					block.x=block.x-70;
+					currentBlock.x=currentBlock.x-70;
 				end
 			end
 		end
 
 		function moveBlockRight( event )
 			if event.phase == "began" then
-				if(block.x >= 605)then
-					block.x=block.x;
+				if(currentBlock.x >= 605)then
+					currentBlock.x=currentBlock.x;
 				else
-					block.x=block.x+70;
+					currentBlock.x=currentBlock.x+70;
 				end
 			end
 		end
 
 		function rotateBlock( event )	
-			if(block.tag == "doNotRotate") then
-				block:rotate(90);
+			if(currentBlock.tag == "doNotRotate") then
+				currentBlock:rotate(90);
 			else
 				if(shiftNum == 0) then
-					block.x=block.x - 35;
-					block:rotate(90);
+					currentBlock.x=currentBlock.x - 35;
+					currentBlock:rotate(90);
 					shiftNum = 1;
 				elseif (shiftNum == 1) then
-					block.x=block.x + 35;
-					block:rotate(90);
+					currentBlock.x=currentBlock.x + 35;
+					currentBlock:rotate(90);
 					shiftNum = 0;
 				end
 			end
@@ -231,22 +219,6 @@ function scene:show( event )
 	elseif ( phase == "did" ) then
 		local text = display.newText( sceneGroup, "day scene", display.contentCenterX, display.contentCenterY, native.systemFont, 25 );
 
-		spawnWall();
-		--spawnBlock1();
-		--spawnBlock2();
-		--spawnBlock3();
-		--spawnBlock4();
-		--spawnBlock5();
-		--spawnBlock6();
-		spawnBlock7();
-		
-		block.anchorChildren = true;
-
-
-
-		--testing
-		
-
 		local heroGuy = display.newRect( sceneGroup, display.contentCenterX, display.contentHeight-140, brickSize, 100 );
 		heroGuy.anchorX=0; heroGuy.anchorY=0;
 		heroGuy:addEventListener("tap", rotateBlock);
@@ -254,20 +226,48 @@ function scene:show( event )
 		
 
 		local function next (event)
+			params.wall=wall;
+
 			local sceneOpt = {
 				effect = "fade",
 				time = 800,
 				params = params
 			}
-			Runtime:removeEventListener("tap", next);
+			
 			composer.gotoScene( "night", sceneOpt);
 		end
 
-		
-		--transition.to( block, {time=3000, delay=1000, y=700});
+		local blockCounter = 3;
+		local function moveBlockDown(  )
+			if(blockCounter > 0) then
+				local blockNum = math.random( 1,7 );
+				currentBlock = spawnBlock(blockNum);
+				wall:insert( currentBlock );
+				local function addPhysicsToBlock(  )
+					physics.addBody( currentBlock , "dynamic" );
+				end
+				timer.performWithDelay( 50, addPhysicsToBlock );
+				fallingBlock = transition.to( currentBlock, {time=3000, delay=1000, y=display.contentHeight, onComplete=moveBlockDown} );
+				blockCounter = blockCounter - 1;
+			end
+		end
 
+		moveBlockDown();
 
-
+		--add physics collision thing here for bricks
+			local function hitSomething( event )
+				print("hit!");			
+				local function changeBodyType(  )
+					event.target.bodyType = "static";
+				end	
+				timer.performWithDelay( 50, changeBodyType);
+				event.target.isFixedRotation = true;
+				if (event.phase == "began") then
+					transition.cancel( fallingBlock );
+					moveBlockDown();
+				end
+			end
+			currentBlock:addEventListener( "collision", hitSomething );
 	end
 end
 
