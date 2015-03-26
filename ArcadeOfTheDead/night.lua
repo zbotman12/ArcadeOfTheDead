@@ -1,6 +1,7 @@
 local composer = require( "composer" );
 local widget = require("widget");
 local Brick = require("Brick");
+local Pistol = require("Pistol");
 local Zombie = require("Zombie");
 local physics = require("physics");
 local scene = composer.newScene();
@@ -39,17 +40,11 @@ function scene:show( event )
 	  		{name = "idle", frames={6}}
 		}
 
-		local pistolSeqData = {
-	  		{name = "idle", frames={7}},
-	  		{name = "shoot", start=7, count= 9, time = 200}
-		}
-
 		local playerSpt = display.newSprite(params.spriteSheet, playerSeqData )
 		playerSpt:setSequence( "idle" );
 
-		local pistolSpt = display.newSprite(params.spriteSheet, pistolSeqData )
-		pistolSpt.x =  pistolSpt.x  + 35;
-		pistolSpt:setSequence( "idle" );
+		local pistol = Pistol:new();
+		local pistolSpt = pistol:spawn(params.spriteSheet);
 
 		local heroGuy = display.newGroup( )
 		heroGuy.x =   display.contentCenterX;
@@ -65,20 +60,7 @@ function scene:show( event )
 
 		local function movePlayer( event )
 			heroGuy.x = event.x;
-			local bullet = display.newCircle (heroGuy.x + 30, heroGuy.y-16, 5);
-			bullet.anchorY = 1;
-			bullet:setFillColor(0,1,0);
-			pistolSpt:setSequence( "shoot" );
-			pistolSpt:play( );
-			timer.performWithDelay( 200, function () pistolSpt:setSequence( "idle" ); pistolSpt:play( ); end )
-			physics.addBody (bullet, "dynamic", {radius=5} );
-			--bullet.isSensor = true;
-			bullet.isBullet =true;
-			bullet:applyForce(0, -2, bullet.x, bullet.y);
-			--audio.play( soundTable["shootSound"] );
-
-
-			bullet.tag = "shot";
+			local bullet = pistol:shoot(heroGuy);
 
 			local function bulletHandler (event)
 				-- remove the bullet
