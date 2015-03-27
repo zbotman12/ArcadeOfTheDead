@@ -53,8 +53,4 @@ function Zombie:hit ()
 	end
 end
 
-function Zombie:addPhysics(  )
-	physics.addBody( self.shape , "dynamic" );
-end
-
 return Zombie;

@@ -92,7 +92,7 @@ function scene:show( event )
 			local zombie = Zombie:new({xPos=x, yPos=y});
 			zombie:spawn();			
 			--zombie:move();
-			zombie:addPhysics();
+			physics.addBody( zombie.shape , "dynamic" );
 			sceneGroup:insert( zombie.shape );
 		end
 

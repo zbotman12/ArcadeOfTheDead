@@ -39,7 +39,8 @@ function scene:show( event )
 		function spawnBrick( x, y, group )
 
 			local brick = Brick:new({xPos=x, yPos=y} );
-			brick:spawn(params.spriteSheet);		
+			brick:spawn(params.spriteSheet);
+			physics.addBody( brick.shape , "static" );		
 			group:insert(brick.shape);		
 
 		end

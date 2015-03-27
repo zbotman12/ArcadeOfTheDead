@@ -47,8 +47,4 @@ function Brick:hit ()
 	end
 end
 
-function Brick:addPhysics(  )
-	physics.addBody( self.shape , "kinematic" );
-end
-
 return Brick;
