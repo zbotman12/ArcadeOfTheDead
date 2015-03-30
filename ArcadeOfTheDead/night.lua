@@ -103,6 +103,22 @@ function scene:show( event )
 		statusBar.anchorX=0; statusBar.anchorY=0;
 		statusBar:setFillColor( 0,0,1,0.35 );
 		statusBar:toFront( );
+
+		-------Tickets----------------------
+		local ticketNum=0;
+		local ticketText = display.newText( sceneGroup, "Tickets: "..ticketNum, 75, 15, native.systemFont, 25 );
+
+		--------Life Total-----------------
+		local life = 3;
+		local heartX = display.contentWidth-30;
+		local heart;
+		for i=1,life do
+			heart = display.newRect(sceneGroup, heartX, 7,25,25);
+			heart.anchorX=0; heart.anchorY=0;
+			heart:setFillColor(1,0,0,0.75);
+			heartX = heartX - 30;
+		end
+		
 	end
 end
 
