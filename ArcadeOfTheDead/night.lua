@@ -2,6 +2,7 @@ local composer = require( "composer" );
 local widget = require("widget");
 local Brick = require("Brick");
 local Pistol = require("Pistol");
+local Shotgun = require("Shotgun");
 local Zombie = require("Zombie");
 local physics = require("physics");
 local scene = composer.newScene();
@@ -23,6 +24,17 @@ function scene:show( event )
 	local brickSize = 70;
 	--COMMENTED OUT FOR TESTING sceneGroup:insert( params.wall );
 
+	local function newGun (guntype)
+		local gun;
+		if (guntype == "pistol") then
+			gun = Pistol:new();
+		end
+		if (guntype == "shotgun") then
+			gun = Shotgun:new();
+		end
+		return gun;
+	end
+
 	if ( phase == "will" ) then
 		physics.start();
 		physics.setGravity(0,0);
@@ -43,14 +55,14 @@ function scene:show( event )
 		local playerSpt = display.newSprite(params.spriteSheet, playerSeqData )
 		playerSpt:setSequence( "idle" );
 
-		local pistol = Pistol:new();
-		local pistolSpt = pistol:spawn(params.spriteSheet);
+		local gun = newGun("pistol");
+		local gunSpt = gun:spawn(params.spriteSheet);
 
 		local heroGuy = display.newGroup( )
 		heroGuy.x =   display.contentCenterX;
 		heroGuy.y = display.contentHeight-140;
 		heroGuy:insert(playerSpt);
-		heroGuy:insert(pistolSpt);
+		heroGuy:insert(gunSpt);
 		sceneGroup:insert( heroGuy );
 
 		heroGuy.anchorY=0;
@@ -60,21 +72,9 @@ function scene:show( event )
 
 		local function movePlayer( event )
 			heroGuy.x = event.x;
-			local bullet = pistol:shoot(heroGuy);
-
-			local function bulletHandler (event)
-				-- remove the bullet
-				bullet:removeSelf();
-				bullet=nil;
-				if (event.other.tag == "Zombie") then
-					event.other.pp:hit();
-				end
-			end
-			bullet:addEventListener("collision", bulletHandler);
+			gun:shoot(heroGuy);
 		end
-
 		crossLine:addEventListener("tap", movePlayer);
-
 
 	elseif ( phase == "did" ) then	
 		local function next (event)
