@@ -1,4 +1,5 @@
 --PISTOL CLASS
+local CollisionFilters = require("CollisionFilters");
 
 --Prototype
 local Pistol =  {tag="Pistol", ammo = 9, fireSpd = 200, reloadSpd = 500};
@@ -31,7 +32,7 @@ function Pistol:shoot(playerGroup)
 		self.spt:setSequence( "shoot" );
 		self.spt:play( );
 		timer.performWithDelay( 200, function () self.spt:setSequence( "idle" ); self.spt:play( ); end )
-		physics.addBody (bullet, "dynamic", {radius=5} );
+		physics.addBody (bullet, "dynamic", {radius=5, filter=CollisionFilters.bullet} );
 		--bullet.isSensor = true;
 		bullet.isBullet =true;
 		bullet:applyForce(0, -2, bullet.x, bullet.y);

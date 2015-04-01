@@ -3,6 +3,7 @@ local widget = require("widget");
 local scene = composer.newScene();
 local Brick = require("Brick");
 local physics = require("physics");
+local CollisionFilters = require("CollisionFilters");
 local currentBlock=nil;
 local params;
 
@@ -23,6 +24,7 @@ function scene:show( event )
 	local brickSize = 70;	
 	local shiftNum = 0;	
 	local fallingBlock;
+	local polygon;
 
 	if ( phase == "will" ) then	
 		physics.start();
@@ -39,9 +41,8 @@ function scene:show( event )
 		function spawnBrick( x, y, group )
 
 			local brick = Brick:new({xPos=x, yPos=y} );
-			brick:spawn(params.spriteSheet);
-			physics.addBody( brick.shape , "static" );		
-			group:insert(brick.shape);		
+			brick:spawn(params.spriteSheet);	
+			group:insert(brick.shape);
 
 		end
 
@@ -72,6 +73,11 @@ function scene:show( event )
 				end
 				block1.x=display.contentCenterX;block1.y=35;
 				block1.anchorChildren = true;
+				local poly1 = {display.contentCenterX-105,0, display.contentCenterX-105,70, display.contentCenterX+105,70, display.contentCenterX+105,0};
+				local function addPhysics(  )
+					physics.addBody( block1 , "dynamic", {filter=CollisionFilters.brick, shape=poly1} );
+				end
+				timer.performWithDelay( 5, addPhysics ,1 );
 				return block1;
 			elseif (blockNum == 2)then
 				local block2 = display.newGroup( );
@@ -87,6 +93,11 @@ function scene:show( event )
 				block2.x=display.contentCenterX;block2.y=70;
 				block2.tag="doNotRotate";
 				block2.anchorChildren = true;
+				local poly1 = {display.contentCenterX-35,0, display.contentCenterX-35,140, display.contentCenterX+35,140, display.contentCenterX+35,0};
+				local function addPhysics(  )
+					physics.addBody( block2 , "dynamic", {filter=CollisionFilters.brick, shape=poly1} );
+				end
+				timer.performWithDelay( 5, addPhysics ,1 );
 				return block2;
 			elseif (blockNum == 3) then
 				local block3 = display.newGroup( );
@@ -99,6 +110,11 @@ function scene:show( event )
 				end
 				block3.x=display.contentCenterX-35;block3.y=70;
 				block3.anchorChildren = true;
+				local poly1 = {0,0, 0,140, 210,140, 210,70, 70,70, 70,0, 0,0};
+				local function addPhysics(  )
+					physics.addBody( block3 , "dynamic", {filter=CollisionFilters.brick, shape=poly1} );
+				end
+				timer.performWithDelay( 5, addPhysics ,1 );
 				return block3;
 			elseif (blockNum == 4) then
 				local block4 = display.newGroup( );
@@ -166,7 +182,7 @@ function scene:show( event )
 		local height = display.contentHeight - (display.contentHeight-180);
 		local crossLine = display.newRect( sceneGroup, 0, display.contentHeight-180, display.contentWidth, 5 );
 		crossLine.anchorX=0; crossLine.anchorY=0;
-		physics.addBody( crossLine , "static" );
+		physics.addBody( crossLine , "static", {filter=CollisionFilters.crossLine} );
 		crossLine:setFillColor( 1,0,0 );
 
 		local leftArrow = display.newRect( sceneGroup, 0, display.contentHeight-180, 200, height );
@@ -212,7 +228,6 @@ function scene:show( event )
 				end
 			end
 		end
-		--Runtime:addEventListener("tap", next);
 		leftArrow:addEventListener("touch", moveBlockLeft);
 		rightArrow:addEventListener("touch", moveBlockRight);
 		--
@@ -239,15 +254,28 @@ function scene:show( event )
 		end
 
 		local blockCounter = 3;
-		local function moveBlockDown(  )
+		function moveBlockDown(  )
 			if(blockCounter > 0) then
 				local blockNum = math.random( 1,7 );
-				currentBlock = spawnBlock(blockNum);
+				currentBlock = spawnBlock(3);
 				wall:insert( currentBlock );
-				local function addPhysicsToBlock(  )
-					physics.addBody( currentBlock , "dynamic" );
+				
+				--add physics collision thing here for bricks
+				local function hitSomething( event )
+					print("hit!");	
+					--[[		
+					local function changeBodyType(  )
+						event.target.bodyType = "static";
+					end	
+					timer.performWithDelay( 50, changeBodyType);
+					event.target.isFixedRotation = true;
+					]]--
+					if (event.phase == "began") then
+						transition.cancel( fallingBlock );
+						moveBlockDown();
+					end
 				end
-				timer.performWithDelay( 50, addPhysicsToBlock );
+				currentBlock:addEventListener( "collision", hitSomething );
 				fallingBlock = transition.to( currentBlock, {time=3000, delay=1000, y=display.contentHeight, onComplete=moveBlockDown} );
 				blockCounter = blockCounter - 1;
 			end
@@ -255,20 +283,6 @@ function scene:show( event )
 
 		moveBlockDown();
 
-		--add physics collision thing here for bricks
-			local function hitSomething( event )
-				print("hit!");			
-				local function changeBodyType(  )
-					event.target.bodyType = "static";
-				end	
-				timer.performWithDelay( 50, changeBodyType);
-				event.target.isFixedRotation = true;
-				if (event.phase == "began") then
-					transition.cancel( fallingBlock );
-					moveBlockDown();
-				end
-			end
-			currentBlock:addEventListener( "collision", hitSomething );
 	end
 end
 

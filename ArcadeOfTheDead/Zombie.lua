@@ -20,7 +20,6 @@ function Zombie:spawn()
 	self.shape:setFillColor( 1,0,0 );
 	self.shape.anchorX = 0; 
 	self.shape.anchorY = 100;
-	--physics.addBody(self.shape, "kinematic");
 	return self.shape;
 end
 

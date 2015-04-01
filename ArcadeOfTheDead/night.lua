@@ -5,6 +5,7 @@ local Pistol = require("Pistol");
 local Shotgun = require("Shotgun");
 local Zombie = require("Zombie");
 local physics = require("physics");
+local CollisionFilters = require("CollisionFilters");
 local scene = composer.newScene();
 local params;
 
@@ -92,7 +93,7 @@ function scene:show( event )
 			local zombie = Zombie:new({xPos=x, yPos=y});
 			zombie:spawn();			
 			--zombie:move();
-			physics.addBody( zombie.shape , "dynamic" );
+			physics.addBody( zombie.shape , "dynamic", {filter=CollisionFilters.zombie} );
 			sceneGroup:insert( zombie.shape );
 		end
 

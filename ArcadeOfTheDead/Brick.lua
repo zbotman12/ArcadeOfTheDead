@@ -28,7 +28,6 @@ function Brick:spawn(spriteSheet)
 	self.shape.anchorY = 60;
 	self.shape.x = self.xPos;
 	self.shape.y = self.yPos;
-	--physics.addBody(self.shape, "kinematic");
 	return self.shape;
 end
 
