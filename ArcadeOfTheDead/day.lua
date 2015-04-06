@@ -23,13 +23,12 @@ function scene:show( event )
 	params.wall=wall;
 	local brickSize = 70;	
 	local shiftNum = 0;	
-	local fallingBlock;
 	local polygon;
 
 	if ( phase == "will" ) then	
 		physics.start();
 		physics.setGravity(0,0);
-		physics.setDrawMode( "hybrid" );
+		--physics.setDrawMode( "hybrid" );
 		sceneGroup:insert(wall);
 
 		local DayBackground = display.newImage(sceneGroup, "images/Grass.jpg");
@@ -39,11 +38,9 @@ function scene:show( event )
 		 DayBackground:toBack();
 
 		function spawnBrick( x, y, group )
-
 			local brick = Brick:new({xPos=x, yPos=y} );
-			brick:spawn(params.spriteSheet);	
-			group:insert(brick.shape);
-
+			brick:spawn(params.spriteSheet);				
+			group:insert(brick.shape);		
 		end
 
 		function spawnWall(  )
@@ -73,11 +70,6 @@ function scene:show( event )
 				end
 				block1.x=display.contentCenterX;block1.y=35;
 				block1.anchorChildren = true;
-				local poly1 = {display.contentCenterX-105,0, display.contentCenterX-105,70, display.contentCenterX+105,70, display.contentCenterX+105,0};
-				local function addPhysics(  )
-					physics.addBody( block1 , "dynamic", {filter=CollisionFilters.brick, shape=poly1} );
-				end
-				timer.performWithDelay( 5, addPhysics ,1 );
 				return block1;
 			elseif (blockNum == 2)then
 				local block2 = display.newGroup( );
@@ -93,11 +85,6 @@ function scene:show( event )
 				block2.x=display.contentCenterX;block2.y=70;
 				block2.tag="doNotRotate";
 				block2.anchorChildren = true;
-				local poly1 = {display.contentCenterX-35,0, display.contentCenterX-35,140, display.contentCenterX+35,140, display.contentCenterX+35,0};
-				local function addPhysics(  )
-					physics.addBody( block2 , "dynamic", {filter=CollisionFilters.brick, shape=poly1} );
-				end
-				timer.performWithDelay( 5, addPhysics ,1 );
 				return block2;
 			elseif (blockNum == 3) then
 				local block3 = display.newGroup( );
@@ -110,11 +97,6 @@ function scene:show( event )
 				end
 				block3.x=display.contentCenterX-35;block3.y=70;
 				block3.anchorChildren = true;
-				local poly1 = {0,0, 0,140, 210,140, 210,70, 70,70, 70,0, 0,0};
-				local function addPhysics(  )
-					physics.addBody( block3 , "dynamic", {filter=CollisionFilters.brick, shape=poly1} );
-				end
-				timer.performWithDelay( 5, addPhysics ,1 );
 				return block3;
 			elseif (blockNum == 4) then
 				local block4 = display.newGroup( );
@@ -180,10 +162,10 @@ function scene:show( event )
 
 		-----------Cross over line------------------
 		local height = display.contentHeight - (display.contentHeight-180);
-		local crossLine = display.newRect( sceneGroup, 0, display.contentHeight-180, display.contentWidth, 5 );
+		local crossLine = display.newRect( sceneGroup, 0, 1050, display.contentWidth, 5 );
 		crossLine.anchorX=0; crossLine.anchorY=0;
-		physics.addBody( crossLine , "static", {filter=CollisionFilters.crossLine} );
-		crossLine:setFillColor( 1,0,0 );
+		physics.addBody( crossLine, "static", {filters=CollisionFilters.crossLine} );
+		crossLine:setFillColor( 0,0,0,0.1 );
 
 		local leftArrow = display.newRect( sceneGroup, 0, display.contentHeight-180, 200, height );
 		leftArrow.anchorX=0; leftArrow.anchorY=0;
@@ -199,6 +181,10 @@ function scene:show( event )
 					currentBlock.x=currentBlock.x;
 				else
 					currentBlock.x=currentBlock.x-70;
+					for i=1,currentBlock.numChildren do
+						local child=currentBlock[i];
+						child.x=child.x-70;
+					end
 				end
 			end
 		end
@@ -209,6 +195,10 @@ function scene:show( event )
 					currentBlock.x=currentBlock.x;
 				else
 					currentBlock.x=currentBlock.x+70;
+					for i=1,currentBlock.numChildren do
+						local child=currentBlock[i];
+						child.x=child.x+70;
+					end
 				end
 			end
 		end
@@ -218,7 +208,7 @@ function scene:show( event )
 				currentBlock:rotate(90);
 			else
 				if(shiftNum == 0) then
-					currentBlock.x=currentBlock.x - 35;
+					currentBlock.x=currentBlock.x - 35;					
 					currentBlock:rotate(90);
 					shiftNum = 1;
 				elseif (shiftNum == 1) then
@@ -233,15 +223,11 @@ function scene:show( event )
 		--
 
 	elseif ( phase == "did" ) then
-		local text = display.newText( sceneGroup, "day scene", display.contentCenterX, display.contentCenterY, native.systemFont, 25 );
-
 		local heroGuy = display.newRect( sceneGroup, display.contentCenterX, display.contentHeight-140, brickSize, 100 );
 		heroGuy.anchorX=0; heroGuy.anchorY=0;
-		heroGuy:addEventListener("tap", rotateBlock);
+		--heroGuy:addEventListener("tap", rotateBlock);		
 
-		
-
-		local function next (event)
+		local function next ()
 			params.wall=wall;
 
 			local sceneOpt = {
@@ -252,37 +238,60 @@ function scene:show( event )
 			
 			composer.gotoScene( "night", sceneOpt);
 		end
+		local test;
 
-		local blockCounter = 3;
-		function moveBlockDown(  )
-			if(blockCounter > 0) then
-				local blockNum = math.random( 1,7 );
-				currentBlock = spawnBlock(3);
-				wall:insert( currentBlock );
-				
-				--add physics collision thing here for bricks
-				local function hitSomething( event )
-					print("hit!");	
-					--[[		
-					local function changeBodyType(  )
-						event.target.bodyType = "static";
-					end	
-					timer.performWithDelay( 50, changeBodyType);
-					event.target.isFixedRotation = true;
-					]]--
-					if (event.phase == "began") then
-						transition.cancel( fallingBlock );
-						moveBlockDown();
+		local function checkRayCast(  )
+			transition.cancel( test );
+			local hits,hits2,hits3,hits4;
+			--for i=1,4 do
+				--local child = currentBlock[i];
+				hits = physics.rayCast( currentBlock.x-105, currentBlock.y, currentBlock.x-105, currentBlock.y+50, "closest" );
+				hits2 = physics.rayCast( currentBlock.x-35, currentBlock.y, currentBlock.x-35, currentBlock.y+50, "closest" );
+				hits3 = physics.rayCast( currentBlock.x+35, currentBlock.y, currentBlock.x+35, currentBlock.y+50, "closest" );
+				hits4 = physics.rayCast( currentBlock.x+105, currentBlock.y, currentBlock.x+105, currentBlock.y+50, "closest" );
+
+				if ( hits or hits2 or hits3 or hits4 ) then
+					for i=1,currentBlock.numChildren do
+						local child=currentBlock[i];
+						physics.addBody( child, "static", {filter=CollisionFilters.brick} );
 					end
+					spawnNewBlock();
+				    --[[-- There's at least one hit
+				    print( "Hit count: " .. tostring( #hits ) )
+				    -- Output the results
+				    for i,v in ipairs( hits ) do
+				        print( "Hit: ", i, v.object, " Position: ", v.position.x, v.position.y, " Surface normal: ", v.normal.x, v.normal.y )
+				    end
+				    print( "The first object hit is: ", hits[1].object, " at position: ", hits[1].position.x, hits[1].position.y, " where the surface normal is: ", hits[1].normal.x, hits[1].normal.y, " and where the fraction along the ray is: ", hits[1].fraction )
+				    ]]--
+				else
+				   -- print("no hits");
+				    for i=1,currentBlock.numChildren do
+						local child=currentBlock[i];
+						child.y=child.y+70;
+					end
+				    test = transition.to( currentBlock, {time=125, delay=500, y=currentBlock.y+70, onComplete=checkRayCast} );
 				end
-				currentBlock:addEventListener( "collision", hitSomething );
-				fallingBlock = transition.to( currentBlock, {time=3000, delay=1000, y=display.contentHeight, onComplete=moveBlockDown} );
+			--end
+			
+			
+		end
+
+		local blockCounter =3;
+		function spawnNewBlock(  )
+			if(blockCounter > 0) then
 				blockCounter = blockCounter - 1;
+				local blockNum = math.random( 1,7 );
+				currentBlock = spawnBlock(1);
+				currentBlock.num=blockNum;
+				wall:insert( currentBlock );				
+				checkRayCast();
+			else
+				next();
 			end
 		end
 
-		moveBlockDown();
-
+		spawnNewBlock();
 	end
 end
 

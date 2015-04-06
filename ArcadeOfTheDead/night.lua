@@ -39,7 +39,6 @@ function scene:show( event )
 	if ( phase == "will" ) then
 		physics.start();
 		physics.setGravity(0,0);
-		local text = display.newText( sceneGroup, "night scene", display.contentCenterX, display.contentCenterY, native.systemFont, 25 );
 
 		-----------Cross over line------------------
 		local width = display.contentHeight - (display.contentHeight-180);
@@ -92,7 +91,7 @@ function scene:show( event )
 		function spawnZombie( x, y )
 			local zombie = Zombie:new({xPos=x, yPos=y});
 			zombie:spawn();			
-			--zombie:move();
+			zombie:move();
 			physics.addBody( zombie.shape , "dynamic", {filter=CollisionFilters.zombie} );
 			sceneGroup:insert( zombie.shape );
 		end
