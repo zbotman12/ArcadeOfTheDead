@@ -28,7 +28,7 @@ function scene:show( event )
 	if ( phase == "will" ) then	
 		physics.start();
 		physics.setGravity(0,0);
-		--physics.setDrawMode( "hybrid" );
+		physics.setDrawMode( "hybrid" );
 		sceneGroup:insert(wall);
 
 		local DayBackground = display.newImage(sceneGroup, "images/Grass.jpg");
@@ -243,12 +243,25 @@ function scene:show( event )
 		local function checkRayCast(  )
 			transition.cancel( test );
 			local hits,hits2,hits3,hits4;
-			--for i=1,4 do
-				--local child = currentBlock[i];
-				hits = physics.rayCast( currentBlock.x-105, currentBlock.y, currentBlock.x-105, currentBlock.y+50, "closest" );
-				hits2 = physics.rayCast( currentBlock.x-35, currentBlock.y, currentBlock.x-35, currentBlock.y+50, "closest" );
-				hits3 = physics.rayCast( currentBlock.x+35, currentBlock.y, currentBlock.x+35, currentBlock.y+50, "closest" );
-				hits4 = physics.rayCast( currentBlock.x+105, currentBlock.y, currentBlock.x+105, currentBlock.y+50, "closest" );
+				if(currentBlock.num == 1) then
+					hits = physics.rayCast( currentBlock.x-105, currentBlock.y, currentBlock.x-105, currentBlock.y+50, "closest" );
+					hits2 = physics.rayCast( currentBlock.x-35, currentBlock.y, currentBlock.x-35, currentBlock.y+50, "closest" );
+					hits3 = physics.rayCast( currentBlock.x+35, currentBlock.y, currentBlock.x+35, currentBlock.y+50, "closest" );
+					hits4 = physics.rayCast( currentBlock.x+105, currentBlock.y, currentBlock.x+105, currentBlock.y+50, "closest" );
+				elseif(currentBlock.num ==7) then
+					hits = physics.rayCast( currentBlock.x-105, currentBlock.y, currentBlock.x-105, currentBlock.y+50, "closest" );
+					hits2 = physics.rayCast( currentBlock.x+35, currentBlock.y, currentBlock.x+35, currentBlock.y+71, "closest" );
+					hits3 = physics.rayCast( currentBlock.x+105, currentBlock.y, currentBlock.x+105, currentBlock.y+71, "closest" );
+				elseif(currentBlock.num>=4) then
+					hits = physics.rayCast( currentBlock.x-105, currentBlock.y, currentBlock.x-105, currentBlock.y+71, "closest" );
+				elseif(currentBlock.num==3)then
+					hits2 = physics.rayCast( currentBlock.x-35, currentBlock.y, currentBlock.x-35, currentBlock.y+71, "closest" );
+					hits3 = physics.rayCast( currentBlock.x+35, currentBlock.y, currentBlock.x+35, currentBlock.y+71, "closest" );
+					hits4 = physics.rayCast( currentBlock.x+105, currentBlock.y, currentBlock.x+105, currentBlock.y+71, "closest" );
+				else
+					hits2 = physics.rayCast( currentBlock.x-35, currentBlock.y, currentBlock.x-35, currentBlock.y+71, "closest" );
+					hits3 = physics.rayCast( currentBlock.x+35, currentBlock.y, currentBlock.x+35, currentBlock.y+71, "closest" );
+				end
 
 				if ( hits or hits2 or hits3 or hits4 ) then
 					for i=1,currentBlock.numChildren do
@@ -277,13 +290,13 @@ function scene:show( event )
 			
 		end
 
-		local blockCounter =3;
+		local blockCounter =4;
 		function spawnNewBlock(  )
 			if(blockCounter > 0) then
 				blockCounter = blockCounter - 1;
 				local blockNum = math.random( 1,7 );
-				currentBlock = spawnBlock(1);
-				currentBlock.num=blockNum;
+				currentBlock = spawnBlock(3);
+				currentBlock.num=3;
 				wall:insert( currentBlock );				
 				checkRayCast();
 			else
