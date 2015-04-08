@@ -45,6 +45,7 @@ function scene:show( event )
 		local width = display.contentHeight - (display.contentHeight-180);
 		local crossLine = display.newRect( sceneGroup, 0, display.contentHeight-180, display.contentWidth, width );
 		crossLine.anchorX=0; crossLine.anchorY=0;
+		crossLine.tag="crossLine";
 		crossLine:setFillColor(0,0,0,0.1);
 
 
@@ -90,7 +91,6 @@ function scene:show( event )
 		end
 		--Runtime:addEventListener("tap", next);
 
-<<<<<<< HEAD
 		local function zombieAttackBrick( event )
 			transition.cancel( event.target );
 			if (event.other.tag == "Brick") then
@@ -120,14 +120,13 @@ function scene:show( event )
 			end
 		end
 
-=======
->>>>>>> origin/master
 		function spawnZombie( x, y )
 			local zombie = Zombie:new({xPos=x, yPos=y});
-			zombie:spawn();			
-			zombie:move();
+			zombie:spawn();
 			physics.addBody( zombie.shape , "dynamic", {filter=CollisionFilters.zombie} );
 			sceneGroup:insert( zombie.shape );
+			zombie.shape:addEventListener( "collision", zombieAttackBrick );				
+			moveZombie(zombie.shape);
 		end
 
 		spawnZombie(5,100);
