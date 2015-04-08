@@ -41,17 +41,6 @@ function Pistol:shoot(playerGroup)
 		return bullet;
 	end
 
-	local function bulletHandler (event)
-		-- remove the bullet
-		bullet:removeSelf();
-		bullet=nil;
-		if (event.other.tag == "Zombie") then
-			event.other:hit();
-		end
-	end
-
-	bullet:addEventListener("collision", bulletHandler);
-
 end
 
 return Pistol;
