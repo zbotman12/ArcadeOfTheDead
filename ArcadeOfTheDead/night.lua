@@ -23,6 +23,7 @@ function scene:show( event )
 	local phase = event.phase;
 	local wall = display.newGroup();
 	local brickSize = 70;
+	local ticketNum,ticketText,life;
 	--COMMENTED OUT FOR TESTING sceneGroup:insert( params.wall );
 
 	local function newGun (guntype)
@@ -79,6 +80,7 @@ function scene:show( event )
 
 	elseif ( phase == "did" ) then	
 		local function next (event)
+			params.ticketNum=ticketNum;
 			local sceneOpt = {
 				effect = "fade",
 				time = 800,
@@ -98,8 +100,11 @@ function scene:show( event )
 				event.target.pp:hit();
 				event.other:removeSelf();
 				event.other=nil;
+				ticketNum = ticketNum + 10;
+				ticketText:removeSelf( );
+				ticketText = display.newText( sceneGroup, "Tickets: "..ticketNum, 75, 15, native.systemFont, 25 );
 			else
-				print("hit");
+				life = life -1;
 			end
 		end
 
@@ -133,20 +138,22 @@ function scene:show( event )
 		statusBar:toFront( );
 
 		-------Tickets----------------------
-		local ticketNum=0;
-		local ticketText = display.newText( sceneGroup, "Tickets: "..ticketNum, 75, 15, native.systemFont, 25 );
+		ticketNum=0;
+		ticketText = display.newText( sceneGroup, "Tickets: "..ticketNum, 75, 15, native.systemFont, 25 );
 
 		--------Life Total-----------------
-		local life = 3;
-		local heartX = display.contentWidth-30;
-		local heart;
-		for i=1,life do
-			heart = display.newRect(sceneGroup, heartX, 7,25,25);
-			heart.anchorX=0; heart.anchorY=0;
-			heart:setFillColor(1,0,0,0.75);
-			heartX = heartX - 30;
-		end
-		
+		life = 3;
+		local function showHearts(  )
+			local heartX = display.contentWidth-30;
+			local heart;
+			for i=1,life do
+				heart = display.newRect(sceneGroup, heartX, 7,25,25);
+				heart.anchorX=0; heart.anchorY=0;
+				heart:setFillColor(1,0,0,0.75);
+				heartX = heartX - 30;
+			end
+		end		
+		showHearts();
 	end
 end
 
