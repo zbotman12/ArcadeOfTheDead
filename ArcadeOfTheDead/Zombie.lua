@@ -2,7 +2,7 @@
 local test;
 
 --Prototype
-local Zombie = {tag="Zombie", HP=1, xPos=0, yPos=0, fT=1};
+local Zombie = {tag="Zombie", HP=1, xPos=0, yPos=0, fT=3000};
 
 --Constructor
 function Zombie:new (o)
@@ -23,8 +23,8 @@ function Zombie:spawn()
 	return self.shape;
 end
 
-function Zombie:move ()
-	
+function Zombie:move ()   
+   test = transition.to(self.shape, {x=self.shape.x, y=display.contentHeight-180, time=self.fT} );
 end
 
 function Zombie:movePerBlock ()   
@@ -32,7 +32,7 @@ function Zombie:movePerBlock ()
 end
 
 function Zombie:stop ()   
-   transition.cancel( self.shape );
+   transition.cancel( test );
 end
 
 function Zombie:hit ()

@@ -313,11 +313,11 @@ function scene:show( event )
 						local child=currentBlock[i];
 						child.y=child.y+70;
 					end
-				    BlockTrans = transition.to( currentBlock, {time=1, delay=250, y=currentBlock.y+70, onComplete=checkRayCast} );
+				    BlockTrans = transition.to( currentBlock, {time=1, delay=500, y=currentBlock.y+70, onComplete=checkRayCast} );
 				end			
 		end
 
-		local blockCounter =1;
+		local blockCounter =10;
 		function spawnNewBlock(  )
 			if(blockCounter > 0) then
 				blockCounter = blockCounter - 1;
