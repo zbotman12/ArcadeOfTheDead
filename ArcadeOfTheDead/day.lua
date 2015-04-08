@@ -180,10 +180,10 @@ function scene:show( event )
 				if(currentBlock.x <= 115)then
 					currentBlock.x=currentBlock.x;
 				else
-					currentBlock.x=currentBlock.x-70;
+					currentBlock.x=currentBlock.x-71;
 					for i=1,currentBlock.numChildren do
 						local child=currentBlock[i];
-						child.x=child.x-70;
+						child.x=child.x-71;
 					end
 				end
 			end
@@ -194,10 +194,10 @@ function scene:show( event )
 				if(currentBlock.x >= 605)then
 					currentBlock.x=currentBlock.x;
 				else
-					currentBlock.x=currentBlock.x+70;
+					currentBlock.x=currentBlock.x+71;
 					for i=1,currentBlock.numChildren do
 						local child=currentBlock[i];
-						child.x=child.x+70;
+						child.x=child.x+71;
 					end
 				end
 			end
@@ -238,34 +238,64 @@ function scene:show( event )
 			
 			composer.gotoScene( "night", sceneOpt);
 		end
-		local test;
 
+		local BlockTrans;
 		local function checkRayCast(  )
-			transition.cancel( test );
+			transition.cancel(BlockTrans);
 			local hits,hits2,hits3,hits4;
 				if(currentBlock.num == 1) then
-					hits = physics.rayCast( currentBlock.x-105, currentBlock.y, currentBlock.x-105, currentBlock.y+50, "closest" );
-					hits2 = physics.rayCast( currentBlock.x-35, currentBlock.y, currentBlock.x-35, currentBlock.y+50, "closest" );
-					hits3 = physics.rayCast( currentBlock.x+35, currentBlock.y, currentBlock.x+35, currentBlock.y+50, "closest" );
-					hits4 = physics.rayCast( currentBlock.x+105, currentBlock.y, currentBlock.x+105, currentBlock.y+50, "closest" );
+					hits = physics.rayCast( currentBlock.x-100, currentBlock.y, currentBlock.x-100, currentBlock.y+37, "closest" );
+					hits2 = physics.rayCast( currentBlock.x-35, currentBlock.y, currentBlock.x-35, currentBlock.y+37, "closest" );
+					hits3 = physics.rayCast( currentBlock.x+35, currentBlock.y, currentBlock.x+35, currentBlock.y+37, "closest" );
+					hits4 = physics.rayCast( currentBlock.x+100, currentBlock.y, currentBlock.x+100, currentBlock.y+37, "closest" );
 				elseif(currentBlock.num ==7) then
-					hits = physics.rayCast( currentBlock.x-105, currentBlock.y, currentBlock.x-105, currentBlock.y+50, "closest" );
+					hits = physics.rayCast( currentBlock.x-105, currentBlock.y, currentBlock.x-105, currentBlock.y+37, "closest" );
 					hits2 = physics.rayCast( currentBlock.x+35, currentBlock.y, currentBlock.x+35, currentBlock.y+71, "closest" );
-					hits3 = physics.rayCast( currentBlock.x+105, currentBlock.y, currentBlock.x+105, currentBlock.y+71, "closest" );
-				elseif(currentBlock.num>=4) then
-					hits = physics.rayCast( currentBlock.x-105, currentBlock.y, currentBlock.x-105, currentBlock.y+71, "closest" );
+					hits3 = physics.rayCast( currentBlock.x+105, currentBlock.y, currentBlock.x+105, currentBlock.y+71, "closest" );				
 				elseif(currentBlock.num==3)then
 					hits2 = physics.rayCast( currentBlock.x-35, currentBlock.y, currentBlock.x-35, currentBlock.y+71, "closest" );
 					hits3 = physics.rayCast( currentBlock.x+35, currentBlock.y, currentBlock.x+35, currentBlock.y+71, "closest" );
 					hits4 = physics.rayCast( currentBlock.x+105, currentBlock.y, currentBlock.x+105, currentBlock.y+71, "closest" );
+				elseif((currentBlock.num==4) or (currentBlock.num==5)) then
+					hits = physics.rayCast( currentBlock.x-33, currentBlock.y, currentBlock.x-33, currentBlock.y+71, "closest" );
+					hits2 = physics.rayCast( currentBlock.x+37, currentBlock.y, currentBlock.x+37, currentBlock.y+71, "closest" );
+					hits3 = physics.rayCast( currentBlock.x+107, currentBlock.y, currentBlock.x+107, currentBlock.y+71, "closest" );
+				elseif(currentBlock.num==6) then
+					hits = physics.rayCast( currentBlock.x-105, currentBlock.y, currentBlock.x-33, currentBlock.y+71, "closest" );
+					hits2 = physics.rayCast( currentBlock.x+35, currentBlock.y, currentBlock.x+37, currentBlock.y+71, "closest" );
+					hits3 = physics.rayCast( currentBlock.x+105, currentBlock.y, currentBlock.x+107, currentBlock.y+37, "closest" );
 				else
-					hits2 = physics.rayCast( currentBlock.x-35, currentBlock.y, currentBlock.x-35, currentBlock.y+71, "closest" );
-					hits3 = physics.rayCast( currentBlock.x+35, currentBlock.y, currentBlock.x+35, currentBlock.y+71, "closest" );
+					hits2 = physics.rayCast( currentBlock.x-33, currentBlock.y, currentBlock.x-35, currentBlock.y+71, "closest" );
+					hits3 = physics.rayCast( currentBlock.x+33, currentBlock.y, currentBlock.x+35, currentBlock.y+71, "closest" );
 				end
 
+				if hits then
+					for i,v in ipairs( hits ) do
+      				  print( "Hit: ", i, v.object, " Position: ", v.position.x, v.position.y, " Surface normal: ", v.normal.x, v.normal.y )
+    				end
+    			end
+    			if hits2 then
+					for i,v in ipairs( hits2 ) do
+      				  print( "Hit2: ", i, v.object, " Position: ", v.position.x, v.position.y, " Surface normal: ", v.normal.x, v.normal.y )
+    				end
+    			end
+   				if hits3 then
+					for i,v in ipairs( hits3 ) do
+      				  print( "Hit3: ", i, v.object, " Position: ", v.position.x, v.position.y, " Surface normal: ", v.normal.x, v.normal.y )
+    				end
+    			end
+   				if hits4 then
+					for i,v in ipairs( hits4 ) do
+      				  print( "Hit4: ", i, v.object, " Position: ", v.position.x, v.position.y, " Surface normal: ", v.normal.x, v.normal.y )
+    				end
+    			end
+
 				if ( hits or hits2 or hits3 or hits4 ) then
+
 					for i=1,currentBlock.numChildren do
 						local child=currentBlock[i];
+						child.anchorX = 35;
+						child.anchorY = 35;
 						physics.addBody( child, "static", {filter=CollisionFilters.brick} );
 					end
 					spawnNewBlock();
@@ -283,20 +313,18 @@ function scene:show( event )
 						local child=currentBlock[i];
 						child.y=child.y+70;
 					end
-				    test = transition.to( currentBlock, {time=125, delay=500, y=currentBlock.y+70, onComplete=checkRayCast} );
-				end
-			--end
-			
-			
+				    BlockTrans = transition.to( currentBlock, {time=1, delay=500, y=currentBlock.y+70, onComplete=checkRayCast} );
+				end			
 		end
 
-		local blockCounter =4;
+		local blockCounter =10;
 		function spawnNewBlock(  )
 			if(blockCounter > 0) then
 				blockCounter = blockCounter - 1;
 				local blockNum = math.random( 1,7 );
-				currentBlock = spawnBlock(3);
-				currentBlock.num=3;
+				currentBlock = spawnBlock(blockNum);
+				currentBlock.num=blockNum;
+				print ("block is :" .. blockNum);
 				wall:insert( currentBlock );				
 				checkRayCast();
 			else
