@@ -93,32 +93,34 @@ function scene:show( event )
 		--Runtime:addEventListener("tap", next);
 
 		local function zombieAttackBrick( event )
-			print("hit");
-			transition.cancel( event.target );
-			if (event.other.tag == "Brick") then
-				event.other.pp:hit();
-				local function test()
-					local function go( )
-				   		moveZombie(event.target);
-				   end
-					transition.to(event.target, {x=event.target.x, y=event.target.y-1, time=1, onComplete=go} );
+			if(event.phase=="began")then
+				print("hit");
+				transition.cancel( event.target );
+				if (event.other.tag == "Brick") then
+					event.other.pp:hit();
+					local function test()
+						local function go( )
+					   		moveZombie(event.target);
+					   end
+						transition.to(event.target, {x=event.target.x, y=event.target.y-1, time=1, onComplete=go} );
+					end
+					timer.performWithDelay(500,test,1);
+				elseif(event.other.tag == "shot") then
+					event.target.pp:hit();
+					event.other:removeSelf();
+					event.other=nil;
+					ticketNum = ticketNum + 10;
+					ticketText:removeSelf( );
+					ticketText = display.newText( sceneGroup, "Tickets: "..ticketNum, 75, 15, native.systemFont, 25 );
+				else
+					life = life -1;
+					display.remove(heartGroup);
+					heartGroup = display.newGroup();
+					if(life >= 0)then
+						showHearts();
+					end
+					event.target.pp:hit();
 				end
-				timer.performWithDelay(500,test,1);
-			elseif(event.other.tag == "shot") then
-				event.target.pp:hit();
-				event.other:removeSelf();
-				event.other=nil;
-				ticketNum = ticketNum + 10;
-				ticketText:removeSelf( );
-				ticketText = display.newText( sceneGroup, "Tickets: "..ticketNum, 75, 15, native.systemFont, 25 );
-			else
-				life = life -1;
-				display.remove(heartGroup);
-				heartGroup = display.newGroup();
-				if(life >= 0)then
-					showHearts();
-				end
-				event.target.pp:hit();
 			end
 		end
 
@@ -147,30 +149,30 @@ function scene:show( event )
 		function spawnRandomZombie(  )
 			local location = math.random(1,10);
 			if (location == 1) then
-				spawnZombie(5,100);
+				spawnZombie(10,100);
 			elseif(location == 2) then
-				spawnZombie(75,100);
+				spawnZombie(80,100);
 			elseif(location == 3) then
-				spawnZombie(145,100);
+				spawnZombie(150,100);
 			elseif(location == 4) then
-				spawnZombie(215,100);
+				spawnZombie(220,100);
 			elseif(location == 5) then
-				spawnZombie(285,100);
+				spawnZombie(290,100);
 			elseif(location == 6) then
 				spawnZombie(355,100);
 			elseif(location == 7) then
-				spawnZombie(425,100);
+				spawnZombie(430,100);
 			elseif(location == 8) then
-				spawnZombie(495,100);
+				spawnZombie(500,100);
 			elseif(location == 9) then
-				spawnZombie(565,100);
+				spawnZombie(570,100);
 			elseif(location == 10) then
-				spawnZombie(635,100);
+				spawnZombie(640,100);
 			end
 			
 		end
 
-		local totalNumZombies = 3
+		local totalNumZombies = 10;
 		function spawnZombieHorde( )
 			spawnRandomZombie();
 			totalNumZombies = totalNumZombies -1;

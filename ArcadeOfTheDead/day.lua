@@ -30,7 +30,7 @@ function scene:show( event )
 	if ( phase == "will" ) then	
 		physics.start();
 		physics.setGravity(0,0);
-		--physics.setDrawMode( "hybrid" );
+		physics.setDrawMode( "hybrid" );
 		sceneGroup:insert(wall);
 
 		local DayBackground = display.newImage(sceneGroup, "images/Grass.jpg");
@@ -346,7 +346,7 @@ function scene:show( event )
 				end			
 		end
 
-		local blockCounter =1;
+		local blockCounter =10;
 		function spawnNewBlock(  )
 			if(blockCounter > 0) then
 				blockCounter = blockCounter - 1;
