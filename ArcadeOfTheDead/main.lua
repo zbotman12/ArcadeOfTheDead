@@ -38,7 +38,7 @@ local spriteSheet = graphics.newImageSheet( "images/spriteSheet.png", MainSheetO
 local sceneOpt = {
 	effect = "fade",
 	time = 800,
-	params = {buttonSheet = buttonSheet, spriteSheet = spriteSheet}
+
 }
 -- load first scene
 composer.gotoScene( "day", sceneOpt);

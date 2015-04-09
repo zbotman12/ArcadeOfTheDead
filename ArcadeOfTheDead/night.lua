@@ -205,6 +205,9 @@ function scene:show( event )
 			end
 		end		
 		showHearts();
+
+		--------Level-----------------------
+		local level = display.newText(sceneGroup,"Level: "..params.level,display.contentCenterX,15,native.systemFont, 25);
 	end
 end
 
