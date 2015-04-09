@@ -101,7 +101,7 @@ function scene:show( event )
 					local function go( )
 				   		moveZombie(event.target);
 				   end
-					transition.to(event.target, {x=event.target.x, y=event.target.y-10, time=1, onComplete=go} );
+					transition.to(event.target, {x=event.target.x, y=event.target.y-1, time=1, onComplete=go} );
 				end
 				timer.performWithDelay(500,test,1);
 			elseif(event.other.tag == "shot") then
@@ -115,7 +115,9 @@ function scene:show( event )
 				life = life -1;
 				display.remove(heartGroup);
 				heartGroup = display.newGroup();
-				showHearts();
+				if(life >= 0)then
+					showHearts();
+				end
 				event.target.pp:hit();
 			end
 		end
@@ -142,7 +144,42 @@ function scene:show( event )
 			moveZombie(zombie.shape);
 		end
 
-		spawnZombie(5,100);
+		function spawnRandomZombie(  )
+			local location = math.random(1,10);
+			if (location == 1) then
+				spawnZombie(5,100);
+			elseif(location == 2) then
+				spawnZombie(75,100);
+			elseif(location == 3) then
+				spawnZombie(145,100);
+			elseif(location == 4) then
+				spawnZombie(215,100);
+			elseif(location == 5) then
+				spawnZombie(285,100);
+			elseif(location == 6) then
+				spawnZombie(355,100);
+			elseif(location == 7) then
+				spawnZombie(425,100);
+			elseif(location == 8) then
+				spawnZombie(495,100);
+			elseif(location == 9) then
+				spawnZombie(565,100);
+			elseif(location == 10) then
+				spawnZombie(635,100);
+			end
+			
+		end
+
+		local totalNumZombies = 3
+		function spawnZombieHorde( )
+			spawnRandomZombie();
+			totalNumZombies = totalNumZombies -1;
+			if(totalNumZombies >0)then
+				timer.performWithDelay(1000, spawnZombieHorde,1);
+			end
+		end
+		
+		spawnZombieHorde()
 
 		---------Status Bar ----------------
 		local statusBar = display.newRect( sceneGroup, 0, 0, display.contentWidth, 35 );

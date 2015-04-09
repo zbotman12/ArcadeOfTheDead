@@ -30,7 +30,7 @@ function scene:show( event )
 	if ( phase == "will" ) then	
 		physics.start();
 		physics.setGravity(0,0);
-		physics.setDrawMode( "hybrid" );
+		--physics.setDrawMode( "hybrid" );
 		sceneGroup:insert(wall);
 
 		local DayBackground = display.newImage(sceneGroup, "images/Grass.jpg");
