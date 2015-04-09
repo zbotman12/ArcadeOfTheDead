@@ -22,6 +22,7 @@ function scene:show( event )
 	local sceneGroup = self.view;
 	local phase = event.phase;
 	local wall = display.newGroup();
+	local heartGroup = display.newGroup();
 	local brickSize = 70;
 	local ticketNum,ticketText,life;
 	--COMMENTED OUT FOR TESTING sceneGroup:insert( params.wall );
@@ -92,10 +93,17 @@ function scene:show( event )
 		--Runtime:addEventListener("tap", next);
 
 		local function zombieAttackBrick( event )
+			print("hit");
 			transition.cancel( event.target );
 			if (event.other.tag == "Brick") then
 				event.other.pp:hit();
-				print(event.other.pp.HP)
+				local function test()
+					local function go( )
+				   		moveZombie(event.target);
+				   end
+					transition.to(event.target, {x=event.target.x, y=event.target.y-10, time=1, onComplete=go} );
+				end
+				timer.performWithDelay(500,test,1);
 			elseif(event.other.tag == "shot") then
 				event.target.pp:hit();
 				event.other:removeSelf();
@@ -105,10 +113,14 @@ function scene:show( event )
 				ticketText = display.newText( sceneGroup, "Tickets: "..ticketNum, 75, 15, native.systemFont, 25 );
 			else
 				life = life -1;
+				display.remove(heartGroup);
+				heartGroup = display.newGroup();
+				showHearts();
+				event.target.pp:hit();
 			end
 		end
 
-		local function moveZombie( zombie )
+		function moveZombie( zombie )
 			local hits;
 			hits = physics.rayCast( zombie.x, zombie.y, zombie.x, zombie.y+1, "closest" );
 			if ( hits) then
@@ -116,14 +128,15 @@ function scene:show( event )
 			   local function go( )
 			   		moveZombie(zombie);
 			   end			    
-			    test = transition.to( zombie, {time=self.fT, delay=10, y=zombie.y+100, onComplete=go} );
+			    test = transition.to( zombie, {time=self.fT, delay=1, y=zombie.y+100, onComplete=go} );
 			end
 		end
 
 		function spawnZombie( x, y )
 			local zombie = Zombie:new({xPos=x, yPos=y});
 			zombie:spawn();
-			physics.addBody( zombie.shape , "dynamic", {filter=CollisionFilters.zombie} );
+			local test = {-30,-50,-30,50,30,50,30,-50};
+			physics.addBody( zombie.shape , "dynamic", {filter=CollisionFilters.zombie, shape=test} );
 			sceneGroup:insert( zombie.shape );
 			zombie.shape:addEventListener( "collision", zombieAttackBrick );				
 			moveZombie(zombie.shape);
@@ -143,7 +156,7 @@ function scene:show( event )
 
 		--------Life Total-----------------
 		life = 3;
-		local function showHearts(  )
+		function showHearts(  )
 			local heartX = display.contentWidth-30;
 			local heart;
 			for i=1,life do
@@ -151,6 +164,7 @@ function scene:show( event )
 				heart.anchorX=0; heart.anchorY=0;
 				heart:setFillColor(1,0,0,0.75);
 				heartX = heartX - 30;
+				heartGroup:insert(heart);
 			end
 		end		
 		showHearts();

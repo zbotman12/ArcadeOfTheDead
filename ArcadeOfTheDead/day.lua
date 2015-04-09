@@ -2,6 +2,8 @@ local composer = require( "composer" );
 local widget = require("widget");
 local scene = composer.newScene();
 local Brick = require("Brick");
+local Pistol = require("Pistol");
+local Shotgun = require("Shotgun");
 local physics = require("physics");
 local CollisionFilters = require("CollisionFilters");
 local currentBlock=nil;
@@ -223,10 +225,37 @@ function scene:show( event )
 		--
 
 	elseif ( phase == "did" ) then
-		local heroGuy = display.newRect( sceneGroup, display.contentCenterX, display.contentHeight-140, brickSize, 100 );
-		heroGuy.anchorX=0; heroGuy.anchorY=0;
-		--heroGuy:addEventListener("tap", rotateBlock);		
 
+		local function newGun (guntype)
+			local gun;
+			if (guntype == "pistol") then
+				gun = Pistol:new();
+			end
+			if (guntype == "shotgun") then
+				gun = Shotgun:new();
+			end
+			return gun;
+		end
+		----------Create the player display object group--------
+		local playerSeqData = {
+	  		{name = "idle", frames={6}}
+		}
+
+		local playerSpt = display.newSprite(params.spriteSheet, playerSeqData )
+		playerSpt:setSequence( "idle" );
+
+		local gun = newGun("pistol");
+		local gunSpt = gun:spawn(params.spriteSheet);
+
+		local heroGuy = display.newGroup( )
+		heroGuy.x =   display.contentCenterX;
+		heroGuy.y = display.contentHeight-140;
+		heroGuy:insert(playerSpt);
+		heroGuy:insert(gunSpt);
+		sceneGroup:insert( heroGuy );
+		heroGuy.anchorY=0;
+
+		---------------Next Scene-----------------
 		local function next ()
 			params.wall=wall;
 
@@ -268,7 +297,7 @@ function scene:show( event )
 					hits2 = physics.rayCast( currentBlock.x-33, currentBlock.y, currentBlock.x-35, currentBlock.y+71, "closest" );
 					hits3 = physics.rayCast( currentBlock.x+33, currentBlock.y, currentBlock.x+35, currentBlock.y+71, "closest" );
 				end
-
+				--[[
 				if hits then
 					for i,v in ipairs( hits ) do
       				  print( "Hit: ", i, v.object, " Position: ", v.position.x, v.position.y, " Surface normal: ", v.normal.x, v.normal.y )
@@ -288,7 +317,7 @@ function scene:show( event )
 					for i,v in ipairs( hits4 ) do
       				  print( "Hit4: ", i, v.object, " Position: ", v.position.x, v.position.y, " Surface normal: ", v.normal.x, v.normal.y )
     				end
-    			end
+    			end]]--
 
 				if ( hits or hits2 or hits3 or hits4 ) then
 
