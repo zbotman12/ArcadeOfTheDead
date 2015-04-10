@@ -25,7 +25,6 @@ function scene:show( event )
 	local heartGroup = display.newGroup();
 	local brickSize = 70;
 	local ticketNum,ticketText,life;
-	--COMMENTED OUT FOR TESTING sceneGroup:insert( params.wall );
 
 	local function newGun (guntype)
 		local gun;
@@ -88,9 +87,8 @@ function scene:show( event )
 				params = params
 			}
 			Runtime:removeEventListener("tap", next);
-			composer.gotoScene( "shop", sceneOpt);
-		end
-		--Runtime:addEventListener("tap", next);
+			composer.gotoScene( "GameOver", sceneOpt);
+		end		
 
 		local function zombieAttackBrick( event )
 			if(event.phase=="began")then
@@ -118,6 +116,8 @@ function scene:show( event )
 					heartGroup = display.newGroup();
 					if(life >= 0)then
 						showHearts();
+					else
+						next();
 					end
 					event.target.pp:hit();
 				end
