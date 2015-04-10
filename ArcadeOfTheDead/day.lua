@@ -266,9 +266,6 @@ function scene:show( event )
 		--
 
 	elseif ( phase == "did" ) then
-		local heroGuy = display.newRect( sceneGroup, display.contentCenterX, display.contentHeight-140, brickSize, 100 );
-		heroGuy.anchorX=0; heroGuy.anchorY=0;
-		--heroGuy:addEventListener("tap", rotateBlock);		
 
 		local function newGun (guntype)
 			local gun;
@@ -369,8 +366,9 @@ function scene:show( event )
 				end			
 		end
 
-		local blockCounter =5;
 		local blockCounter =10;
+
+
 		function spawnNewBlock(  )
 			if(blockCounter > 0) then
 				blockCounter = blockCounter - 1;
