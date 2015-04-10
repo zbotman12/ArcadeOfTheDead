@@ -31,14 +31,14 @@ local MainSheetOpt =
 	}
 }
 
-local buttonSheet = graphics.newImageSheet( "images/button.png", btnOpt );
+local buttonSheet = graphics.newImageSheet( "button.png", btnOpt );
 
-local spriteSheet = graphics.newImageSheet( "images/spriteSheet.png", MainSheetOpt );
-local level = 0;
+local spriteSheet = graphics.newImageSheet( "spriteSheet.png", MainSheetOpt );
+
 local sceneOpt = {
 	effect = "fade",
 	time = 800,
-	params = {buttonSheet = buttonSheet, spriteSheet = spriteSheet,level=level}
+	params = {buttonSheet = buttonSheet, spriteSheet = spriteSheet}
 }
 -- load first scene
-composer.gotoScene( "day", sceneOpt);
+composer.gotoScene( "shop", sceneOpt);

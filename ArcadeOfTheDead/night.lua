@@ -22,6 +22,7 @@ function scene:show( event )
 	local sceneGroup = self.view;
 	local phase = event.phase;
 	local wall = display.newGroup();
+	local heartGroup = display.newGroup();
 	local brickSize = 70;
 	local ticketNum,ticketText,life;
 	--COMMENTED OUT FOR TESTING sceneGroup:insert( params.wall );
@@ -92,23 +93,38 @@ function scene:show( event )
 		--Runtime:addEventListener("tap", next);
 
 		local function zombieAttackBrick( event )
-			transition.cancel( event.target );
-			if (event.other.tag == "Brick") then
-				event.other.pp:hit();
-				print(event.other.pp.HP)
-			elseif(event.other.tag == "shot") then
-				event.target.pp:hit();
-				event.other:removeSelf();
-				event.other=nil;
-				ticketNum = ticketNum + 10;
-				ticketText:removeSelf( );
-				ticketText = display.newText( sceneGroup, "Tickets: "..ticketNum, 75, 15, native.systemFont, 25 );
-			else
-				life = life -1;
+			if(event.phase=="began")then
+				print("hit");
+				transition.cancel( event.target );
+				if (event.other.tag == "Brick") then
+					event.other.pp:hit();
+					local function test()
+						local function go( )
+					   		moveZombie(event.target);
+					   end
+						transition.to(event.target, {x=event.target.x, y=event.target.y-1, time=1, onComplete=go} );
+					end
+					timer.performWithDelay(500,test,1);
+				elseif(event.other.tag == "shot") then
+					event.target.pp:hit();
+					event.other:removeSelf();
+					event.other=nil;
+					ticketNum = ticketNum + 10;
+					ticketText:removeSelf( );
+					ticketText = display.newText( sceneGroup, "Tickets: "..ticketNum, 75, 15, native.systemFont, 25 );
+				else
+					life = life -1;
+					display.remove(heartGroup);
+					heartGroup = display.newGroup();
+					if(life >= 0)then
+						showHearts();
+					end
+					event.target.pp:hit();
+				end
 			end
 		end
 
-		local function moveZombie( zombie )
+		function moveZombie( zombie )
 			local hits;
 			hits = physics.rayCast( zombie.x, zombie.y, zombie.x, zombie.y+1, "closest" );
 			if ( hits) then
@@ -116,20 +132,56 @@ function scene:show( event )
 			   local function go( )
 			   		moveZombie(zombie);
 			   end			    
-			    test = transition.to( zombie, {time=self.fT, delay=10, y=zombie.y+100, onComplete=go} );
+			    test = transition.to( zombie, {time=self.fT, delay=1, y=zombie.y+100, onComplete=go} );
 			end
 		end
 
 		function spawnZombie( x, y )
 			local zombie = Zombie:new({xPos=x, yPos=y});
 			zombie:spawn();
-			physics.addBody( zombie.shape , "dynamic", {filter=CollisionFilters.zombie} );
+			local test = {-30,-50,-30,50,30,50,30,-50};
+			physics.addBody( zombie.shape , "dynamic", {filter=CollisionFilters.zombie, shape=test} );
 			sceneGroup:insert( zombie.shape );
 			zombie.shape:addEventListener( "collision", zombieAttackBrick );				
 			moveZombie(zombie.shape);
 		end
 
-		spawnZombie(5,100);
+		function spawnRandomZombie(  )
+			local location = math.random(1,10);
+			if (location == 1) then
+				spawnZombie(10,100);
+			elseif(location == 2) then
+				spawnZombie(80,100);
+			elseif(location == 3) then
+				spawnZombie(150,100);
+			elseif(location == 4) then
+				spawnZombie(220,100);
+			elseif(location == 5) then
+				spawnZombie(290,100);
+			elseif(location == 6) then
+				spawnZombie(355,100);
+			elseif(location == 7) then
+				spawnZombie(430,100);
+			elseif(location == 8) then
+				spawnZombie(500,100);
+			elseif(location == 9) then
+				spawnZombie(570,100);
+			elseif(location == 10) then
+				spawnZombie(640,100);
+			end
+			
+		end
+
+		local totalNumZombies = 10;
+		function spawnZombieHorde( )
+			spawnRandomZombie();
+			totalNumZombies = totalNumZombies -1;
+			if(totalNumZombies >0)then
+				timer.performWithDelay(1000, spawnZombieHorde,1);
+			end
+		end
+		
+		spawnZombieHorde()
 
 		---------Status Bar ----------------
 		local statusBar = display.newRect( sceneGroup, 0, 0, display.contentWidth, 35 );
@@ -143,7 +195,7 @@ function scene:show( event )
 
 		--------Life Total-----------------
 		life = 3;
-		local function showHearts(  )
+		function showHearts(  )
 			local heartX = display.contentWidth-30;
 			local heart;
 			for i=1,life do
@@ -151,9 +203,13 @@ function scene:show( event )
 				heart.anchorX=0; heart.anchorY=0;
 				heart:setFillColor(1,0,0,0.75);
 				heartX = heartX - 30;
+				heartGroup:insert(heart);
 			end
 		end		
 		showHearts();
+
+		--------Level-----------------------
+		local level = display.newText(sceneGroup,"Level: "..params.level,display.contentCenterX,15,native.systemFont, 25);
 	end
 end
 

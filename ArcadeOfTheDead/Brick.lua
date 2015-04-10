@@ -24,8 +24,6 @@ function Brick:spawn(spriteSheet)
 	self.shape.pp = self; -- parent object
 	self.shape.tag = self.tag; -- “brick”
 	self.shape:setFillColor (math.random(), math.random(), math.random() );
-	--self.shape.anchorX = 0; 
-	--self.shape.anchorY = 0;
 	self.shape.x = self.xPos;
 	self.shape.y = self.yPos;
 	return self.shape;
@@ -35,7 +33,13 @@ function Brick:hit ()
 	self.HP = self.HP - 1;
 	if (self.HP > 0) then
 		--audio.play( soundTable["hitSound"] );
-		self.shape:setFillColor(0.75,0.75,0.75);
+		if(self.HP== 3) then
+			self.shape:setSequence("3");
+		elseif(self.HP==2)then
+			self.shape:setSequence("2");
+		elseif(self.HP==1)then
+			self.shape:setSequence("1");
+		end
 	else
 		--audio.play( soundTable["explodeSound"] );
 		if(self.shape ~= nil) then

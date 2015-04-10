@@ -268,6 +268,17 @@ function scene:show( event )
 		heroGuy.anchorX=0; heroGuy.anchorY=0;
 		--heroGuy:addEventListener("tap", rotateBlock);		
 
+		local function newGun (guntype)
+			local gun;
+			if (guntype == "pistol") then
+				gun = Pistol:new();
+			end
+			if (guntype == "shotgun") then
+				gun = Shotgun:new();
+			end
+			return gun;
+		end
+		---------------Next Scene-----------------
 		local function next ()
 			params.wall=wall;
 
@@ -338,6 +349,7 @@ function scene:show( event )
 		end
 
 		local blockCounter =5;
+		local blockCounter =10;
 		function spawnNewBlock(  )
 			if(blockCounter > 0) then
 				blockCounter = blockCounter - 1;

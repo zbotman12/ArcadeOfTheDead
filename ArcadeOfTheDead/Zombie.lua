@@ -23,10 +23,6 @@ function Zombie:spawn()
 	return self.shape;
 end
 
-function Zombie:move ()   
-   
-end
-
 function Zombie:movePerBlock ()   
    transition.to(self.shape, {x=self.shape.x, y=display.contentHeight-180, time=1000} );
 end
