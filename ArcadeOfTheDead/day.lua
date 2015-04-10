@@ -31,11 +31,11 @@ function scene:show( event )
 		physics.setDrawMode( "hybrid" );
 		sceneGroup:insert(wall);
 
-		local DayBackground = display.newImage(sceneGroup, "images/Grass.jpg");
-		 DayBackground.anchorX = 0;
-		 DayBackground.anchorY = 0;
-		 DayBackground.yScale = DayBackground.yScale * 2;
-		 DayBackground:toBack();
+		--local DayBackground = display.newImage(sceneGroup, "images/Grass.jpg");
+		-- DayBackground.anchorX = 0;
+		-- DayBackground.anchorY = 0;
+		-- DayBackground.yScale = DayBackground.yScale * 2;
+		-- DayBackground:toBack();
 
 		function spawnBrick( x, y, group )
 			local brick = Brick:new({xPos=x, yPos=y} );
@@ -167,6 +167,22 @@ function scene:show( event )
 		physics.addBody( crossLine, "static", {filters=CollisionFilters.crossLine} );
 		crossLine:setFillColor( 0,0,0,0.1 );
 
+		local sidebarRight = display.newRect(sceneGroup, 0, 5, 5, display.contentHeight);
+		sidebarRight.anchorX=0; sidebarRight.anchorY=0;
+		--[[
+			MAY NEED A COLLISON FILTER
+		]]--
+		physics.addBody( sidebarRight, "static" );
+		sidebarRight:setFillColor( 0,0,0,0.1 );
+
+		local sidebarLeft = display.newRect(sceneGroup, 0, 50, 5, display.contentHeight);
+		sidebarLeft.anchorX=0; sidebarLeft.anchorY=0;
+		--[[
+			MAY NEED A COLLISON FILTER
+		]]--
+		physics.addBody( sidebarLeft, "static" );
+		sidebarLeft:setFillColor( 0,0,0,0.1 );
+
 		local leftArrow = display.newRect( sceneGroup, 0, display.contentHeight-180, 200, height );
 		leftArrow.anchorX=0; leftArrow.anchorY=0;
 		leftArrow:setFillColor(1,0,0);
@@ -191,8 +207,33 @@ function scene:show( event )
 
 		function moveBlockRight( event )
 			if event.phase == "began" then
-				if(currentBlock.x >= 605)then
-					currentBlock.x=currentBlock.x;
+				local hits, hits2, hits3, hits4, hits5, hits6, hits7, hits8;
+				if(currentBlock.num == 1) then
+					hits = physics.rayCast( currentBlock.x-105, currentBlock.y, currentBlock.x-142, currentBlock.y, "closest" );
+					hits2 = physics.rayCast( currentBlock.x+105, currentBlock.y, currentBlock.x+142, currentBlock.y, "closest" );
+				elseif(currentBlock.num == 2) then
+					hits  = physics.rayCast( currentBlock.x-35, currentBlock.y-35, currentBlock.x-72, currentBlock.y-35, "closest" );
+					hits2 = physics.rayCast( currentBlock.x+35, currentBlock.y-35, currentBlock.x+72, currentBlock.y-35, "closest" );
+					hits3 = physics.rayCast( currentBlock.x-35, currentBlock.y+35, currentBlock.x-72, currentBlock.y+35, "closest" );
+					hits4 = physics.rayCast( currentBlock.x+35, currentBlock.y+35, currentBlock.x+72, currentBlock.y+35, "closest" );					
+				elseif(currentBlock.num == 3) then
+
+				
+				elseif(currentBlock.num == 4) then
+
+				
+				elseif(currentBlock.num == 5) then
+
+				
+				elseif(currentBlock.num == 6) then
+
+				
+				elseif(currentBlock.num == 7) then
+
+				end
+
+				if ( hits or hits2 or hits3 or hits4 ) then
+
 				else
 					currentBlock.x=currentBlock.x+71;
 					for i=1,currentBlock.numChildren do
@@ -244,71 +285,50 @@ function scene:show( event )
 			transition.cancel(BlockTrans);
 			local hits,hits2,hits3,hits4;
 				if(currentBlock.num == 1) then
-					hits = physics.rayCast( currentBlock.x-100, currentBlock.y, currentBlock.x-100, currentBlock.y+37, "closest" );
+					hits = physics.rayCast( currentBlock.x-105, currentBlock.y, currentBlock.x-105, currentBlock.y+37, "closest" );
 					hits2 = physics.rayCast( currentBlock.x-35, currentBlock.y, currentBlock.x-35, currentBlock.y+37, "closest" );
 					hits3 = physics.rayCast( currentBlock.x+35, currentBlock.y, currentBlock.x+35, currentBlock.y+37, "closest" );
-					hits4 = physics.rayCast( currentBlock.x+100, currentBlock.y, currentBlock.x+100, currentBlock.y+37, "closest" );
-				elseif(currentBlock.num ==7) then
-					hits = physics.rayCast( currentBlock.x-105, currentBlock.y, currentBlock.x-105, currentBlock.y+37, "closest" );
-					hits2 = physics.rayCast( currentBlock.x+35, currentBlock.y, currentBlock.x+35, currentBlock.y+71, "closest" );
-					hits3 = physics.rayCast( currentBlock.x+105, currentBlock.y, currentBlock.x+105, currentBlock.y+71, "closest" );				
-				elseif(currentBlock.num==3)then
-					hits2 = physics.rayCast( currentBlock.x-35, currentBlock.y, currentBlock.x-35, currentBlock.y+71, "closest" );
-					hits3 = physics.rayCast( currentBlock.x+35, currentBlock.y, currentBlock.x+35, currentBlock.y+71, "closest" );
-					hits4 = physics.rayCast( currentBlock.x+105, currentBlock.y, currentBlock.x+105, currentBlock.y+71, "closest" );
-				elseif((currentBlock.num==4) or (currentBlock.num==5)) then
-					hits = physics.rayCast( currentBlock.x-33, currentBlock.y, currentBlock.x-33, currentBlock.y+71, "closest" );
-					hits2 = physics.rayCast( currentBlock.x+37, currentBlock.y, currentBlock.x+37, currentBlock.y+71, "closest" );
-					hits3 = physics.rayCast( currentBlock.x+107, currentBlock.y, currentBlock.x+107, currentBlock.y+71, "closest" );
-				elseif(currentBlock.num==6) then
-					hits = physics.rayCast( currentBlock.x-105, currentBlock.y, currentBlock.x-33, currentBlock.y+71, "closest" );
-					hits2 = physics.rayCast( currentBlock.x+35, currentBlock.y, currentBlock.x+37, currentBlock.y+71, "closest" );
-					hits3 = physics.rayCast( currentBlock.x+105, currentBlock.y, currentBlock.x+107, currentBlock.y+37, "closest" );
-				else
-					hits2 = physics.rayCast( currentBlock.x-33, currentBlock.y, currentBlock.x-35, currentBlock.y+71, "closest" );
-					hits3 = physics.rayCast( currentBlock.x+33, currentBlock.y, currentBlock.x+35, currentBlock.y+71, "closest" );
-				end
+					hits4 = physics.rayCast( currentBlock.x+105, currentBlock.y, currentBlock.x+105, currentBlock.y+37, "closest" );
 
-				if hits then
-					for i,v in ipairs( hits ) do
-      				  print( "Hit: ", i, v.object, " Position: ", v.position.x, v.position.y, " Surface normal: ", v.normal.x, v.normal.y )
-    				end
-    			end
-    			if hits2 then
-					for i,v in ipairs( hits2 ) do
-      				  print( "Hit2: ", i, v.object, " Position: ", v.position.x, v.position.y, " Surface normal: ", v.normal.x, v.normal.y )
-    				end
-    			end
-   				if hits3 then
-					for i,v in ipairs( hits3 ) do
-      				  print( "Hit3: ", i, v.object, " Position: ", v.position.x, v.position.y, " Surface normal: ", v.normal.x, v.normal.y )
-    				end
-    			end
-   				if hits4 then
-					for i,v in ipairs( hits4 ) do
-      				  print( "Hit4: ", i, v.object, " Position: ", v.position.x, v.position.y, " Surface normal: ", v.normal.x, v.normal.y )
-    				end
-    			end
+				elseif(currentBlock.num == 2) then
+					hits = physics.rayCast( currentBlock.x-35, currentBlock.y, currentBlock.x-35, currentBlock.y+72, "closest" );
+					hits2 = physics.rayCast( currentBlock.x+35, currentBlock.y, currentBlock.x+35, currentBlock.y+72, "closest" );
+
+				--elseif(currentBlock.num==3)then
+			--		hits = physics.rayCast( currentBlock.x-35, currentBlock.y, currentBlock.x-35, currentBlock.y+71, "closest" );
+			--		hits2 = physics.rayCast( currentBlock.x+35, currentBlock.y, currentBlock.x+35, currentBlock.y+71, "closest" );
+			--		hits3 = physics.rayCast( currentBlock.x+105, currentBlock.y, currentBlock.x+105, currentBlock.y+71, "closest" );
+
+				elseif(currentBlock.num==5 or currentBlock.num==3 or currentBlock.num==4 )then
+					hits = physics.rayCast( currentBlock.x, currentBlock.y, currentBlock.x, currentBlock.y+72, "closest" );
+					hits2 = physics.rayCast( currentBlock.x+70, currentBlock.y, currentBlock.x+70, currentBlock.y+72, "closest" );
+					hits3 = physics.rayCast( currentBlock.x-70, currentBlock.y, currentBlock.x-70, currentBlock.y+72, "closest" );
+
+				elseif(currentBlock.num ==7) then
+					hits = physics.rayCast( currentBlock.x-70, currentBlock.y-35, currentBlock.x-70, currentBlock.y+2, "closest" );
+					hits2 = physics.rayCast( currentBlock.x, currentBlock.y, currentBlock.x, currentBlock.y+72, "closest" );
+					hits3 = physics.rayCast( currentBlock.x+70, currentBlock.y+35, currentBlock.x+70, currentBlock.y+72, "closest" );				
+				--elseif((currentBlock.num==4) or (currentBlock.num==5)) then
+				--	hits = physics.rayCast( currentBlock.x-33, currentBlock.y, currentBlock.x-33, currentBlock.y+71, "closest" );
+				--	hits2 = physics.rayCast( currentBlock.x+37, currentBlock.y, currentBlock.x+37, currentBlock.y+71, "closest" );
+				--	hits3 = physics.rayCast( currentBlock.x+107, currentBlock.y, currentBlock.x+107, currentBlock.y+71, "closest" );
+				elseif(currentBlock.num==6) then
+					hits = physics.rayCast( currentBlock.x-70, currentBlock.y+35, currentBlock.x-70, currentBlock.y+72, "closest" );
+					hits2 = physics.rayCast( currentBlock.x, currentBlock.y, currentBlock.x, currentBlock.y+72, "closest" );
+					hits3 = physics.rayCast( currentBlock.x+70, currentBlock.y-35, currentBlock.x+70, currentBlock.y+2, "closest" );
+				else
+				end
 
 				if ( hits or hits2 or hits3 or hits4 ) then
 
 					for i=1,currentBlock.numChildren do
 						local child=currentBlock[i];
-						child.anchorX = 35;
 						child.anchorY = 35;
+						child.anchorX = 35;
 						physics.addBody( child, "static", {filter=CollisionFilters.brick} );
 					end
 					spawnNewBlock();
-				    --[[-- There's at least one hit
-				    print( "Hit count: " .. tostring( #hits ) )
-				    -- Output the results
-				    for i,v in ipairs( hits ) do
-				        print( "Hit: ", i, v.object, " Position: ", v.position.x, v.position.y, " Surface normal: ", v.normal.x, v.normal.y )
-				    end
-				    print( "The first object hit is: ", hits[1].object, " at position: ", hits[1].position.x, hits[1].position.y, " where the surface normal is: ", hits[1].normal.x, hits[1].normal.y, " and where the fraction along the ray is: ", hits[1].fraction )
-				    ]]--
 				else
-				   -- print("no hits");
 				    for i=1,currentBlock.numChildren do
 						local child=currentBlock[i];
 						child.y=child.y+70;
@@ -317,7 +337,7 @@ function scene:show( event )
 				end			
 		end
 
-		local blockCounter =1;
+		local blockCounter =5;
 		function spawnNewBlock(  )
 			if(blockCounter > 0) then
 				blockCounter = blockCounter - 1;
