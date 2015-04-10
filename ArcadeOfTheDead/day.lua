@@ -2,6 +2,8 @@ local composer = require( "composer" );
 local widget = require("widget");
 local scene = composer.newScene();
 local Brick = require("Brick");
+local Pistol = require("Pistol");
+local Shotgun = require("Shotgun");
 local physics = require("physics");
 local CollisionFilters = require("CollisionFilters");
 local currentBlock=nil;
@@ -278,6 +280,25 @@ function scene:show( event )
 			end
 			return gun;
 		end
+		----------Create the player display object group--------
+		local playerSeqData = {
+	  		{name = "idle", frames={6}}
+		}
+
+		local playerSpt = display.newSprite(params.spriteSheet, playerSeqData )
+		playerSpt:setSequence( "idle" );
+
+		local gun = newGun("pistol");
+		local gunSpt = gun:spawn(params.spriteSheet);
+
+		local heroGuy = display.newGroup( )
+		heroGuy.x =   display.contentCenterX;
+		heroGuy.y = display.contentHeight-140;
+		heroGuy:insert(playerSpt);
+		heroGuy:insert(gunSpt);
+		sceneGroup:insert( heroGuy );
+		heroGuy.anchorY=0;
+
 		---------------Next Scene-----------------
 		local function next ()
 			params.wall=wall;
