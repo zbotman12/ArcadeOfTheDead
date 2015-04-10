@@ -66,7 +66,16 @@ function scene:show( event )
 				time = 800,
 				params = params
 			}
-			composer.gotoScene( "page1", sceneOpt);
+			composer.gotoScene( "page2", sceneOpt);
+		end
+
+		local function prevPage (event)
+			local sceneOpt = {
+				effect = "fade",
+				time = 800,
+				params = params
+			}
+			composer.gotoScene( "shop", sceneOpt);
 		end
 
 		local function equipMe( event )
@@ -203,8 +212,25 @@ function scene:show( event )
 		sceneGroup:insert( nextPageBtn );
 
 
-		local pageTitle = display.newText("BRICK SHOP", display.contentCenterX, display.contentCenterY - 550, native.systemFont, 70)
+		local pageTitle = display.newText("PAGE 1", display.contentCenterX, display.contentCenterY - 550, native.systemFont, 70)
 		sceneGroup:insert(pageTitle)
+
+		local prevPageBtn = widget.newButton(
+		    {
+		        x = display.contentCenterX - 300,
+		        y = display.contentCenterY - 550,    
+		        id = "Prev",
+		        label = "Prev",
+		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
+		        sheet = params.buttonSheet,
+		        defaultFrame = 1,
+		        onPress = prevPage,
+		    }
+		);
+
+		prevPageBtn:setFillColor( 0,0.5,0.5 );
+		prevPageBtn:scale( 1.5, 1.5 );
+		sceneGroup:insert( prevPageBtn );
 
 		--DIV VERT
 
@@ -232,8 +258,8 @@ function scene:show( event )
 
 		--BOTTOM BAR
 
-		--local currentlyEquiptedShit = display.newText("Currently Equipted Shit", display.contentCenterX, display.contentCenterY + 500, native.systemFont, 50)
-		--sceneGroup:insert(currentlyEquiptedShit)
+		local currentlyEquiptedShit = display.newText("Currently Equipted Shit", display.contentCenterX, display.contentCenterY + 500, native.systemFont, 50)
+		sceneGroup:insert(currentlyEquiptedShit)
 
 		local moneyAvailable = display.newText("MONEY YOU HAVE", display.contentCenterX, display.contentCenterY + 560, native.systemFont, 50)
 		sceneGroup:insert(moneyAvailable)
