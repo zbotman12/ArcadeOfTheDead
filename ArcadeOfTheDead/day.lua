@@ -189,13 +189,19 @@ function scene:show( event )
 		physics.addBody( sidebarLeft, "static" );
 		sidebarLeft:setFillColor( 0,0,0,0.1 );
 
-		local leftArrow = display.newRect( sceneGroup, 0, display.contentHeight-180, 200, height );
+		local leftArrow = display.newSprite( params.spriteSheet, {{name = "leftarrow", frames={17}}} );
 		leftArrow.anchorX=0; leftArrow.anchorY=0;
-		leftArrow:setFillColor(1,0,0);
+		leftArrow.x = 0;
+		leftArrow.y = display.contentHeight-180;
+		sceneGroup:insert( leftArrow );
+		leftArrow:setSequence( "leftarrow" );
 
-		local rightArrow = display.newRect( sceneGroup, display.contentWidth-200, display.contentHeight-180, 200, height );
+		local rightArrow = display.newSprite( params.spriteSheet, {{name = "rightarrow", frames={18}}} );
 		rightArrow.anchorX=0; rightArrow.anchorY=0;
-		rightArrow:setFillColor(0,0,1);
+		rightArrow.x = display.contentWidth-200;
+		rightArrow.y = display.contentHeight-180;
+		sceneGroup:insert( rightArrow );
+		rightArrow:setSequence( "rightArrow" );
 
 		function moveBlockLeft( event )
 			if event.phase == "began" then

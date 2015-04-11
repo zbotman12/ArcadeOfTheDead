@@ -47,7 +47,7 @@ function scene:show( event )
 	elseif ( phase == "did" ) then	
 		physics.start();
 		physics.setGravity(0,0);
-		physics.setDrawMode( "hybrid" );
+		--physics.setDrawMode( "hybrid" );
 		local function next (event)	
 			Runtime:removeEventListener( "tap", movePlayer );
 			display.remove( heartGroup );							
@@ -163,7 +163,7 @@ function scene:show( event )
 
 		function spawnZombie( x, y )
 			local zombie = Zombie:new({xPos=x, yPos=y});
-			zombie:spawn();
+			zombie:spawn(params.spriteSheet);
 			local test = {-30,-50,-30,50,30,50,30,-50};
 			physics.addBody( zombie.shape , "dynamic", {filter=CollisionFilters.zombie, shape=test} );
 			sceneGroup:insert( zombie.shape );

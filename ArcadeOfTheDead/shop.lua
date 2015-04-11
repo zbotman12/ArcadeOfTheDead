@@ -231,14 +231,13 @@ function scene:show( event )
 		        id = "Continue",
 		        label = "Continue",
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
-		        sheet = params.buttonSheet,
-		        defaultFrame = 1,
+		        sheet = params.spriteSheet,
+		        defaultFrame = 16,
 		        onPress = nextScene,
 		    }
 		);
 
 		continueBtn:setFillColor( 0,0.5,0.5 );
-		continueBtn:scale( 1.5, 1.5 );
 		sceneGroup:insert( continueBtn );
 
 
