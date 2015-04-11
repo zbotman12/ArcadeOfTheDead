@@ -23,6 +23,29 @@ function scene:show( event )
 
 	if ( phase == "will" ) then
 	elseif ( phase == "did" ) then	
+		local function nextScene (event)
+			local sceneOpt = {
+				effect = "fade",
+				time = 800,
+				params = params
+			}
+			composer.gotoScene( "start", sceneOpt);
+		end
+		local startGameBtn = widget.newButton(
+		    {
+		        x = display.contentCenterX,
+		        y = display.contentCenterY + 400,    
+		        id = "New Game",
+		        label = "New Game?",
+		        fontSize=35,
+		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
+		        sheet = params.spriteSheet,
+		        defaultFrame = 16,
+		        onPress = nextScene,
+		    }
+		);
+		startGameBtn:setFillColor( .6,0,1 );
+		sceneGroup:insert( startGameBtn );
 	end
 end
 

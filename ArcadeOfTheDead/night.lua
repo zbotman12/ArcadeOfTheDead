@@ -55,20 +55,7 @@ function scene:show( event )
 		physics.start();
 		physics.setGravity(0,0);
 		--physics.setDrawMode( "hybrid" );
-		local function next (event)	
-			Runtime:removeEventListener( "tap", movePlayer );
-			display.remove( heartGroup );							
-			physics.removeBody( crossLine );
-			display.remove( crossLine );
-			params.ticketNum=ticketNum;
-			params.life=life;
-			local sceneOpt = {
-				effect = "fade",
-				time = 800,
-				params = params
-			}
-			composer.gotoScene( "GameOver", sceneOpt);
-		end		
+		sceneGroup:insert(params.wall);	
 
 		-----------Cross over line------------------
 		local width = display.contentHeight - (display.contentHeight-180);
@@ -126,7 +113,7 @@ function scene:show( event )
 					ticketText = display.newText( sceneGroup, "Tickets: "..ticketNum, 75, 15, native.systemFont, 25 );
 					zombiesPlayerKilled = zombiesPlayerKilled + 1;
 					if(zombiesToKill == zombiesPlayerKilled) then						
-						local function next (event)							
+						local function goToShop (event)							
 							Runtime:removeEventListener( "tap", movePlayer );
 							display.remove( heartGroup );							
 							physics.removeBody( crossLine );
@@ -140,21 +127,36 @@ function scene:show( event )
 							}
 							composer.gotoScene( "shop", sceneOpt);
 						end
-						next();
+						goToShop();
 					end
 				else
 					life = life -1;
 					display.remove(heartGroup);
 					heartGroup = display.newGroup();
-					if(life >= 0)then
+					if(life > 0)then
 						showHearts();
 					else
-						next();
+						gameOver();
 					end
 					event.target.pp:hit();
 				end
 			end
 		end
+
+		function gameOver (event)	
+			Runtime:removeEventListener( "tap", movePlayer );
+			display.remove( heartGroup );							
+			physics.removeBody( crossLine );
+			display.remove( crossLine );
+			params.ticketNum=ticketNum;
+			params.life=life;
+			local sceneOpt = {
+				effect = "fade",
+				time = 800,
+				params = params
+			}
+			composer.gotoScene( "GameOver", sceneOpt);
+		end	
 
 		function moveZombie( zombie )
 			local hits;
@@ -204,13 +206,13 @@ function scene:show( event )
 			
 		end
 
-		local totalNumZombies = 1;
-		zombiesToKill = 1;
+		local totalNumZombies = 3;
+		zombiesToKill = 3;
 		function spawnZombieHorde( )
 			spawnRandomZombie();
 			totalNumZombies = totalNumZombies -1;
 			if(totalNumZombies >0)then
-				timer.performWithDelay(1000, spawnZombieHorde,1);
+				timer.performWithDelay(2000, spawnZombieHorde,1);
 			end
 		end
 		

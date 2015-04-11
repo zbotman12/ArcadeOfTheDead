@@ -30,6 +30,7 @@ function scene:show( event )
 	local phase = event.phase;
 	local purchasedBlock=0;
 	local moneyAvailable;
+	local isThingEquipped=false;
 
 	if ( phase == "will" ) then
 		local function nextScene (event)
@@ -51,7 +52,31 @@ function scene:show( event )
 			composer.gotoScene( "page1", sceneOpt);
 		end
 
+		local function removeEquip( isThingEquipped )
+			if(isThingEquipped == "Equip") then
+				equipBtn.isVisible = true;
+			elseif (isThingEquipped== "Equip2") then
+				equipBtn2.isVisible = true;
+			elseif (isThingEquipped == "Equip3") then
+				equipBtn3.isVisible = true;
+			elseif (isThingEquipped == "Equip4") then
+				equipBtn4.isVisible = true;
+			elseif (isThingEquipped == "Equip5") then
+				equipBtn5.isVisible = true;
+			elseif (isThingEquipped == "Equip6") then
+				equipBtn6.isVisible = true;
+			elseif (isThingEquipped == "Equip7") then
+				equipBtn7.isVisible = true;
+			elseif (isThingEquipped == "Equip8") then
+				equipBtn8.isVisible = true;
+			elseif (isThingEquipped == "Equip9") then
+				equipBtn9.isVisible = true;
+			end
+		end
+
 		local function equipMe( event )
+			removeEquip(isThingEquipped);
+			isThingEquipped = event.target.id;
 			if(event.target.id == "Equip") then
 				event.target.isVisible = false
 				unequipBtn.isVisible = true
