@@ -2,7 +2,7 @@
 --x is 240 across each time
 -- need button 240 width
 
-
+--FONTS--
 if "Win" == system.getInfo( "platformName" ) then
     BlockFont = "3D Thirteen Pixel Fonts";
     CompFont = "Computer Pixel-7";
@@ -39,6 +39,7 @@ function scene:show( event )
 
 
 	if ( phase == "will" ) then
+		--go to the day scene
 		local function nextScene (event)
 			moneyAvailable:removeSelf( );
 			params.purchasedBlock=purchasedBlock;
@@ -49,7 +50,8 @@ function scene:show( event )
 			}
 			composer.gotoScene( "day", sceneOpt);
 		end
-
+		
+		--go to next page of the shop
 		local function nextPage (event)
 			moneyAvailable:removeSelf( );
 			params.purchasedBlock=purchasedBlock;
@@ -60,7 +62,7 @@ function scene:show( event )
 			}
 			composer.gotoScene( "page1", sceneOpt);
 		end
-
+		--for blocks, buy button will reappear
 		local function reshowBuyBtn( isThingBought )
 			if(isThingBought == "Buy") then
 				buyBtn.isVisible = true;
@@ -82,7 +84,7 @@ function scene:show( event )
 				buyBtn9.isVisible = true;
 			end
 		end
-
+		--button logic to use the buy function of the shop
 		local function buyMe( event )
 			reshowBuyBtn(isThingBought);
 			isThingBought = event.target.id;
@@ -161,7 +163,7 @@ function scene:show( event )
 				end
 			end 
 		end
-		
+		--move of to the day scene
 		local continueBtn = widget.newButton(
 		    {
 		        x = display.contentCenterX,
@@ -193,7 +195,7 @@ function scene:show( event )
 		nextPageBtn:scale( 0.5, 0.5 );
 		sceneGroup:insert( nextPageBtn );
 
-
+		--title of page
 		local pageTitle = display.newText("BRICK SHOP", display.contentCenterX, display.contentCenterY - 500,CompFont, 120)
 		sceneGroup:insert(pageTitle)
 
@@ -226,11 +228,11 @@ function scene:show( event )
 
 		--local currentlyEquiptedShit = display.newText("Currently Equipted Shit", display.contentCenterX, display.contentCenterY + 500, native.systemFont, 50)
 		--sceneGroup:insert(currentlyEquiptedShit)
-
+		--ticket parameters to pass from scene to scene
 		if(params.ticketNum==nil)then
 			params.ticketNum=10000;
 		end
-
+		-- update money when you buy something
 		function updateMoney(  )
 			moneyAvailable = display.newText("Tickets: "..params.ticketNum, display.contentCenterX, display.contentCenterY + 600, CompFont, 100)
 			sceneGroup:insert(moneyAvailable)
