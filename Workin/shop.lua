@@ -5,6 +5,7 @@
 local composer = require( "composer" );
 local widget = require("widget");
 local scene = composer.newScene();
+local audio = require("audio")
 local params;
 
 --locals
@@ -36,6 +37,12 @@ local equipBtn9
 local unequipBtn9
 
 
+local soundTable = {
+	buySound  = audio.loadSound("sound/coin.mp3"),
+	equipSound = audio.loadSound("sounds/gunCock.mp3"),
+	--bgShop = audio.loadStr("shoply.mp3")
+}
+
 --scene:create
 function scene:create( event )
 	local sceneGroup = self.view
@@ -51,12 +58,19 @@ function scene:show( event )
 	if ( phase == "will" ) then
 		--local text = display.newText( sceneGroup, "shop scene", display.contentCenterX, display.contentCenterY, native.systemFont, 25 );
 
+		--play music until shop is gone
+		local bgShop = audio.loadStream("sounds/shoply.mp3")
+		audio.setMaxVolume(.015, {channel = 1})
+		--sceneGroup:insert(bgShop)
+		local backGroundChan = audio.play(bgShop, {channel = 1, loops = -1, fadein = 500})
+
 		local function nextScene (event)
 			local sceneOpt = {
 				effect = "fade",
 				time = 800,
 				params = params
 			}
+			audio.stop(bgShop)
 			composer.gotoScene( "day", sceneOpt);
 		end
 
@@ -71,6 +85,10 @@ function scene:show( event )
 
 		local function equipMe( event )
 			--print("Equipping shit...please wait :)");
+			local equipz = audio.loadSound("sounds/gunCock.mp3")
+			audio.play(equipz, {channel = 3})
+			audio.setMaxVolume(1, {channel = 3})
+
 			if(event.target.id == "Equip") then
 				event.target.isVisible = false
 				unequipBtn.isVisible = true
@@ -99,6 +117,7 @@ function scene:show( event )
 				event.target.isVisible = false
 				unequipBtn9.isVisible = true
 			end
+
 
 		end
 
@@ -136,10 +155,14 @@ function scene:show( event )
 
 		local function buyMe( event )
 			--print("Money, Money, money $$$")
+			--local buySound  = audio.loadStream("coin.wav")
+			local coinz = audio.loadSound("sounds/coin.mp3")
+			audio.play(coinz, {channel = 2})
+			audio.setMaxVolume(.80, {channel = 2})
+
 			if(event.target.id == "Buy") then
 				event.target.isVisible = false
 				equipBtn.isVisible = true
-				--update money
 			elseif (event.target.id == "Buy2") then
 				event.target.isVisible = false
 				equipBtn2.isVisible = true
@@ -216,7 +239,7 @@ function scene:show( event )
 
 		--DIV HOR
 		local yTack = ((display.contentCenterY * 2) - 342)/3
-		--print(yTack)
+		print(yTack)
 
 		local horionDivide1 = display.newRect(display.contentCenterX, 172, display.contentCenterX*2, 5) -- y = 172
 		sceneGroup:insert(horionDivide1)
