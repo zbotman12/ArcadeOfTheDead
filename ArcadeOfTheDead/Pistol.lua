@@ -34,7 +34,13 @@ function Pistol:shoot(playerGroup)
 			bullet:setFillColor(1,0,0);
 		self.spt:setSequence( "shoot" );
 		self.spt:play( );
-		timer.performWithDelay( 200, function () self.spt:setSequence( "idle" ); self.spt:play( ); end )
+		timer.performWithDelay( 200, 
+			function () 
+				if(self.spt~=nil)then
+					self.spt:setSequence( "idle" );
+					self.spt:play( );
+				end
+			end );
 		physics.addBody (bullet, "dynamic", {radius=5, filter=CollisionFilters.bullet} );
 		--bullet.isSensor = true;
 		bullet.isBullet =true;

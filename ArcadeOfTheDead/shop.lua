@@ -40,6 +40,8 @@ function scene:show( event )
 
 	if ( phase == "will" ) then
 		local function nextScene (event)
+			moneyAvailable:removeSelf( );
+			params.purchasedBlock=purchasedBlock;
 			local sceneOpt = {
 				effect = "fade",
 				time = 800,
@@ -49,6 +51,7 @@ function scene:show( event )
 		end
 
 		local function nextPage (event)
+			moneyAvailable:removeSelf( );
 			params.purchasedBlock=purchasedBlock;
 			local sceneOpt = {
 				effect = "fade",

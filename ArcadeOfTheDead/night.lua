@@ -56,7 +56,9 @@ function scene:show( event )
 		physics.start();
 		physics.setGravity(0,0);
 		--physics.setDrawMode( "hybrid" );
-		sceneGroup:insert(params.wall);	
+		if(params.wall~=nil)then
+			sceneGroup:insert(params.wall);	
+		end
 
 		-----------Cross over line------------------
 		local width = display.contentHeight - (display.contentHeight-180);
@@ -91,6 +93,10 @@ function scene:show( event )
 		end
 		Runtime:addEventListener("tap", movePlayer);
 
+		--------Level-----------------------
+		local level = display.newText(sceneGroup,"Level: "..params.level,display.contentCenterX,15,native.systemFont, 25);
+		level:setFillColor( 1,1,1,.75 );
+
 		local function zombieAttackBrick( event )
 			if(event.phase=="began")then
 				transition.cancel( event.target );
@@ -120,6 +126,9 @@ function scene:show( event )
 							display.remove( heartGroup );							
 							physics.removeBody( crossLine );
 							display.remove( crossLine );
+							display.remove( ticketText );
+							display.remove( level );
+							display.remove( heroGuy );
 							params.ticketNum=ticketNum;
 							params.life=life;
 							local sceneOpt = {
@@ -150,6 +159,9 @@ function scene:show( event )
 			display.remove( heartGroup );							
 			physics.removeBody( crossLine );
 			display.remove( crossLine );
+			display.remove( ticketText );
+			display.remove( level );
+			display.remove( heroGuy );
 			params.ticketNum=ticketNum;
 			params.life=life;
 			local sceneOpt = {
@@ -228,7 +240,11 @@ function scene:show( event )
 		statusBar:toFront( );
 
 		-------Tickets----------------------
-		ticketNum=0;
+		if(params.ticketNum==nil)then
+			ticketNum=0;
+		else
+			ticketNum=params.ticketNum;
+		end
 		ticketText = display.newText( sceneGroup, "Tickets: "..ticketNum, 75, 15, native.systemFont, 25 );
 		ticketText:setFillColor( 1,1,1,.75 );
 
@@ -249,10 +265,6 @@ function scene:show( event )
 			end
 		end		
 		showHearts();
-
-		--------Level-----------------------
-		local level = display.newText(sceneGroup,"Level: "..params.level,display.contentCenterX,15,native.systemFont, 25);
-		level:setFillColor( 1,1,1,.75 );
 
 	end
 end

@@ -34,6 +34,7 @@ function scene:show( event )
 	if ( phase == "will" ) then
 
 		local function nextScene (event)
+			moneyAvailable:removeSelf( );
 			local sceneOpt = {
 				effect = "fade",
 				time = 800,
@@ -43,6 +44,7 @@ function scene:show( event )
 		end
 
 		local function nextPage (event)
+			moneyAvailable:removeSelf( );
 			local sceneOpt = {
 				effect = "fade",
 				time = 800,
@@ -215,7 +217,10 @@ function scene:show( event )
 				end
 			elseif (event.target.id == "Buy8") then
 				if(params.ticketNum>=300)then
-					event.target.isVisible = false;
+					params.life=params.life+1;
+					if (params.life == 3) then
+						event.target.isVisible = false;
+					end
 					params.ticketNum=params.ticketNum-150;
 					moneyAvailable:removeSelf( );
 					updateMoney();
@@ -223,7 +228,7 @@ function scene:show( event )
 			else -- event.target.id = "Buy9"
 				if(params.ticketNum>=1)then
 					event.target.isVisible = false;
-					params.ticketNum=params.ticketNum-150;
+					params.ticketNum=params.ticketNum-1;
 					moneyAvailable:removeSelf( );
 					updateMoney();
 				end
@@ -246,21 +251,6 @@ function scene:show( event )
 
 		continueBtn:setFillColor( 0,0.5,0.5 );
 		sceneGroup:insert( continueBtn );
-
-
-		local nextPageBtn = widget.newButton(
-		    {
-		        x = display.contentCenterX + 300,
-		        y = display.contentCenterY - 550,    
-		        id = "Next",  
-		        sheet = params.spriteSheet,
-		        defaultFrame = 18,
-		        onPress = nextPage,
-		    }
-		);
-
-		nextPageBtn:scale( 0.5, 0.5 );
-		sceneGroup:insert( nextPageBtn );
 
 
 		local pageTitle = display.newText("MISCELANEOUS", display.contentCenterX, display.contentCenterY - 550, native.systemFont, 60)
@@ -696,7 +686,9 @@ function scene:show( event )
 		        onPress = buyMe,
 		    }
 		);
-
+		if (params.life == 3) then
+			buyBtn8.isVisible = false;
+		end
 		buyBtn8:setFillColor( 0,0.9,0.3 );
 		sceneGroup:insert( buyBtn8 );
 
