@@ -8,7 +8,10 @@ local params;
 --scene:create
 function scene:create( event )
 	local sceneGroup = self.view
-	params = event.params
+	params = event.params;
+	local bg = display.newImage ("images/ArcadeOfTheDeadTitle.png");
+	bg.anchorX=0; bg.anchorY=0;
+    bg:toBack();
 end
 
 
@@ -29,12 +32,12 @@ function scene:show( event )
 		end
 		local startGameBtn = widget.newButton(
 		    {
-		        x = display.contentCenterX,
-		        y = display.contentCenterY - 100,    
+		        x = display.contentCenterX-200,
+		        y = display.contentCenterY + 300,    
 		        id = "Start Game",
 		        label = "Start Game",
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
-		        sheet = params.buttonSheet,
+		        sheet = params.spriteSheet,
 		        defaultFrame = 1,
 		        onPress = nextScene,
 		    }
@@ -53,12 +56,12 @@ function scene:show( event )
 		end
 		local howToPlay = widget.newButton(
 		    {
-		        x = display.contentCenterX,
-		        y = display.contentCenterY + 100,    
+		        x = display.contentCenterX +200,
+		        y = display.contentCenterY + 300,    
 		        id = "How To Play",
 		        label = "How To Play",
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
-		        sheet = params.buttonSheet,
+		        sheet = params.spriteSheet,
 		        defaultFrame = 1,
 		        onPress = instructionScene,
 		    }
