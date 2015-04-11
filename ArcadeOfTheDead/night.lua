@@ -26,6 +26,10 @@ function scene:show( event )
 	local brickSize = 70;
 	local zombiesPlayerKilled=0;
 	local ticketNum,ticketText,life,zombiesToKill,crossLine;
+	
+	--music
+	local bgNight = audio.loadStream("sounds/night.mp3")
+	audio.setMaxVolume(.015, {channel = 1})
 
 	local function newGun (guntype)
 		local gun;
