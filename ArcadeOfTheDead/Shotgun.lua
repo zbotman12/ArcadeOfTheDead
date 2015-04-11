@@ -37,6 +37,9 @@ function Shotgun:shoot(playerGroup)
 		bullet:applyForce(0, -2, bullet.x, bullet.y);
 		--audio.play( soundTable["shootSound"] );
 		bullet.tag = "shot";
+		local shotsFired = audio.loadSound("sounds/pistol.mp3")
+		audio.play(shotsFired, {channel = 13})
+		audio.setMaxVolume(0.20, {channel = 13})
 		return bullet;
 	end
 end
