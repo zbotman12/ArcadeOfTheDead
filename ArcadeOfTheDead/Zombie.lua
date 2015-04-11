@@ -24,6 +24,9 @@ function Zombie:spawn( spriteSheet)
 	self.shape.anchorY = 100;
 	self.shape:setSequence( "walk" );
 	self.shape:play();
+	local growl = audio.loadSound("sounds/zombie.mp3")
+	audio.play(growl, {channel = 10})
+	audio.setMaxVolume(0.10, {channel = 10})
 	return self.shape;
 end
 

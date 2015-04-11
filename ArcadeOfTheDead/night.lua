@@ -47,6 +47,10 @@ function scene:show( event )
 	end
 
 	if ( phase == "will" ) then
+		local bgNight = audio.loadStream("sounds/night.mp3")
+		--sceneGroup:insert(bgNight)
+		audio.setMaxVolume(0.045, {channel = 1})
+		local backGroundChan = audio.play(bgNight, {channel = 1, loops = -1, fadein = 500})
 
 	elseif ( phase == "did" ) then	
 		physics.start();
@@ -153,6 +157,7 @@ function scene:show( event )
 				time = 800,
 				params = params
 			}
+			audio.stop(bgNight)
 			composer.gotoScene( "GameOver", sceneOpt);
 		end	
 
