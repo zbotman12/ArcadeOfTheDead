@@ -1,4 +1,12 @@
 --Start Menu
+if "Win" == system.getInfo( "platformName" ) then
+    BlockFont = "3D Thirteen Pixel Fonts";
+    CompFont = "Computer Pixel-7";
+elseif "Android" == system.getInfo( "platformName" ) then
+    BlockFont = "3D-Thirteen-Pixel-Fonts"
+    CompFont = "computer_pixel-7"
+end
+
 local composer = require( "composer" );
 local widget = require("widget");
 local scene = composer.newScene();
@@ -38,9 +46,10 @@ function scene:show( event )
 		    {
 		        x = display.contentCenterX-200,
 		        y = display.contentCenterY + 300,    
-		        id = "Start Game",
-		        label = "Start Game",
-		        fontSize=35,
+		        id = "Start",
+		        label = "Start",
+		        fontSize=75,
+		        font=CompFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -62,10 +71,11 @@ function scene:show( event )
 		    {
 		        x = display.contentCenterX +200,
 		        y = display.contentCenterY + 300,    
-		        id = "How To Play",
-		        label = "How To Play",
-		        fontSize=35,
-		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
+		        id = "Tutorial",
+		        label = "Tutorial",
+		        fontSize=75,
+		        font=CompFont,
+		        labelColor = { default={ 0, 0, 0}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
 		        onPress = instructionScene,

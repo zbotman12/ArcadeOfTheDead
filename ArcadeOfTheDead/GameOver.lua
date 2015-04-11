@@ -1,4 +1,12 @@
 --Game Over
+if "Win" == system.getInfo( "platformName" ) then
+    BlockFont = "3D Thirteen Pixel Fonts";
+    CompFont = "Computer Pixel-7";
+elseif "Android" == system.getInfo( "platformName" ) then
+    BlockFont = "3D-Thirteen-Pixel-Fonts"
+    CompFont = "computer_pixel-7"
+end
+
 local composer = require( "composer" );
 local widget = require("widget");
 local scene = composer.newScene();
@@ -43,7 +51,8 @@ function scene:show( event )
 		        y = display.contentCenterY + 400,    
 		        id = "New Game",
 		        label = "New Game?",
-		        fontSize=35,
+		        fontSize=55,
+		        font=CompFont;
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,

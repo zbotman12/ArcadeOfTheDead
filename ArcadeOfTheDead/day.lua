@@ -40,7 +40,7 @@ function scene:show( event )
 	if ( phase == "will" ) then	
 		physics.start();
 		physics.setGravity(0,0);
-		physics.setDrawMode( "hybrid" );
+		--physics.setDrawMode( "hybrid" );
 		--sceneGroup:insert(wall);
 		if(params.wall~=nil)then
 			sceneGroup:insert(params.wall);	
@@ -364,8 +364,8 @@ function scene:show( event )
 
 					for i=1,currentBlock.numChildren do
 						local child=currentBlock[i];
-						--child.anchorY = 35;
-						--child.anchorX = 35;
+						child.anchorY = 35;
+						child.anchorX = 35;
 						physics.addBody( child, "static", {filter=CollisionFilters.brick} );
 					end
 					spawnNewBlock();
@@ -378,8 +378,7 @@ function scene:show( event )
 				end			
 		end
 
-		local blockCounter =1;
-
+		local blockCounter =5;
 
 		function spawnNewBlock(  )
 			if(blockCounter > 0) then
@@ -392,7 +391,8 @@ function scene:show( event )
 				sceneGroup:insert( wall );	
 				checkRayCast();
 			else
-				next();
+				timer.performWithDelay( 500, 
+					function () next()	end,1 );
 			end
 		end
 

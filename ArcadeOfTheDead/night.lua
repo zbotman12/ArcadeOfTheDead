@@ -1,3 +1,12 @@
+----------NIGHT SCENE----------------
+if "Win" == system.getInfo( "platformName" ) then
+    BlockFont = "3D Thirteen Pixel Fonts";
+    CompFont = "Computer Pixel-7";
+elseif "Android" == system.getInfo( "platformName" ) then
+    BlockFont = "3D-Thirteen-Pixel-Fonts"
+    CompFont = "computer_pixel-7"
+end
+
 local composer = require( "composer" );
 local widget = require("widget");
 local Brick = require("Brick");
@@ -94,7 +103,7 @@ function scene:show( event )
 		Runtime:addEventListener("tap", movePlayer);
 
 		--------Level-----------------------
-		local level = display.newText(sceneGroup,"Level: "..params.level,display.contentCenterX,15,native.systemFont, 25);
+		local level = display.newText(sceneGroup,"Level: "..params.level,display.contentCenterX,15,CompFont, 50);
 		level:setFillColor( 1,1,1,.75 );
 
 		local function zombieAttackBrick( event )
@@ -106,7 +115,7 @@ function scene:show( event )
 						local function go( )
 					   		moveZombie(event.target);
 					   end
-					   if(event.target~=nil)then
+					   if(event.target.y~=nil)then
 							transition.to(event.target, {x=event.target.x, y=event.target.y-1, time=1, onComplete=go} );
 						end
 					end
@@ -117,7 +126,7 @@ function scene:show( event )
 					event.other=nil;
 					ticketNum = ticketNum + 10;
 					ticketText:removeSelf( );
-					ticketText = display.newText( sceneGroup, "Tickets: "..ticketNum, 75, 15, native.systemFont, 25 );
+					ticketText = display.newText( sceneGroup, "Tickets: "..ticketNum, 100, 15, CompFont, 50 );
 					ticketText:setFillColor( 1,1,1,.75 );
 					zombiesPlayerKilled = zombiesPlayerKilled + 1;
 					if(zombiesToKill == zombiesPlayerKilled) then						
@@ -136,11 +145,12 @@ function scene:show( event )
 								time = 800,
 								params = params
 							}
-							composer.gotoScene( "shop", sceneOpt);
+							timer.performWithDelay( 500, 
+								function () composer.gotoScene( "shop", sceneOpt);	end,1 );							
 						end
 						goToShop();
 					end
-				else
+				else --crossline
 					life = life -1;
 					display.remove(heartGroup);
 					heartGroup = display.newGroup();
@@ -221,13 +231,13 @@ function scene:show( event )
 			
 		end
 
-		local totalNumZombies = 1;
-		zombiesToKill = 1;
+		local totalNumZombies = 10;
+		zombiesToKill = 10;
 		function spawnZombieHorde( )
 			spawnRandomZombie();
 			totalNumZombies = totalNumZombies -1;
 			if(totalNumZombies >0)then
-				timer.performWithDelay(2000, spawnZombieHorde,1);
+				timer.performWithDelay(1000, spawnZombieHorde,1);
 			end
 		end
 		
@@ -245,7 +255,7 @@ function scene:show( event )
 		else
 			ticketNum=params.ticketNum;
 		end
-		ticketText = display.newText( sceneGroup, "Tickets: "..ticketNum, 75, 15, native.systemFont, 25 );
+		ticketText = display.newText( sceneGroup, "Tickets: "..ticketNum, 100, 15, CompFont, 50 );
 		ticketText:setFillColor( 1,1,1,.75 );
 
 		--------Life Total-----------------

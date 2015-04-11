@@ -1,7 +1,4 @@
----TEMPLATE FOR ALL PAGES
---x is 240 across each time
--- need button 240 width
-
+----------SHOP SCENE--------------
 
 if "Win" == system.getInfo( "platformName" ) then
     BlockFont = "3D Thirteen Pixel Fonts";
@@ -39,28 +36,6 @@ function scene:show( event )
 
 
 	if ( phase == "will" ) then
-		local function nextScene (event)
-			moneyAvailable:removeSelf( );
-			params.purchasedBlock=purchasedBlock;
-			local sceneOpt = {
-				effect = "fade",
-				time = 800,
-				params = params
-			}
-			composer.gotoScene( "day", sceneOpt);
-		end
-
-		local function nextPage (event)
-			moneyAvailable:removeSelf( );
-			params.purchasedBlock=purchasedBlock;
-			local sceneOpt = {
-				effect = "fade",
-				time = 800,
-				params = params
-			}
-			composer.gotoScene( "page1", sceneOpt);
-		end
-
 		local function reshowBuyBtn( isThingBought )
 			if(isThingBought == "Buy") then
 				buyBtn.isVisible = true;
@@ -161,40 +136,9 @@ function scene:show( event )
 				end
 			end 
 		end
-		
-		local continueBtn = widget.newButton(
-		    {
-		        x = display.contentCenterX,
-		        y = display.contentCenterY - 600,    
-		        id = "Continue",
-		        label = "Continue",
-		        fontSize=50,
-		        font = BlockFont,
-		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
-		        sheet = params.spriteSheet,
-		        defaultFrame = 16,
-		        onPress = nextScene,
-		    }
-		);
-		continueBtn:setFillColor( 0,0.5,0.5 );
-		sceneGroup:insert( continueBtn );
 
-		local nextPageBtn = widget.newButton(
-		    {
-		        x = display.contentCenterX + 300,
-		        y = display.contentCenterY - 550,    
-		        id = "Next", 
-		        sheet = params.spriteSheet,
-		        defaultFrame = 18,
-		        onPress = nextPage,
-		    }
-		);
-		--nextPageBtn:setFillColor( 0,0.5,0.5 );
-		nextPageBtn:scale( 0.5, 0.5 );
-		sceneGroup:insert( nextPageBtn );
-
-
-		local pageTitle = display.newText("BRICK SHOP", display.contentCenterX, display.contentCenterY - 500,CompFont, 120)
+		local pageTitle = display.newText("BRICK SHOP", display.contentCenterX, display.contentCenterY - 550,CompFont, 60)
+		pageTitle:setFillColor( 0,0,0 );
 		sceneGroup:insert(pageTitle)
 
 		--DIV VERT
@@ -233,11 +177,20 @@ function scene:show( event )
 
 		function updateMoney(  )
 			moneyAvailable = display.newText("Tickets: "..params.ticketNum, display.contentCenterX, display.contentCenterY + 600, CompFont, 100)
+			moneyAvailable:setFillColor( 0,0,0 );
 			sceneGroup:insert(moneyAvailable)
 		end
 		updateMoney();
 		-----ROW 1------
 		local rowY = 145 + yTack;
+
+		----Black Squares----
+		local square1 = display.newRect(sceneGroup, 120,rowY-160,220,240);
+		square1:setFillColor( 0,0,0,.6 );
+		local square2 = display.newRect(sceneGroup, 360,rowY-160,220,240);
+		square2:setFillColor( 0,0,0,.6 );
+		local square3 = display.newRect(sceneGroup, 600,rowY-160,220,240);
+		square3:setFillColor( 0,0,0,.6 );
 
 		buyBtn = widget.newButton(
 		    {
@@ -295,6 +248,14 @@ function scene:show( event )
 		--ROW 2
 		rowY = 145 + (yTack*2)
 
+		----Black Squares----
+		local square4 = display.newRect(sceneGroup, 120,rowY-150,220,240);
+		square4:setFillColor( 0,0,0,.6 );
+		local square5 = display.newRect(sceneGroup, 360,rowY-155,220,240);
+		square5:setFillColor( 0,0,0,.6 );
+		local square6 = display.newRect(sceneGroup, 600,rowY-155,220,240);
+		square6:setFillColor( 0,0,0,.6 );
+
 		buyBtn4 = widget.newButton(
 		    {
 		        x = 120,
@@ -350,8 +311,15 @@ function scene:show( event )
 		sceneGroup:insert( buyBtn6 );
 
 		--ROW 3
-
 		rowY = 145 + (yTack*3)
+
+		----Black Squares----
+		local square7 = display.newRect(sceneGroup, 120,rowY-150,220,240);
+		square7:setFillColor( 0,0,0,.6 );
+		local square8 = display.newRect(sceneGroup, 360,rowY-155,220,240);
+		square8:setFillColor( 0,0,0,.6 );
+		local square9 = display.newRect(sceneGroup, 600,rowY-155,220,240);
+		square9:setFillColor( 0,0,0,.6 );
 
 		buyBtn7 = widget.newButton(
 		    {
@@ -406,6 +374,72 @@ function scene:show( event )
 
 		buyBtn9:setFillColor( 0,0.9,0.3 );
 		sceneGroup:insert( buyBtn9);
+
+		function removeObjs(  )		
+			moneyAvailable:removeSelf( );
+			display.remove( square1 );
+			display.remove( square2 );
+			display.remove( square3 );
+			display.remove( square4 );
+			display.remove( square5 );
+			display.remove( square6 );
+			display.remove( square7 );
+			display.remove( square8 );
+			display.remove( square9 );
+		end
+
+		local function nextScene (event)
+			removeObjs( );
+			params.purchasedBlock=purchasedBlock;
+			local sceneOpt = {
+				effect = "fade",
+				time = 800,
+				params = params
+			}
+			composer.gotoScene( "day", sceneOpt);
+		end
+
+		local function nextPage (event)
+			removeObjs( );
+			params.purchasedBlock=purchasedBlock;
+			local sceneOpt = {
+				effect = "fade",
+				time = 800,
+				params = params
+			}
+			composer.gotoScene( "page1", sceneOpt);
+		end
+
+		local continueBtn = widget.newButton(
+		    {
+		        x = display.contentCenterX,
+		        y = display.contentCenterY - 600,    
+		        id = "Continue",
+		        label = "Continue",
+		        fontSize=60,
+		        font = CompFont,
+		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
+		        sheet = params.spriteSheet,
+		        defaultFrame = 16,
+		        onPress = nextScene,
+		    }
+		);
+		continueBtn:setFillColor( 0,0.5,0.5 );
+		sceneGroup:insert( continueBtn );
+
+		local nextPageBtn = widget.newButton(
+		    {
+		        x = display.contentCenterX + 300,
+		        y = display.contentCenterY - 550,    
+		        id = "Next", 
+		        sheet = params.spriteSheet,
+		        defaultFrame = 18,
+		        onPress = nextPage,
+		    }
+		);
+		--nextPageBtn:setFillColor( 0,0.5,0.5 );
+		nextPageBtn:scale( 0.5, 0.5 );
+		sceneGroup:insert( nextPageBtn );
 
 	elseif ( phase == "did" ) then	
 

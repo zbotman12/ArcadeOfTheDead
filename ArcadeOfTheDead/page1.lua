@@ -1,6 +1,12 @@
----TEMPLATE FOR ALL PAGES
---x is 240 across each time
--- need button 240 width
+----------SHOP SCENE, page 2--------------
+
+if "Win" == system.getInfo( "platformName" ) then
+    BlockFont = "3D Thirteen Pixel Fonts";
+    CompFont = "Computer Pixel-7";
+elseif "Android" == system.getInfo( "platformName" ) then
+    BlockFont = "3D-Thirteen-Pixel-Fonts"
+    CompFont = "computer_pixel-7"
+end
 
 local composer = require( "composer" );
 local widget = require("widget");
@@ -22,6 +28,11 @@ local equipBtn9, unequipBtn9;
 function scene:create( event )
 	local sceneGroup = self.view
 	params = event.params
+
+	local bg = display.newImage ("images/ShopBG.png");
+	bg.anchorX=0; bg.anchorY=0;
+    bg:toBack();
+    sceneGroup:insert( bg );
 end
 
 
@@ -30,10 +41,14 @@ function scene:show( event )
 	local sceneGroup = self.view;
 	local phase = event.phase;	
 	local isThingEquipped=false;
+	local wall = params.wall;
+	local blockHealth = 0;
+	local totalNumOfBricks = 0;
+	local repairCost=0;
 
 	if ( phase == "will" ) then
 
-		local function nextScene (event)
+		function nextScene (event)
 			moneyAvailable:removeSelf( );
 			local sceneOpt = {
 				effect = "fade",
@@ -43,7 +58,7 @@ function scene:show( event )
 			composer.gotoScene( "day", sceneOpt);
 		end
 
-		local function nextPage (event)
+		function nextPage (event)
 			moneyAvailable:removeSelf( );
 			local sceneOpt = {
 				effect = "fade",
@@ -53,7 +68,7 @@ function scene:show( event )
 			composer.gotoScene( "page2", sceneOpt);
 		end
 
-		local function prevPage (event)
+		function prevPage (event)
 			local sceneOpt = {
 				effect = "fade",
 				time = 800,
@@ -228,47 +243,28 @@ function scene:show( event )
 			else -- event.target.id = "Buy9"
 				if(params.ticketNum>=1)then
 					event.target.isVisible = false;
-					params.ticketNum=params.ticketNum-1;
+					if(wall~=nil) then
+						for i=1,wall.numChildren do
+							local child = wall[i];
+							for j=1,child.numChildren do
+								local brick = child[j];
+								if(brick.pp~=nil)then
+									brick.pp.HP = 4;
+									brick.pp.shape:setSequence("4");
+								end
+							end
+						end
+					end
+					params.ticketNum=params.ticketNum-repairCost;
 					moneyAvailable:removeSelf( );
 					updateMoney();
 				end
 			end 
 		end
 		
-		local continueBtn = widget.newButton(
-		    {
-		        x = display.contentCenterX,
-		        y = display.contentCenterY - 600,    
-		        id = "Continue",
-		        label = "Continue",
-		        fontSize=35,
-		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
-		        sheet = params.spriteSheet,
-		        defaultFrame = 16,
-		        onPress = nextScene,
-		    }
-		);
-
-		continueBtn:setFillColor( 0,0.5,0.5 );
-		sceneGroup:insert( continueBtn );
-
-
-		local pageTitle = display.newText("MISCELANEOUS", display.contentCenterX, display.contentCenterY - 550, native.systemFont, 60)
+		local pageTitle = display.newText("MISCELANEOUS", display.contentCenterX, display.contentCenterY - 550, CompFont, 60)
+		pageTitle:setFillColor( 0,0,0 );
 		sceneGroup:insert(pageTitle)
-
-		local prevPageBtn = widget.newButton(
-		    {
-		        x = display.contentCenterX - 300,
-		        y = display.contentCenterY - 550,    
-		        id = "Prev",  
-		        sheet = params.spriteSheet,
-		        defaultFrame = 17,
-		        onPress = prevPage,
-		    }
-		);
-
-		prevPageBtn:scale( 0.5, 0.5 );
-		sceneGroup:insert( prevPageBtn );
 
 		--DIV VERT
 		--[[
@@ -294,25 +290,34 @@ function scene:show( event )
 
 		local horionDivide4 = display.newRect(display.contentCenterX, 172 + (3*yTack), display.contentCenterX*2, 5) -- y = 1110
 		sceneGroup:insert(horionDivide4)
-
+		
 		--BOTTOM BAR
 		]]--
-
-		local currentlyEquiptedShit = display.newText("Currently Equipted Shit", display.contentCenterX, display.contentCenterY + 500, native.systemFont, 50)
-		sceneGroup:insert(currentlyEquiptedShit)
+		local currentlyEquipted = display.newText("Currently Equipted Shit", display.contentCenterX, display.contentCenterY + 500, CompFont, 75);
+		currentlyEquipted:setFillColor( 0,0,0 );
+		sceneGroup:insert(currentlyEquipted)
 
 		if(params.ticketNum==nil)then
 			params.ticketNum=10000;
 		end
 
 		function updateMoney(  )
-			moneyAvailable = display.newText("Tickets: "..params.ticketNum, display.contentCenterX, display.contentCenterY + 600, native.systemFont, 50)
+			moneyAvailable = display.newText("Tickets: "..params.ticketNum, display.contentCenterX, display.contentCenterY + 600, CompFont, 100);
+			moneyAvailable:setFillColor( 0,0,0 );
 			sceneGroup:insert(moneyAvailable);
 		end
 		updateMoney();
 
 		-----ROW 1------
 		local rowY = 145 + yTack
+		
+		----Black Squares----
+		local square1 = display.newRect(sceneGroup, 120,rowY-160,220,240);
+		square1:setFillColor( 0,0,0,.6 );
+		local square2 = display.newRect(sceneGroup, 360,rowY-160,220,240);
+		square2:setFillColor( 0,0,0,.6 );
+		local square3 = display.newRect(sceneGroup, 600,rowY-160,220,240);
+		square3:setFillColor( 0,0,0,.6 );
 
 		local buyBtn = widget.newButton(
 		    {
@@ -320,7 +325,8 @@ function scene:show( event )
 		        y = rowY,    
 		        id = "Buy",
 		        label = 1000,
-		        fontSize=35,
+		        fontSize=100,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -337,7 +343,8 @@ function scene:show( event )
 		        y = rowY,    
 		        id = "Equip",
 		        label = "Equip",
-		        fontSize=35,
+		        fontSize=90,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -354,7 +361,8 @@ function scene:show( event )
 		        y = rowY,    
 		        id = "Unequip",
 		        label = "Unequip",
-		        fontSize=35,
+		        fontSize=70,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -371,7 +379,8 @@ function scene:show( event )
 		        y = rowY,    
 		        id = "Buy2",
 		        label = 2000,
-		        fontSize=35,
+		        fontSize=100,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -387,7 +396,8 @@ function scene:show( event )
 		        y = rowY,    
 		        id = "Equip2",
 		        label = "Equip",
-		        fontSize=35,
+		        fontSize=90,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -404,7 +414,8 @@ function scene:show( event )
 		        y = rowY,    
 		        id = "Unequip2",
 		        label = "Unequip",
-		        fontSize=35,
+		        fontSize=70,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -421,7 +432,8 @@ function scene:show( event )
 		        y = rowY,    
 		        id = "Buy3",
 		        label = 1000,
-		        fontSize=35,
+		        fontSize=100,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -438,7 +450,8 @@ function scene:show( event )
 		        y = rowY,    
 		        id = "Equip3",
 		        label = "Equip",
-		        fontSize=35,
+		        fontSize=90,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -455,7 +468,8 @@ function scene:show( event )
 		        y = rowY,    
 		        id = "Unequip3",
 		        label = "Unequip",
-		        fontSize=35,
+		        fontSize=70,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -468,6 +482,13 @@ function scene:show( event )
 
 		--ROW 2
 		rowY = 145 + (yTack*2)
+		----Black Squares----
+		local square4 = display.newRect(sceneGroup, 120,rowY-150,220,240);
+		square4:setFillColor( 0,0,0,.6 );
+		local square5 = display.newRect(sceneGroup, 360,rowY-155,220,240);
+		square5:setFillColor( 0,0,0,.6 );
+		local square6 = display.newRect(sceneGroup, 600,rowY-155,220,240);
+		square6:setFillColor( 0,0,0,.6 );
 
 		local buyBtn4 = widget.newButton(
 		    {
@@ -475,7 +496,8 @@ function scene:show( event )
 		        y = rowY,    
 		        id = "Buy4",
 		        label = 500,
-		        fontSize=35,
+		        fontSize=100,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -492,7 +514,8 @@ function scene:show( event )
 		        y = rowY,    
 		        id = "Equip4",
 		        label = "Equip",
-		        fontSize=35,
+		        fontSize=90,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -509,7 +532,8 @@ function scene:show( event )
 		        y = rowY,    
 		        id = "Unequip4",
 		        label = "Unequip",
-		        fontSize=35,
+		        fontSize=70,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -526,7 +550,8 @@ function scene:show( event )
 		        y = rowY,    
 		        id = "Buy5",
 		        label = 400,
-		        fontSize=35,
+		        fontSize=100,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -543,7 +568,8 @@ function scene:show( event )
 		        y = rowY,    
 		        id = "Equip5",
 		        label = "Equip",
-		        fontSize=35,
+		        fontSize=90,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -560,7 +586,8 @@ function scene:show( event )
 		        y = rowY,    
 		        id = "Unequip5",
 		        label = "Unequip",
-		        fontSize=35,
+		        fontSize=70,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -577,7 +604,8 @@ function scene:show( event )
 		        y = rowY,    
 		        id = "Buy6",
 		        label = 250,
-		        fontSize=35,
+		        fontSize=100,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -594,7 +622,8 @@ function scene:show( event )
 		        y = rowY,    
 		        id = "Equip6",
 		        label = "Equip",
-		        fontSize=35,
+		        fontSize=90,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -611,7 +640,8 @@ function scene:show( event )
 		        y = rowY,    
 		        id = "Unequip6",
 		        label = "Unequip",
-		        fontSize=35,
+		        fontSize=70,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -623,8 +653,14 @@ function scene:show( event )
 		sceneGroup:insert( unequipBtn6 );
 
 		--ROW 3
-
 		rowY = 145 + (yTack*3)
+		----Black Squares----
+		local square7 = display.newRect(sceneGroup, 120,rowY-150,220,240);
+		square7:setFillColor( 0,0,0,.6 );
+		local square8 = display.newRect(sceneGroup, 360,rowY-155,220,240);
+		square8:setFillColor( 0,0,0,.6 );
+		local square9 = display.newRect(sceneGroup, 600,rowY-155,220,240);
+		square9:setFillColor( 0,0,0,.6 );
 
 		local buyBtn7 = widget.newButton(
 		    {
@@ -632,7 +668,8 @@ function scene:show( event )
 		        y = rowY,    
 		        id = "Buy7",
 		        label = 300,
-		        fontSize=35,
+		        fontSize=100,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -649,7 +686,8 @@ function scene:show( event )
 		        y = rowY,    
 		        id = "Equip7",
 		        label = "Equip",
-		        fontSize=35,
+		        fontSize=90,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -666,7 +704,8 @@ function scene:show( event )
 		        y = rowY,    
 		        id = "Unequip7",
 		        label = "Unequip",
-		        fontSize=35,
+		        fontSize=70,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -682,6 +721,7 @@ function scene:show( event )
 		heart.x=330; heart.y=rowY-180;
 		heart.anchorX=0; heart.anchorY=0;
 		heart:scale( 3, 3 );
+		sceneGroup:insert( heart );
 
 		local buyBtn8 = widget.newButton(
 		    {
@@ -689,7 +729,8 @@ function scene:show( event )
 		        y = rowY,    
 		        id = "Buy8",
 		        label = 300,
-		        fontSize=35,
+		        fontSize=100,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -702,13 +743,35 @@ function scene:show( event )
 		buyBtn8:setFillColor( 0,0.9,0.3 );
 		sceneGroup:insert( buyBtn8 );
 
+		if(wall~=nil) then
+			for i=1,wall.numChildren do
+				local child = wall[i];
+				for j=1,child.numChildren do
+					local brick = child[j];
+					if(brick.pp~=nil)then
+						print(brick.pp.HP);
+						blockHealth = blockHealth + brick.pp.HP;
+						totalNumOfBricks = totalNumOfBricks +1;
+					end
+				end
+			end
+		end
+		totalNumOfBricks = totalNumOfBricks * 4;
+		repairCost = totalNumOfBricks - blockHealth;
+		repairCost= repairCost*10;
+
+		local repairText = display.newText("Repair\n All\nBlocks", 625, rowY-160, CompFont, 70)
+		repairText:setFillColor( 1,.5,0 );
+		sceneGroup:insert(repairText)
+
 		local buyBtn9 = widget.newButton(
 		    {
 		        x = 600,
 		        y = rowY,    
 		        id = "Buy9",
-		        label = 1,
-		        fontSize=35,
+		        label = repairCost,
+		        fontSize=100,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -718,6 +781,81 @@ function scene:show( event )
 
 		buyBtn9:setFillColor( 0,0.9,0.3 );
 		sceneGroup:insert( buyBtn9);
+
+		function removeObjs(  )		
+			moneyAvailable:removeSelf( );
+			display.remove( square1 );
+			display.remove( square2 );
+			display.remove( square3 );
+			display.remove( square4 );
+			display.remove( square5 );
+			display.remove( square6 );
+			display.remove( square7 );
+			display.remove( square8 );
+			display.remove( square9 );
+		end
+
+		function nextScene (event)
+			removeObjs();
+			local sceneOpt = {
+				effect = "fade",
+				time = 800,
+				params = params
+			}
+			composer.gotoScene( "day", sceneOpt);
+		end
+
+		function nextPage (event)
+			removeObjs();
+			local sceneOpt = {
+				effect = "fade",
+				time = 800,
+				params = params
+			}
+			composer.gotoScene( "page2", sceneOpt);
+		end
+
+		function prevPage (event)
+			removeObjs();
+			local sceneOpt = {
+				effect = "fade",
+				time = 800,
+				params = params
+			}
+			composer.gotoScene( "shop", sceneOpt);
+		end
+
+		local continueBtn = widget.newButton(
+		    {
+		        x = display.contentCenterX,
+		        y = display.contentCenterY - 600,    
+		        id = "Continue",
+		        label = "Continue",
+		        font = CompFont,
+		        fontSize=55,
+		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
+		        sheet = params.spriteSheet,
+		        defaultFrame = 16,
+		        onPress = nextScene,
+		    }
+		);
+
+		continueBtn:setFillColor( 0,0.5,0.5 );
+		sceneGroup:insert( continueBtn );
+
+		local prevPageBtn = widget.newButton(
+		    {
+		        x = display.contentCenterX - 300,
+		        y = display.contentCenterY - 550,    
+		        id = "Prev",  
+		        sheet = params.spriteSheet,
+		        defaultFrame = 17,
+		        onPress = prevPage,
+		    }
+		);
+
+		prevPageBtn:scale( 0.5, 0.5 );
+		sceneGroup:insert( prevPageBtn );
 
 	elseif ( phase == "did" ) then	
 
