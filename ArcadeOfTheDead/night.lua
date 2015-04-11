@@ -24,7 +24,8 @@ function scene:show( event )
 	local wall = display.newGroup();
 	local heartGroup = display.newGroup();
 	local brickSize = 70;
-	local ticketNum,ticketText,life;
+	local zombiesPlayerKilled=0;
+	local ticketNum,ticketText,life,zombiesToKill,crossLine;
 
 	local function newGun (guntype)
 		local gun;
@@ -40,13 +41,14 @@ function scene:show( event )
 	if ( phase == "will" ) then
 		physics.start();
 		physics.setGravity(0,0);
+		--physics.setDrawMode( "hybrid" );
 
 		-----------Cross over line------------------
 		local width = display.contentHeight - (display.contentHeight-180);
-		local crossLine = display.newRect( sceneGroup, 0, display.contentHeight-180, display.contentWidth, width );
+		crossLine = display.newRect( sceneGroup, 0, 1050, display.contentWidth, 5 );
 		crossLine.anchorX=0; crossLine.anchorY=0;
-		crossLine.tag="crossLine";
-		crossLine:setFillColor(0,0,0,0.1);
+		physics.addBody( crossLine, "static", {filters=CollisionFilters.crossLine} );
+		crossLine:setFillColor( 0,0,0,0.1 );
 
 
 		----------Create the player display object group--------
@@ -76,23 +78,21 @@ function scene:show( event )
 			heroGuy.x = event.x;
 			gun:shoot(heroGuy);
 		end
-		crossLine:addEventListener("tap", movePlayer);
+		Runtime:addEventListener("tap", movePlayer);
 
 	elseif ( phase == "did" ) then	
-		local function next (event)
+		local function next (event)	
 			params.ticketNum=ticketNum;
 			local sceneOpt = {
 				effect = "fade",
 				time = 800,
 				params = params
 			}
-			Runtime:removeEventListener("tap", next);
 			composer.gotoScene( "GameOver", sceneOpt);
 		end		
 
 		local function zombieAttackBrick( event )
 			if(event.phase=="began")then
-				print("hit");
 				transition.cancel( event.target );
 				if (event.other.tag == "Brick") then
 					event.other.pp:hit();
@@ -100,7 +100,9 @@ function scene:show( event )
 						local function go( )
 					   		moveZombie(event.target);
 					   end
-						transition.to(event.target, {x=event.target.x, y=event.target.y-1, time=1, onComplete=go} );
+					   if(event.target~=nil)then
+							transition.to(event.target, {x=event.target.x, y=event.target.y-1, time=1, onComplete=go} );
+						end
 					end
 					timer.performWithDelay(500,test,1);
 				elseif(event.other.tag == "shot") then
@@ -110,6 +112,22 @@ function scene:show( event )
 					ticketNum = ticketNum + 10;
 					ticketText:removeSelf( );
 					ticketText = display.newText( sceneGroup, "Tickets: "..ticketNum, 75, 15, native.systemFont, 25 );
+					zombiesPlayerKilled = zombiesPlayerKilled + 1;
+					if(zombiesToKill == zombiesPlayerKilled) then
+						local function next (event)
+							display.remove( heartGroup );							
+							physics.removeBody( crossLine );
+							display.remove( crossLine );
+							params.ticketNum=ticketNum;
+							local sceneOpt = {
+								effect = "fade",
+								time = 800,
+								params = params
+							}
+							composer.gotoScene( "shop", sceneOpt);
+						end
+						next();
+					end
 				else
 					life = life -1;
 					display.remove(heartGroup);
@@ -172,7 +190,8 @@ function scene:show( event )
 			
 		end
 
-		local totalNumZombies = 10;
+		local totalNumZombies = 1;
+		zombiesToKill = 1;
 		function spawnZombieHorde( )
 			spawnRandomZombie();
 			totalNumZombies = totalNumZombies -1;

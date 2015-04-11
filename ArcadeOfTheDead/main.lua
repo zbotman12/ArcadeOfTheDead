@@ -41,4 +41,4 @@ local sceneOpt = {
 	params = {buttonSheet = buttonSheet, spriteSheet = spriteSheet,level=level}
 }
 -- load first scene
-composer.gotoScene( "start", sceneOpt);
+composer.gotoScene( "night", sceneOpt);

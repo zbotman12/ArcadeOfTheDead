@@ -33,11 +33,11 @@ function scene:show( event )
 		--physics.setDrawMode( "hybrid" );
 		sceneGroup:insert(wall);
 
-		--local DayBackground = display.newImage(sceneGroup, "images/Grass.jpg");
-		-- DayBackground.anchorX = 0;
-		-- DayBackground.anchorY = 0;
-		-- DayBackground.yScale = DayBackground.yScale * 2;
-		-- DayBackground:toBack();
+		local DayBackground = display.newImage(sceneGroup, "images/Grass.jpg");
+		DayBackground.anchorX = 0;
+		DayBackground.anchorY = 0;
+		DayBackground.yScale = DayBackground.yScale * 2;
+		DayBackground:toBack();
 
 		function spawnBrick( x, y, group )
 			local brick = Brick:new({xPos=x, yPos=y} );
@@ -366,7 +366,7 @@ function scene:show( event )
 				end			
 		end
 
-		local blockCounter =10;
+		local blockCounter =1;
 
 
 		function spawnNewBlock(  )
