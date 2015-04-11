@@ -26,6 +26,10 @@ function scene:show( event )
 	local brickSize = 70;	
 	local shiftNum = 0;	
 	local polygon;
+	
+	--music
+	local bgDay = audio.loadStream("sounds/tetris.mp3")
+	audio.setMaxVolume(.015, {channel = 1})
 
 	if ( phase == "will" ) then	
 		physics.start();
