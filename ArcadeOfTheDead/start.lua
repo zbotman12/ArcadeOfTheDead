@@ -22,6 +22,9 @@ function scene:show( event )
 	local phase = event.phase;
 
 	if ( phase == "will" ) then
+		local intro = audio.loadStream("sounds/fuckeryhalfpace.mp3")
+		audio.setMaxVolume(.015, {channel = 1})
+		local backGroundChan = audio.play(intro, {channel = 1, loops = -1, fadein = 500})
 	elseif ( phase == "did" ) then	
 		local function nextScene (event)
 			local sceneOpt = {
