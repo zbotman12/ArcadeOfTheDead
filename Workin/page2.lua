@@ -51,6 +51,10 @@ function scene:show( event )
 	if ( phase == "will" ) then
 		--local text = display.newText( sceneGroup, "shop scene", display.contentCenterX, display.contentCenterY, native.systemFont, 25 );
 
+		local bgShop = audio.loadStream("sounds/shoply.mp3")
+		audio.setMaxVolume(.015, {channel = 1})
+		local backGroundChan = audio.play(bgShop, {channel = 1, loops = -1, fadein = 500})
+
 		local function nextScene (event)
 			local sceneOpt = {
 				effect = "fade",
@@ -66,6 +70,7 @@ function scene:show( event )
 				time = 800,
 				params = params
 			}
+			audio.stop(bgShop)
 			composer.gotoScene( "page1", sceneOpt);
 		end
 

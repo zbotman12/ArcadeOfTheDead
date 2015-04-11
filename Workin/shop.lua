@@ -38,8 +38,8 @@ local unequipBtn9
 
 
 local soundTable = {
-	buySound  = audio.loadSound("coin.wav"),
-	equipSound = audio.loadSound("gunCock.wav"),
+	buySound  = audio.loadSound("sound/coin.mp3"),
+	equipSound = audio.loadSound("sounds/gunCock.mp3"),
 	--bgShop = audio.loadStr("shoply.mp3")
 }
 
@@ -70,7 +70,7 @@ function scene:show( event )
 				time = 800,
 				params = params
 			}
-			audio.stop(bgshop)
+			audio.stop(bgShop)
 			composer.gotoScene( "day", sceneOpt);
 		end
 
@@ -85,7 +85,10 @@ function scene:show( event )
 
 		local function equipMe( event )
 			--print("Equipping shit...please wait :)");
-			audio.play(soundTable[equipSound], {channel = 2})
+			local equipz = audio.loadSound("sounds/gunCock.mp3")
+			audio.play(equipz, {channel = 3})
+			audio.setMaxVolume(1, {channel = 3})
+
 			if(event.target.id == "Equip") then
 				event.target.isVisible = false
 				unequipBtn.isVisible = true
@@ -114,6 +117,7 @@ function scene:show( event )
 				event.target.isVisible = false
 				unequipBtn9.isVisible = true
 			end
+
 
 		end
 
@@ -152,12 +156,13 @@ function scene:show( event )
 		local function buyMe( event )
 			--print("Money, Money, money $$$")
 			--local buySound  = audio.loadStream("coin.wav")
-			audio.play(soundTable[buySound], {channel = 2})
+			local coinz = audio.loadSound("sounds/coin.mp3")
+			audio.play(coinz, {channel = 2})
+			audio.setMaxVolume(.80, {channel = 2})
+
 			if(event.target.id == "Buy") then
 				event.target.isVisible = false
 				equipBtn.isVisible = true
-				audio.play(soundTable["buySound"])
-				--update money
 			elseif (event.target.id == "Buy2") then
 				event.target.isVisible = false
 				equipBtn2.isVisible = true
@@ -234,7 +239,7 @@ function scene:show( event )
 
 		--DIV HOR
 		local yTack = ((display.contentCenterY * 2) - 342)/3
-		--print(yTack)
+		print(yTack)
 
 		local horionDivide1 = display.newRect(display.contentCenterX, 172, display.contentCenterX*2, 5) -- y = 172
 		sceneGroup:insert(horionDivide1)
