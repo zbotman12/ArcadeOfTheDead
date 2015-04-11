@@ -258,8 +258,7 @@ function scene:show( event )
 				local heartData={{name = "heart", frames={27}}};
 				heart = display.newSprite( params.spriteSheet, heartData )
 				heart.x=heartX; heart.y=7;
-				heart.anchorX=0; heart.anchorY=0;
-				heart:setFillColor(1,0,0,0.75);
+				heart.anchorX=0; heart.anchorY=0;				
 				heartX = heartX - 30;
 				heartGroup:insert(heart);
 			end

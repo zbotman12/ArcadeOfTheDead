@@ -301,6 +301,10 @@ function scene:show( event )
 		local currentlyEquiptedShit = display.newText("Currently Equipted Shit", display.contentCenterX, display.contentCenterY + 500, native.systemFont, 50)
 		sceneGroup:insert(currentlyEquiptedShit)
 
+		if(params.ticketNum==nil)then
+			params.ticketNum=10000;
+		end
+
 		function updateMoney(  )
 			moneyAvailable = display.newText("Tickets: "..params.ticketNum, display.contentCenterX, display.contentCenterY + 600, native.systemFont, 50)
 			sceneGroup:insert(moneyAvailable);
@@ -672,6 +676,12 @@ function scene:show( event )
 		unequipBtn7.isVisible = false
 		unequipBtn7:setFillColor( 1,0,0 );
 		sceneGroup:insert( unequipBtn7 );
+
+		local heartData={{name = "heart", frames={27}}};
+		local heart = display.newSprite( params.spriteSheet, heartData );
+		heart.x=330; heart.y=rowY-180;
+		heart.anchorX=0; heart.anchorY=0;
+		heart:scale( 3, 3 );
 
 		local buyBtn8 = widget.newButton(
 		    {
