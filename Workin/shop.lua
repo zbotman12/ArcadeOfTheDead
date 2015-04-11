@@ -5,6 +5,7 @@
 local composer = require( "composer" );
 local widget = require("widget");
 local scene = composer.newScene();
+local audio = require("audio")
 local params;
 
 --locals
@@ -36,6 +37,12 @@ local equipBtn9
 local unequipBtn9
 
 
+local soundTable = {
+	buySound  = audio.loadSound("coin.wav"),
+	equipSound = audio.loadSound("gunCock.wav"),
+	--bgShop = audio.loadStr("shoply.mp3")
+}
+
 --scene:create
 function scene:create( event )
 	local sceneGroup = self.view
@@ -51,12 +58,19 @@ function scene:show( event )
 	if ( phase == "will" ) then
 		--local text = display.newText( sceneGroup, "shop scene", display.contentCenterX, display.contentCenterY, native.systemFont, 25 );
 
+		--play music until shop is gone
+		local bgShop = audio.loadStream("sounds/shoply.mp3")
+		audio.setMaxVolume(.015, {channel = 1})
+		--sceneGroup:insert(bgShop)
+		local backGroundChan = audio.play(bgShop, {channel = 1, loops = -1, fadein = 500})
+
 		local function nextScene (event)
 			local sceneOpt = {
 				effect = "fade",
 				time = 800,
 				params = params
 			}
+			audio.stop(bgshop)
 			composer.gotoScene( "day", sceneOpt);
 		end
 
@@ -71,6 +85,7 @@ function scene:show( event )
 
 		local function equipMe( event )
 			--print("Equipping shit...please wait :)");
+			audio.play(soundTable[equipSound], {channel = 2})
 			if(event.target.id == "Equip") then
 				event.target.isVisible = false
 				unequipBtn.isVisible = true
@@ -136,9 +151,12 @@ function scene:show( event )
 
 		local function buyMe( event )
 			--print("Money, Money, money $$$")
+			--local buySound  = audio.loadStream("coin.wav")
+			audio.play(soundTable[buySound], {channel = 2})
 			if(event.target.id == "Buy") then
 				event.target.isVisible = false
 				equipBtn.isVisible = true
+				audio.play(soundTable["buySound"])
 				--update money
 			elseif (event.target.id == "Buy2") then
 				event.target.isVisible = false
