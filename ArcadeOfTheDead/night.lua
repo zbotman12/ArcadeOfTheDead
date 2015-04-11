@@ -39,9 +39,25 @@ function scene:show( event )
 	end
 
 	if ( phase == "will" ) then
+
+	elseif ( phase == "did" ) then	
 		physics.start();
 		physics.setGravity(0,0);
-		--physics.setDrawMode( "hybrid" );
+		physics.setDrawMode( "hybrid" );
+		local function next (event)	
+			Runtime:removeEventListener( "tap", movePlayer );
+			display.remove( heartGroup );							
+			physics.removeBody( crossLine );
+			display.remove( crossLine );
+			params.ticketNum=ticketNum;
+			params.life=life;
+			local sceneOpt = {
+				effect = "fade",
+				time = 800,
+				params = params
+			}
+			composer.gotoScene( "GameOver", sceneOpt);
+		end		
 
 		-----------Cross over line------------------
 		local width = display.contentHeight - (display.contentHeight-180);
@@ -49,7 +65,6 @@ function scene:show( event )
 		crossLine.anchorX=0; crossLine.anchorY=0;
 		physics.addBody( crossLine, "static", {filters=CollisionFilters.crossLine} );
 		crossLine:setFillColor( 0,0,0,0.1 );
-
 
 		----------Create the player display object group--------
 		local playerSeqData = {
@@ -71,25 +86,11 @@ function scene:show( event )
 
 		heroGuy.anchorY=0;
 
-		----- Shooting -------------------------------
-		local cnt = 0;
-
 		local function movePlayer( event )
 			heroGuy.x = event.x;
 			gun:shoot(heroGuy);
 		end
 		Runtime:addEventListener("tap", movePlayer);
-
-	elseif ( phase == "did" ) then	
-		local function next (event)	
-			params.ticketNum=ticketNum;
-			local sceneOpt = {
-				effect = "fade",
-				time = 800,
-				params = params
-			}
-			composer.gotoScene( "GameOver", sceneOpt);
-		end		
 
 		local function zombieAttackBrick( event )
 			if(event.phase=="began")then
@@ -113,12 +114,14 @@ function scene:show( event )
 					ticketText:removeSelf( );
 					ticketText = display.newText( sceneGroup, "Tickets: "..ticketNum, 75, 15, native.systemFont, 25 );
 					zombiesPlayerKilled = zombiesPlayerKilled + 1;
-					if(zombiesToKill == zombiesPlayerKilled) then
-						local function next (event)
+					if(zombiesToKill == zombiesPlayerKilled) then						
+						local function next (event)							
+							Runtime:removeEventListener( "tap", movePlayer );
 							display.remove( heartGroup );							
 							physics.removeBody( crossLine );
 							display.remove( crossLine );
 							params.ticketNum=ticketNum;
+							params.life=life;
 							local sceneOpt = {
 								effect = "fade",
 								time = 800,
@@ -229,6 +232,7 @@ function scene:show( event )
 
 		--------Level-----------------------
 		local level = display.newText(sceneGroup,"Level: "..params.level,display.contentCenterX,15,native.systemFont, 25);
+
 	end
 end
 

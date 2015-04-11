@@ -47,8 +47,6 @@ end
 function scene:show( event )
 	local sceneGroup = self.view;
 	local phase = event.phase;
-	local purchasedBlock=0;
-	local moneyAvailable;
 
 	if ( phase == "will" ) then
 		--local text = display.newText( sceneGroup, "shop scene", display.contentCenterX, display.contentCenterY, native.systemFont, 25 );
@@ -62,8 +60,7 @@ function scene:show( event )
 			composer.gotoScene( "day", sceneOpt);
 		end
 
-		local function nextPage (event)
-			params.purchasedBlock=purchasedBlock;
+		local function prevPage (event)
 			local sceneOpt = {
 				effect = "fade",
 				time = 800,
@@ -140,87 +137,33 @@ function scene:show( event )
 		local function buyMe( event )
 			--print("Money, Money, money $$$")
 			if(event.target.id == "Buy") then
-				if(params.ticketNum>=150)then
-					event.target.isVisible = false
-					equipBtn.isVisible = true
-					--update money
-					purchasedBlock=8;				
-					params.ticketNum=params.ticketNum-150;
-					moneyAvailable:removeSelf( );
-					updateMoney();
-				end
+				event.target.isVisible = false
+				equipBtn.isVisible = true
+				--update money
 			elseif (event.target.id == "Buy2") then
-				if(params.ticketNum>=300)then
-					event.target.isVisible = false
-					equipBtn2.isVisible = true
-					purchasedBlock=9;
-					params.ticketNum=params.ticketNum-300;
-					moneyAvailable:removeSelf( );
-					updateMoney();
-				end
+				event.target.isVisible = false
+				equipBtn2.isVisible = true
 			elseif (event.target.id == "Buy3") then
-				if(params.ticketNum>=500)then
-					event.target.isVisible = false
-					equipBtn3.isVisible = true
-					purchasedBlock=1;
-					params.ticketNum=params.ticketNum-500;
-					moneyAvailable:removeSelf( );
-					updateMoney();
-				end
+				event.target.isVisible = false
+				equipBtn3.isVisible = true
 			elseif (event.target.id == "Buy4") then
-				if(params.ticketNum>=400)then
-					event.target.isVisible = false
-					equipBtn4.isVisible = true
-					purchasedBlock=2;
-					params.ticketNum=params.ticketNum-400;
-					moneyAvailable:removeSelf( );
-					updateMoney();
-				end
+				event.target.isVisible = false
+				equipBtn4.isVisible = true
 			elseif (event.target.id == "Buy5") then
-				if(params.ticketNum>=250)then
-					event.target.isVisible = false
-					equipBtn5.isVisible = true
-					purchasedBlock=3;
-					params.ticketNum=params.ticketNum-250;
-					moneyAvailable:removeSelf( );
-					updateMoney();
-				end
+				event.target.isVisible = false
+				equipBtn5.isVisible = true
 			elseif (event.target.id == "Buy6") then
-				if(params.ticketNum>=250)then
-					event.target.isVisible = false
-					equipBtn6.isVisible = true
-					purchasedBlock=4;
-					params.ticketNum=params.ticketNum-250;
-					moneyAvailable:removeSelf( );
-					updateMoney();
-				end
+				event.target.isVisible = false
+				equipBtn6.isVisible = true
 			elseif (event.target.id == "Buy7") then
-				if(params.ticketNum>=250)then
-					event.target.isVisible = false
-					equipBtn7.isVisible = true
-					purchasedBlock=5;
-					params.ticketNum=params.ticketNum-250;
-					moneyAvailable:removeSelf( );
-					updateMoney();
-				end
+				event.target.isVisible = false
+				equipBtn7.isVisible = true
 			elseif (event.target.id == "Buy8") then
-				if(params.ticketNum>=250)then
-					event.target.isVisible = false
-					equipBtn8.isVisible = true
-					purchasedBlock=6;
-					params.ticketNum=params.ticketNum-250;
-					moneyAvailable:removeSelf( );
-					updateMoney();
-				end
+				event.target.isVisible = false
+				equipBtn8.isVisible = true
 			else -- event.target.id = "Buy9"
-				if(params.ticketNum>=250)then
-					event.target.isVisible = false
-					equipBtn9.isVisible = true
-					purchasedBlock=7;
-					params.ticketNum=params.ticketNum-250;
-					moneyAvailable:removeSelf( );
-					updateMoney();
-				end
+				event.target.isVisible = false
+				equipBtn9.isVisible = true
 			end --end end
 		end
 		
@@ -242,26 +185,25 @@ function scene:show( event )
 		sceneGroup:insert( continueBtn );
 
 
-		local nextPageBtn = widget.newButton(
+		local pageTitle = display.newText("COSTUME SHOP", display.contentCenterX, display.contentCenterY - 550, native.systemFont, 60)
+		sceneGroup:insert(pageTitle)
+
+		local prevPageBtn = widget.newButton(
 		    {
-		        x = display.contentCenterX + 300,
+		        x = display.contentCenterX - 300,
 		        y = display.contentCenterY - 550,    
-		        id = "Next",
-		        label = "Next",
+		        id = "Prev",
+		        label = "Prev",
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.buttonSheet,
 		        defaultFrame = 1,
-		        onPress = nextPage,
+		        onPress = prevPage,
 		    }
 		);
 
-		nextPageBtn:setFillColor( 0,0.5,0.5 );
-		nextPageBtn:scale( 1.5, 1.5 );
-		sceneGroup:insert( nextPageBtn );
-
-
-		local pageTitle = display.newText("BRICK SHOP", display.contentCenterX, display.contentCenterY - 550, native.systemFont, 70)
-		sceneGroup:insert(pageTitle)
+		prevPageBtn:setFillColor( 0,0.5,0.5 );
+		prevPageBtn:scale( 1.5, 1.5 );
+		sceneGroup:insert( prevPageBtn );
 
 		--DIV VERT
 
@@ -289,18 +231,12 @@ function scene:show( event )
 
 		--BOTTOM BAR
 
-		--local currentlyEquiptedShit = display.newText("Currently Equipted Shit", display.contentCenterX, display.contentCenterY + 500, native.systemFont, 50)
-		--sceneGroup:insert(currentlyEquiptedShit)
+		local currentlyEquiptedShit = display.newText("Currently Equipted Shit", display.contentCenterX, display.contentCenterY + 500, native.systemFont, 50)
+		sceneGroup:insert(currentlyEquiptedShit)
 
-		if(params.ticketNum==nil)then
-			params.ticketNum=10000;
-		end
+		local moneyAvailable = display.newText("MONEY YOU HAVE", display.contentCenterX, display.contentCenterY + 560, native.systemFont, 50)
+		sceneGroup:insert(moneyAvailable)
 
-		function updateMoney(  )
-			moneyAvailable = display.newText("Tickets: "..params.ticketNum, display.contentCenterX, display.contentCenterY + 560, native.systemFont, 50)
-			sceneGroup:insert(moneyAvailable)
-		end
-		updateMoney();
 		-----ROW 1------
 		local rowY = 145 + yTack
 
