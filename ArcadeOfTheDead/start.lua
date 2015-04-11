@@ -8,7 +8,11 @@ local params;
 --scene:create
 function scene:create( event )
 	local sceneGroup = self.view
-	params = event.params
+	params = event.params;
+	local bg = display.newImage ("images/ArcadeOfTheDeadTitle.png");
+	bg.anchorX=0; bg.anchorY=0;
+    bg:toBack();
+    sceneGroup:insert( bg );
 end
 
 
@@ -29,18 +33,18 @@ function scene:show( event )
 		end
 		local startGameBtn = widget.newButton(
 		    {
-		        x = display.contentCenterX,
-		        y = display.contentCenterY - 100,    
+		        x = display.contentCenterX-200,
+		        y = display.contentCenterY + 300,    
 		        id = "Start Game",
 		        label = "Start Game",
+		        fontSize=35,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
-		        sheet = params.buttonSheet,
-		        defaultFrame = 1,
+		        sheet = params.spriteSheet,
+		        defaultFrame = 16,
 		        onPress = nextScene,
 		    }
 		);
-		startGameBtn:setFillColor( 0,1,0.5 );
-		startGameBtn:scale( 2, 2 );
+		startGameBtn:setFillColor( 0,1,0 );
 		sceneGroup:insert( startGameBtn );
 
 		local function instructionScene (event)
@@ -53,18 +57,18 @@ function scene:show( event )
 		end
 		local howToPlay = widget.newButton(
 		    {
-		        x = display.contentCenterX,
-		        y = display.contentCenterY + 100,    
+		        x = display.contentCenterX +200,
+		        y = display.contentCenterY + 300,    
 		        id = "How To Play",
 		        label = "How To Play",
+		        fontSize=35,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
-		        sheet = params.buttonSheet,
-		        defaultFrame = 1,
+		        sheet = params.spriteSheet,
+		        defaultFrame = 16,
 		        onPress = instructionScene,
 		    }
 		);
-		howToPlay:setFillColor( .3,.2,.7 );
-		howToPlay:scale( 2, 2 );
+		howToPlay:setFillColor( 1,1,0 );
 		sceneGroup:insert( howToPlay );
 	end
 end

@@ -9,6 +9,10 @@ local params;
 function scene:create( event )
 	local sceneGroup = self.view
 	params = event.params
+	local bg = display.newImage ("images/GameOver.png");
+	bg.anchorX=0; bg.anchorY=0;
+    bg:toBack();
+    sceneGroup:insert( bg );
 end
 
 
@@ -19,7 +23,6 @@ function scene:show( event )
 
 	if ( phase == "will" ) then
 	elseif ( phase == "did" ) then	
-		local text = display.newText( sceneGroup, "Game Over!", display.contentCenterX, display.contentCenterY, native.systemFont, 25 )
 	end
 end
 
