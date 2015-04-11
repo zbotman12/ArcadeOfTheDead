@@ -33,9 +33,6 @@ function scene:show( event )
 	local shiftNum = 0;	
 	local polygon;
 	
-	--music
-	--local bgDay = audio.loadStream("sounds/tetris.mp3")
-	--audio.setMaxVolume(.015, {channel = 1})
 
 	if ( phase == "will" ) then	
 		physics.start();
@@ -45,13 +42,14 @@ function scene:show( event )
 		if(params.wall~=nil)then
 			sceneGroup:insert(params.wall);	
 		end
-
+		
+		--make a brick
 		function spawnBrick( x, y, group )
 			local brick = Brick:new({xPos=x, yPos=y} );
 			brick:spawn(params.spriteSheet);				
 			group:insert(brick.shape);		
 		end
-
+		-- put a block into play
 		function spawnBlock( blockNum )
 			local y=brickSize;
 			if (blockNum == 1)then
@@ -190,14 +188,14 @@ function scene:show( event )
 		]]--
 		physics.addBody( sidebarLeft, "static" );
 		sidebarLeft:setFillColor( 0,0,0,0.1 );
-
+		--handle moving the block left
 		local leftArrow = display.newSprite( params.spriteSheet, {{name = "leftarrow", frames={17}}} );
 		leftArrow.anchorX=0; leftArrow.anchorY=0;
 		leftArrow.x = 0; leftArrow.y = display.contentHeight-180;
 		leftArrow:scale( 0.75, 0.75 );
 		sceneGroup:insert( leftArrow );
 		leftArrow:setSequence( "leftarrow" );
-
+		--handle moving the block right
 		local rightArrow = display.newSprite( params.spriteSheet, {{name = "rightarrow", frames={18}}} );
 		rightArrow.anchorX=0; rightArrow.anchorY=0;
 		rightArrow.x = display.contentWidth-150;
@@ -205,7 +203,7 @@ function scene:show( event )
 		rightArrow:scale( 0.75, 0.75 );
 		sceneGroup:insert( rightArrow );
 		rightArrow:setSequence( "rightArrow" );
-
+		--moving the block
 		function moveBlockLeft( event )
 			if event.phase == "began" then
 				if(currentBlock.x <= 115)then
@@ -219,7 +217,7 @@ function scene:show( event )
 				end
 			end
 		end
-
+		--function to handle moving the block right
 		function moveBlockRight( event )
 			if event.phase == "began" then
 				local hits, hits2, hits3, hits4, hits5, hits6, hits7, hits8;
@@ -258,7 +256,7 @@ function scene:show( event )
 				end
 			end
 		end
-
+		--handle rotation the block
 		function rotateBlock( event )	
 			if(currentBlock.tag == "doNotRotate") then
 				currentBlock:rotate(90);
@@ -280,6 +278,7 @@ function scene:show( event )
 
 	elseif ( phase == "did" ) then
 		params.level=params.level+1;
+		--create a new gun
 		local function newGun (guntype)
 			local gun;
 			if (guntype == "pistol") then
@@ -294,7 +293,7 @@ function scene:show( event )
 		local playerSeqData = {
 	  		{name = "idle", frames={6}}
 		}
-
+		
 		local playerSpt = display.newSprite(params.spriteSheet, playerSeqData )
 		playerSpt:setSequence( "idle" );
 
@@ -320,8 +319,8 @@ function scene:show( event )
 			}			
 			composer.gotoScene( "night", sceneOpt);
 		end
-
-		local BlockTrans;
+	
+		local BlockTrans;--movement of block
 		local function checkRayCast(  )
 			transition.cancel(BlockTrans);
 			local hits,hits2,hits3,hits4;
@@ -379,7 +378,6 @@ function scene:show( event )
 		end
 
 		local blockCounter =5;
-
 		function spawnNewBlock(  )
 			if(blockCounter > 0) then
 				blockCounter = blockCounter - 1;

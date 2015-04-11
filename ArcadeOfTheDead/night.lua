@@ -40,9 +40,6 @@ function scene:show( event )
 	local zombiesPlayerKilled=0;
 	local ticketNum,ticketText,life,zombiesToKill,crossLine;
 	
-	--music
-	--local bgNight = audio.loadStream("sounds/night.mp3")
-	--audio.setMaxVolume(.015, {channel = 1})
 
 	local function newGun (guntype)
 		local gun;
@@ -56,6 +53,7 @@ function scene:show( event )
 	end
 
 	if ( phase == "will" ) then
+		--begin music as scene loads 
 		local bgNight = audio.loadStream("sounds/night.mp3")
 		--sceneGroup:insert(bgNight)
 		audio.setMaxVolume(0.045, {channel = 1})
@@ -163,7 +161,7 @@ function scene:show( event )
 				end
 			end
 		end
-
+		--handler for the game ending
 		function gameOver (event)	
 			Runtime:removeEventListener( "tap", movePlayer );
 			display.remove( heartGroup );							
@@ -182,7 +180,7 @@ function scene:show( event )
 			audio.stop(bgNight)
 			composer.gotoScene( "GameOver", sceneOpt);
 		end	
-
+		--make the zmobie move
 		function moveZombie( zombie )
 			local hits;
 			hits = physics.rayCast( zombie.x, zombie.y, zombie.x, zombie.y+1, "closest" );
@@ -194,7 +192,7 @@ function scene:show( event )
 			    test = transition.to( zombie, {time=self.fT, delay=1, y=zombie.y+100, onComplete=go} );
 			end
 		end
-
+		--make a new zmobie 
 		function spawnZombie( x, y )
 			local zombie = Zombie:new({xPos=x, yPos=y});
 			zombie:spawn(params.spriteSheet);
@@ -204,7 +202,7 @@ function scene:show( event )
 			zombie.shape:addEventListener( "collision", zombieAttackBrick );				
 			moveZombie(zombie.shape);
 		end
-
+		--put random zombie into play
 		function spawnRandomZombie(  )
 			local location = math.random(1,10);
 			if (location == 1) then

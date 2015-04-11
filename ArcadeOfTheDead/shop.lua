@@ -57,7 +57,7 @@ function scene:show( event )
 				buyBtn9.isVisible = true;
 			end
 		end
-
+		--button logic to use the buy function of the shop
 		local function buyMe( event )
 			reshowBuyBtn(isThingBought);
 			isThingBought = event.target.id;
@@ -139,6 +139,7 @@ function scene:show( event )
 
 		local pageTitle = display.newText("BRICK SHOP", display.contentCenterX, display.contentCenterY - 550,CompFont, 60)
 		pageTitle:setFillColor( 0,0,0 );
+
 		sceneGroup:insert(pageTitle)
 
 		--DIV VERT
@@ -170,11 +171,11 @@ function scene:show( event )
 
 		--local currentlyEquiptedShit = display.newText("Currently Equipted Shit", display.contentCenterX, display.contentCenterY + 500, native.systemFont, 50)
 		--sceneGroup:insert(currentlyEquiptedShit)
-
+		--ticket parameters to pass from scene to scene
 		if(params.ticketNum==nil)then
 			params.ticketNum=10000;
 		end
-
+		-- update money when you buy something
 		function updateMoney(  )
 			moneyAvailable = display.newText("Tickets: "..params.ticketNum, display.contentCenterX, display.contentCenterY + 600, CompFont, 100)
 			moneyAvailable:setFillColor( 0,0,0 );
