@@ -31,6 +31,11 @@ end
 
 function Brick:hit ()
 	self.HP = self.HP - 1;
+	
+	local munchies = audio.loadSound("sounds/zombieGrowl.mp3")
+	audio.play(munchies, {channel = 11})
+	audio.setMaxVolume(0.10, {channel = 11})
+	
 	if (self.HP > 0) then
 		--audio.play( soundTable["hitSound"] );
 		if(self.HP== 3) then
