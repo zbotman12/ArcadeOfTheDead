@@ -41,7 +41,8 @@ local MainSheetOpt =
 		--[[24]] { x = 350, y = 520, width = 70, height = 100}, --Zombie Walk 6
 		--[[25]] { x = 420, y = 520, width = 70, height = 100}, --Zombie Walk 7
 		--[[26]] { x = 490, y = 520, width = 70, height = 100}, --Zombie Walk 8
-
+		-------------------------------------------------------------
+		--[[27]] { x = 400, y = 340, width = 25, height = 25}, --Heart for GUI
 	}
 }
 
