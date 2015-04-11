@@ -22,6 +22,11 @@ function scene:show( event )
 	local phase = event.phase;
 
 	if ( phase == "will" ) then
+		
+		local GO = audio.loadStream("sounds/gameover.mp3")
+		audio.setMaxVolume(0.045, {channel = 1})
+		local backGroundChan = audio.play(GO, {channel = 1, loops = -1, fadein = 500})
+		
 	elseif ( phase == "did" ) then	
 		local function nextScene (event)
 			local sceneOpt = {
