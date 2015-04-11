@@ -34,6 +34,7 @@ function scene:show( event )
 				time = 800,
 				params = params
 			}
+			audio.stop(GO)
 			composer.gotoScene( "start", sceneOpt);
 		end
 		local startGameBtn = widget.newButton(
