@@ -54,5 +54,5 @@ local sceneOpt = {
 	params = {spriteSheet = spriteSheet,level=level}
 }
 -- load first scene
-composer.gotoScene( "shop", sceneOpt);
+composer.gotoScene( "start", sceneOpt);
 

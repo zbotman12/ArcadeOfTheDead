@@ -26,7 +26,9 @@ function scene:show( event )
 	local sceneGroup = self.view;
 	local phase = event.phase;
 	local wall = display.newGroup();
-	params.wall=wall;
+	if(params.wall~=nil)then
+		wall:insert( params.wall );
+	end
 	local brickSize = 70;	
 	local shiftNum = 0;	
 	local polygon;
@@ -40,27 +42,14 @@ function scene:show( event )
 		physics.setGravity(0,0);
 		--physics.setDrawMode( "hybrid" );
 		--sceneGroup:insert(wall);
+		if(params.wall~=nil)then
+			sceneGroup:insert(params.wall);	
+		end
 
 		function spawnBrick( x, y, group )
 			local brick = Brick:new({xPos=x, yPos=y} );
 			brick:spawn(params.spriteSheet);				
 			group:insert(brick.shape);		
-		end
-
-		function spawnWall(  )
-			local x = 10;
-			local y = display.contentHeight-180;
-			--spawn the wall of bricks. can use metatable here to wether there should be a block or not.
-			for i=1,10 do
-				for j=1,5 do
-					--if metatable entry is not zero then spawn block
-					--pass in flag/metatable data to set brick animation sequence based on health of brick
-					spawnBrick(x,y, wall);
-					y=y-brickSize;
-				end
-				x=x+brickSize;
-				y=display.contentHeight-180;
-			end
 		end
 
 		function spawnBlock( blockNum )
@@ -290,7 +279,6 @@ function scene:show( event )
 		--
 
 	elseif ( phase == "did" ) then
-
 		params.level=params.level+1;
 		local function newGun (guntype)
 			local gun;
@@ -323,6 +311,7 @@ function scene:show( event )
 
 		---------------Next Scene-----------------
 		local function next ()
+			display.remove( heroGuy );
 			params.wall=wall;
 			local sceneOpt = {
 				effect = "fade",
