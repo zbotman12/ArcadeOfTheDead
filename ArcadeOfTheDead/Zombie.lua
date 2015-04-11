@@ -12,14 +12,17 @@ function Zombie:new (o)
 	return o;
 end
 
-function Zombie:spawn()
-	
-	self.shape=display.newRect( self.xPos, self.yPos, 70, 100 );
+function Zombie:spawn( spriteSheet)
+	local zombieSeqData = {
+		{name = "walk", frames={19}}
+	}
+	self.shape=display.newSprite( spriteSheet, zombieSeqData )
+	self.shape.x = self.xPos;self.shape.y = self.yPos;
 	self.shape.pp = self; -- parent object
 	self.shape.tag = self.tag; -- “Zombie”
-	self.shape:setFillColor( 1,0,0 );
 	self.shape.anchorX = 0; 
 	self.shape.anchorY = 100;
+	self.shape:setSequence( "walk" );
 	return self.shape;
 end
 
