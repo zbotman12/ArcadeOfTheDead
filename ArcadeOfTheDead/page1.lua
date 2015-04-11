@@ -28,7 +28,8 @@ end
 --scene:show
 function scene:show( event )
 	local sceneGroup = self.view;
-	local phase = event.phase;
+	local phase = event.phase;	
+	local isThingEquipped=false;
 
 	if ( phase == "will" ) then
 
@@ -59,7 +60,40 @@ function scene:show( event )
 			composer.gotoScene( "shop", sceneOpt);
 		end
 
-		local function equipMe( event )
+		local function removeEquip( isThingEquipped )
+			if(isThingEquipped == "Equip") then
+				equipBtn.isVisible = true;
+				unequipBtn.isVisible = false;
+			elseif (isThingEquipped== "Equip2") then
+				equipBtn2.isVisible = true;
+				unequipBtn2.isVisible = false;
+			elseif (isThingEquipped == "Equip3") then
+				equipBtn3.isVisible = true;
+				unequipBtn3.isVisible = false;
+			elseif (isThingEquipped == "Equip4") then
+				equipBtn4.isVisible = true;
+				unequipBtn4.isVisible = false;
+			elseif (isThingEquipped == "Equip5") then
+				equipBtn5.isVisible = true;
+				unequipBtn5.isVisible = false;
+			elseif (isThingEquipped == "Equip6") then
+				equipBtn6.isVisible = true;
+				unequipBtn6.isVisible = false;
+			elseif (isThingEquipped == "Equip7") then
+				equipBtn7.isVisible = true;
+				unequipBtn7.isVisible = false;
+			elseif (isThingEquipped == "Equip8") then
+				equipBtn8.isVisible = true;
+				unequipBtn8.isVisible = false;
+			elseif (isThingEquipped == "Equip9") then
+				equipBtn9.isVisible = true;
+				unequipBtn9.isVisible = false;
+			end
+		end
+
+		local function equipMe( event )			
+			removeEquip(isThingEquipped);
+			isThingEquipped = event.target.id;
 			if(event.target.id == "Equip") then
 				event.target.isVisible = false
 				unequipBtn.isVisible = true
@@ -124,33 +158,75 @@ function scene:show( event )
 
 		local function buyMe( event )
 			if(event.target.id == "Buy") then
-				event.target.isVisible = false
-				equipBtn.isVisible = true
-				--update money
+				if(params.ticketNum>=1000)then
+					event.target.isVisible = false
+					equipBtn.isVisible = true
+					params.ticketNum=params.ticketNum-150;
+					moneyAvailable:removeSelf( );
+					updateMoney();
+				end
 			elseif (event.target.id == "Buy2") then
-				event.target.isVisible = false
-				equipBtn2.isVisible = true
+				if(params.ticketNum>=2000)then
+					event.target.isVisible = false
+					equipBtn2.isVisible = true
+					params.ticketNum=params.ticketNum-150;
+					moneyAvailable:removeSelf( );
+					updateMoney();
+				end
 			elseif (event.target.id == "Buy3") then
-				event.target.isVisible = false
-				equipBtn3.isVisible = true
+				if(params.ticketNum>=1000)then
+					event.target.isVisible = false
+					equipBtn3.isVisible = true
+					params.ticketNum=params.ticketNum-150;
+					moneyAvailable:removeSelf( );
+					updateMoney();
+				end
 			elseif (event.target.id == "Buy4") then
-				event.target.isVisible = false
-				equipBtn4.isVisible = true
+				if(params.ticketNum>=500)then
+					event.target.isVisible = false
+					equipBtn4.isVisible = true
+					params.ticketNum=params.ticketNum-150;
+					moneyAvailable:removeSelf( );
+					updateMoney();
+				end
 			elseif (event.target.id == "Buy5") then
-				event.target.isVisible = false
-				equipBtn5.isVisible = true
+				if(params.ticketNum>=400)then
+					event.target.isVisible = false
+					equipBtn5.isVisible = true
+					params.ticketNum=params.ticketNum-150;
+					moneyAvailable:removeSelf( );
+					updateMoney();
+				end
 			elseif (event.target.id == "Buy6") then
-				event.target.isVisible = false
-				equipBtn6.isVisible = true
+				if(params.ticketNum>=250)then
+					event.target.isVisible = false
+					equipBtn6.isVisible = true
+					params.ticketNum=params.ticketNum-150;
+					moneyAvailable:removeSelf( );
+					updateMoney();
+				end
 			elseif (event.target.id == "Buy7") then
-				event.target.isVisible = false
-				equipBtn7.isVisible = true
+				if(params.ticketNum>=300)then
+					event.target.isVisible = false
+					equipBtn7.isVisible = true
+					params.ticketNum=params.ticketNum-150;
+					moneyAvailable:removeSelf( );
+					updateMoney();
+				end
 			elseif (event.target.id == "Buy8") then
-				event.target.isVisible = false
-				equipBtn8.isVisible = true
+				if(params.ticketNum>=300)then
+					event.target.isVisible = false;
+					params.ticketNum=params.ticketNum-150;
+					moneyAvailable:removeSelf( );
+					updateMoney();
+				end
 			else -- event.target.id = "Buy9"
-				event.target.isVisible = false
-				equipBtn9.isVisible = true
+				if(params.ticketNum>=1)then
+					event.target.isVisible = false;
+					params.ticketNum=params.ticketNum-150;
+					moneyAvailable:removeSelf( );
+					updateMoney();
+				end
 			end 
 		end
 		
@@ -249,7 +325,7 @@ function scene:show( event )
 		        x = 120,
 		        y = rowY,    
 		        id = "Buy",
-		        label = "Buy",
+		        label = 1000,
 		        fontSize=35,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
@@ -300,7 +376,7 @@ function scene:show( event )
 		        x = 360,
 		        y = rowY,    
 		        id = "Buy2",
-		        label = "Buy",
+		        label = 2000,
 		        fontSize=35,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
@@ -350,7 +426,7 @@ function scene:show( event )
 		        x = 600,
 		        y = rowY,    
 		        id = "Buy3",
-		        label = "Buy",
+		        label = 1000,
 		        fontSize=35,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
@@ -404,7 +480,7 @@ function scene:show( event )
 		        x = 120,
 		        y = rowY,    
 		        id = "Buy4",
-		        label = "Buy",
+		        label = 500,
 		        fontSize=35,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
@@ -455,7 +531,7 @@ function scene:show( event )
 		        x = 360,
 		        y = rowY,    
 		        id = "Buy5",
-		        label = "Buy",
+		        label = 400,
 		        fontSize=35,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
@@ -506,7 +582,7 @@ function scene:show( event )
 		        x = 600,
 		        y = rowY,    
 		        id = "Buy6",
-		        label = "Buy",
+		        label = 250,
 		        fontSize=35,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
@@ -561,7 +637,7 @@ function scene:show( event )
 		        x = 120,
 		        y = rowY,    
 		        id = "Buy7",
-		        label = "Buy",
+		        label = 300,
 		        fontSize=35,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
@@ -612,7 +688,7 @@ function scene:show( event )
 		        x = 360,
 		        y = rowY,    
 		        id = "Buy8",
-		        label = "Buy",
+		        label = 300,
 		        fontSize=35,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
@@ -624,46 +700,12 @@ function scene:show( event )
 		buyBtn8:setFillColor( 0,0.9,0.3 );
 		sceneGroup:insert( buyBtn8 );
 
-		equipBtn8 = widget.newButton(
-		    {
-		        x = 360,
-		        y = rowY,    
-		        id = "Equip8",
-		        label = "Equip",
-		        fontSize=35,
-		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
-		        sheet = params.spriteSheet,
-		        defaultFrame = 16,
-		        onPress = equipMe,
-		    }
-		);
-		equipBtn8.isVisible = false
-		equipBtn8:setFillColor(0.5,0,0.5);
-		sceneGroup:insert( equipBtn8 );
-
-		unequipBtn8 = widget.newButton(
-		    {
-		        x = 360,
-		        y = rowY,    
-		        id = "Unequip8",
-		        label = "Unequip",
-		        fontSize=35,
-		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
-		        sheet = params.spriteSheet,
-		        defaultFrame = 16,
-		        onPress = unequipMe,
-		    }
-		);
-		unequipBtn8.isVisible = false
-		unequipBtn8:setFillColor( 1,0,0 );
-		sceneGroup:insert( unequipBtn8 );
-
 		local buyBtn9 = widget.newButton(
 		    {
 		        x = 600,
 		        y = rowY,    
 		        id = "Buy9",
-		        label = "Buy",
+		        label = 1,
 		        fontSize=35,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
@@ -674,41 +716,6 @@ function scene:show( event )
 
 		buyBtn9:setFillColor( 0,0.9,0.3 );
 		sceneGroup:insert( buyBtn9);
-
-		equipBtn9 = widget.newButton(
-		    {
-		        x = 600,
-		        y = rowY,    
-		        id = "Equip9",
-		        label = "Equip",
-		        fontSize=35,
-		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
-		        sheet = params.spriteSheet,
-		        defaultFrame = 16,
-		        onPress = equipMe,
-		    }
-		);
-		equipBtn9.isVisible = false
-		equipBtn9:setFillColor(0.5,0,0.5);
-		sceneGroup:insert( equipBtn9 );
-
-		unequipBtn9 = widget.newButton(
-		    {
-		        x = 600,
-		        y = rowY,    
-		        id = "Unequip9",
-		        label = "Unequip",
-		        fontSize=35,
-		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
-		        sheet = params.spriteSheet,
-		        defaultFrame = 16,
-		        onPress = unequipMe,
-		    }
-		);
-		unequipBtn9.isVisible = false
-		unequipBtn9:setFillColor( 1,0,0 );
-		sceneGroup:insert( unequipBtn9 );
-
 
 	elseif ( phase == "did" ) then	
 

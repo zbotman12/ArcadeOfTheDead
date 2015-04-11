@@ -14,6 +14,10 @@ local params;
 function scene:create( event )
 	local sceneGroup = self.view
 	params = event.params
+	local bg = display.newImage ("images/NightBG.png");
+	bg.anchorX=0; bg.anchorY=0;
+    bg:toBack();
+    sceneGroup:insert( bg );
 end
 
 
@@ -28,8 +32,8 @@ function scene:show( event )
 	local ticketNum,ticketText,life,zombiesToKill,crossLine;
 	
 	--music
-	local bgNight = audio.loadStream("sounds/night.mp3")
-	audio.setMaxVolume(.015, {channel = 1})
+	--local bgNight = audio.loadStream("sounds/night.mp3")
+	--audio.setMaxVolume(.015, {channel = 1})
 
 	local function newGun (guntype)
 		local gun;
@@ -41,13 +45,6 @@ function scene:show( event )
 		end
 		return gun;
 	end
-
-		local DayBackground = display.newImage(sceneGroup, "images/Grass.jpg");
-		DayBackground.anchorX = 0;
-		DayBackground.anchorY = 0;
-		DayBackground.yScale = DayBackground.yScale * 2;
-		DayBackground:toBack();
-
 
 	if ( phase == "will" ) then
 
@@ -111,6 +108,7 @@ function scene:show( event )
 					ticketNum = ticketNum + 10;
 					ticketText:removeSelf( );
 					ticketText = display.newText( sceneGroup, "Tickets: "..ticketNum, 75, 15, native.systemFont, 25 );
+					ticketText:setFillColor( 1,1,1,.75 );
 					zombiesPlayerKilled = zombiesPlayerKilled + 1;
 					if(zombiesToKill == zombiesPlayerKilled) then						
 						local function goToShop (event)							
@@ -206,8 +204,8 @@ function scene:show( event )
 			
 		end
 
-		local totalNumZombies = 3;
-		zombiesToKill = 3;
+		local totalNumZombies = 1;
+		zombiesToKill = 1;
 		function spawnZombieHorde( )
 			spawnRandomZombie();
 			totalNumZombies = totalNumZombies -1;
@@ -221,12 +219,13 @@ function scene:show( event )
 		---------Status Bar ----------------
 		local statusBar = display.newRect( sceneGroup, 0, 0, display.contentWidth, 35 );
 		statusBar.anchorX=0; statusBar.anchorY=0;
-		statusBar:setFillColor( 0,0,1,0.35 );
+		statusBar:setFillColor( 0.5,0.5,.5,0.35 );
 		statusBar:toFront( );
 
 		-------Tickets----------------------
 		ticketNum=0;
 		ticketText = display.newText( sceneGroup, "Tickets: "..ticketNum, 75, 15, native.systemFont, 25 );
+		ticketText:setFillColor( 1,1,1,.75 );
 
 		--------Life Total-----------------
 		life = 3;
@@ -234,7 +233,10 @@ function scene:show( event )
 			local heartX = display.contentWidth-30;
 			local heart;
 			for i=1,life do
-				heart = display.newRect(sceneGroup, heartX, 7,25,25);
+				--heart = display.newRect(sceneGroup, heartX, 7,25,25);
+				local heartData={{name = "heart", frames={27}}};
+				heart = display.newSprite( params.spriteSheet, heartData )
+				heart.x=heartX; heart.y=7;
 				heart.anchorX=0; heart.anchorY=0;
 				heart:setFillColor(1,0,0,0.75);
 				heartX = heartX - 30;
@@ -245,6 +247,7 @@ function scene:show( event )
 
 		--------Level-----------------------
 		local level = display.newText(sceneGroup,"Level: "..params.level,display.contentCenterX,15,native.systemFont, 25);
+		level:setFillColor( 1,1,1,.75 );
 
 	end
 end

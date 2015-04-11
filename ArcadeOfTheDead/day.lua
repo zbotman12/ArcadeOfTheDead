@@ -14,6 +14,10 @@ local params;
 function scene:create( event )
 	local sceneGroup = self.view;
 	params = event.params
+	local bg = display.newImage ("images/DayBG.png");
+	bg.anchorX=0; bg.anchorY=0;
+    bg:toBack();
+    sceneGroup:insert( bg );
 end
 
 
@@ -28,20 +32,14 @@ function scene:show( event )
 	local polygon;
 	
 	--music
-	local bgDay = audio.loadStream("sounds/tetris.mp3")
-	audio.setMaxVolume(.015, {channel = 1})
+	--local bgDay = audio.loadStream("sounds/tetris.mp3")
+	--audio.setMaxVolume(.015, {channel = 1})
 
 	if ( phase == "will" ) then	
 		physics.start();
 		physics.setGravity(0,0);
 		--physics.setDrawMode( "hybrid" );
 		--sceneGroup:insert(wall);
-
-		local DayBackground = display.newImage(sceneGroup, "images/Grass.jpg");
-		DayBackground.anchorX = 0;
-		DayBackground.anchorY = 0;
-		DayBackground.yScale = DayBackground.yScale * 2;
-		DayBackground:toBack();
 
 		function spawnBrick( x, y, group )
 			local brick = Brick:new({xPos=x, yPos=y} );
@@ -206,15 +204,16 @@ function scene:show( event )
 
 		local leftArrow = display.newSprite( params.spriteSheet, {{name = "leftarrow", frames={17}}} );
 		leftArrow.anchorX=0; leftArrow.anchorY=0;
-		leftArrow.x = 0;
-		leftArrow.y = display.contentHeight-180;
+		leftArrow.x = 0; leftArrow.y = display.contentHeight-180;
+		leftArrow:scale( 0.75, 0.75 );
 		sceneGroup:insert( leftArrow );
 		leftArrow:setSequence( "leftarrow" );
 
 		local rightArrow = display.newSprite( params.spriteSheet, {{name = "rightarrow", frames={18}}} );
 		rightArrow.anchorX=0; rightArrow.anchorY=0;
-		rightArrow.x = display.contentWidth-200;
+		rightArrow.x = display.contentWidth-150;
 		rightArrow.y = display.contentHeight-180;
+		rightArrow:scale( 0.75, 0.75 );
 		sceneGroup:insert( rightArrow );
 		rightArrow:setSequence( "rightArrow" );
 
@@ -390,7 +389,7 @@ function scene:show( event )
 				end			
 		end
 
-		local blockCounter =5;
+		local blockCounter =1;
 
 
 		function spawnNewBlock(  )
