@@ -35,7 +35,7 @@ function scene:show( event )
 		physics.start();
 		physics.setGravity(0,0);
 		--physics.setDrawMode( "hybrid" );
-		sceneGroup:insert(wall);
+		--sceneGroup:insert(wall);
 
 		local DayBackground = display.newImage(sceneGroup, "images/Grass.jpg");
 		DayBackground.anchorX = 0;
@@ -89,7 +89,6 @@ function scene:show( event )
 					y=brickSize;
 				end
 				block2.x=display.contentCenterX;block2.y=70;
-				block2.tag="doNotRotate";
 				block2.anchorChildren = true;
 				return block2;
 			elseif (blockNum == 3) then
@@ -162,6 +161,22 @@ function scene:show( event )
 				block7.x=display.contentCenterX-35;block7.y=70;
 				block7.anchorChildren = true;
 				return block7;
+			elseif (blockNum == 8)then
+				local block8 = display.newGroup( );
+				local x = 290;
+				spawnBrick(x,y,block8);
+				block8.x=display.contentCenterX-35;block8.y=35;
+				block8.anchorChildren = true;
+				return block8;
+			elseif(blockNum == 9) then
+				local block9 = display.newGroup( );
+				local x = 290;
+				spawnBrick(x,y,block9);
+				y=y+brickSize;
+				spawnBrick(x,y,block9);
+				block9.x=display.contentCenterX-35;block9.y=70;
+				block9.anchorChildren = true;
+				return block9;
 			end
 
 		end
@@ -277,6 +292,7 @@ function scene:show( event )
 
 	elseif ( phase == "did" ) then
 
+		params.level=params.level+1;
 		local function newGun (guntype)
 			local gun;
 			if (guntype == "pistol") then
@@ -309,13 +325,11 @@ function scene:show( event )
 		---------------Next Scene-----------------
 		local function next ()
 			params.wall=wall;
-
 			local sceneOpt = {
 				effect = "fade",
 				time = 800,
 				params = params
-			}
-			
+			}			
 			composer.gotoScene( "night", sceneOpt);
 		end
 
@@ -372,11 +386,11 @@ function scene:show( event )
 						local child=currentBlock[i];
 						child.y=child.y+70;
 					end
-				    BlockTrans = transition.to( currentBlock, {time=1, delay=250, y=currentBlock.y+70, onComplete=checkRayCast} );
+				   BlockTrans = transition.to( currentBlock, {time=1, delay=250, y=currentBlock.y+70, onComplete=checkRayCast} );
 				end			
 		end
 
-		local blockCounter =1;
+		local blockCounter =5;
 
 
 		function spawnNewBlock(  )
@@ -386,7 +400,8 @@ function scene:show( event )
 				currentBlock = spawnBlock(blockNum);
 				currentBlock.num=blockNum;
 				print ("block is :" .. blockNum);
-				wall:insert( currentBlock );				
+				wall:insert( currentBlock );		
+				sceneGroup:insert( wall );	
 				checkRayCast();
 			else
 				next();
