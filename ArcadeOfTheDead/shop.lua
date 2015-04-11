@@ -2,6 +2,16 @@
 --x is 240 across each time
 -- need button 240 width
 
+
+if "Win" == system.getInfo( "platformName" ) then
+    BlockFont = "3D Thirteen Pixel Fonts";
+    CompFont = "Computer Pixel-7";
+elseif "Android" == system.getInfo( "platformName" ) then
+    BlockFont = "3D-Thirteen-Pixel-Fonts"
+    CompFont = "computer_pixel-7"
+end
+
+
 local composer = require( "composer" );
 local widget = require("widget");
 local scene = composer.newScene();
@@ -11,6 +21,10 @@ local params;
 function scene:create( event )
 	local sceneGroup = self.view
 	params = event.params
+	local bg = display.newImage ("images/ShopBG.png");
+	bg.anchorX=0; bg.anchorY=0;
+    bg:toBack();
+    sceneGroup:insert( bg );
 end
 
 --scene:show
@@ -21,6 +35,8 @@ function scene:show( event )
 	local moneyAvailable;
 	local isThingBought=false;
 	local buyBtn, buyBtn2, buyBtn3, buyBtn4, buyBtn5, buyBtn6, buyBtn7, buyBtn8, buyBtn9;
+
+
 
 	if ( phase == "will" ) then
 		local function nextScene (event)
@@ -149,7 +165,8 @@ function scene:show( event )
 		        y = display.contentCenterY - 600,    
 		        id = "Continue",
 		        label = "Continue",
-		        fontSize=35,
+		        fontSize=50,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -174,7 +191,7 @@ function scene:show( event )
 		sceneGroup:insert( nextPageBtn );
 
 
-		local pageTitle = display.newText("BRICK SHOP", display.contentCenterX, display.contentCenterY - 550, native.systemFont, 70)
+		local pageTitle = display.newText("BRICK SHOP", display.contentCenterX, display.contentCenterY - 500,CompFont, 120)
 		sceneGroup:insert(pageTitle)
 
 		--DIV VERT
@@ -212,7 +229,7 @@ function scene:show( event )
 		end
 
 		function updateMoney(  )
-			moneyAvailable = display.newText("Tickets: "..params.ticketNum, display.contentCenterX, display.contentCenterY + 600, native.systemFont, 50)
+			moneyAvailable = display.newText("Tickets: "..params.ticketNum, display.contentCenterX, display.contentCenterY + 600, CompFont, 100)
 			sceneGroup:insert(moneyAvailable)
 		end
 		updateMoney();
@@ -225,7 +242,8 @@ function scene:show( event )
 		        y = rowY,    
 		        id = "Buy",
 		        label = 150,
-		        fontSize=35,
+		        fontSize=100,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -242,7 +260,8 @@ function scene:show( event )
 		        y = rowY,    
 		        id = "Buy2",
 		        label = 300,
-		        fontSize=35,
+		        fontSize=100,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -258,7 +277,8 @@ function scene:show( event )
 		        y = rowY,    
 		        id = "Buy3",
 		        label = 500,
-		        fontSize=35,
+		        fontSize=100,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -278,7 +298,8 @@ function scene:show( event )
 		        y = rowY,    
 		        id = "Buy4",
 		        label = 400,
-		        fontSize=35,
+		        fontSize=100,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -295,7 +316,8 @@ function scene:show( event )
 		        y = rowY,    
 		        id = "Buy5",
 		        label = 250,
-		        fontSize=35,
+		        fontSize=100,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -312,7 +334,8 @@ function scene:show( event )
 		        y = rowY,    
 		        id = "Buy6",
 		        label = 250,
-		        fontSize=35,
+		        fontSize=100,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -333,7 +356,8 @@ function scene:show( event )
 		        y = rowY,    
 		        id = "Buy7",
 		        label = 250,
-		        fontSize=35,
+		        fontSize=100,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -350,7 +374,8 @@ function scene:show( event )
 		        y = rowY,    
 		        id = "Buy8",
 		        label = 250,
-		        fontSize=35,
+		        fontSize=100,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,
@@ -367,7 +392,8 @@ function scene:show( event )
 		        y = rowY,    
 		        id = "Buy9",
 		        label = 250,
-		        fontSize=35,
+		        fontSize=100,
+		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
 		        sheet = params.spriteSheet,
 		        defaultFrame = 16,

@@ -30,8 +30,8 @@ local MainSheetOpt =
 		--[[15]] { x = 160, y = 170, width = 18, height = 100}, --pistol shoot 9
 		-------------------------------------------------------------
 		--[[16]] { x = 1, y = 270, width = 240, height = 70}, --button
-		--[[17]] { x = 1, y = 340, width = 200, height = 180}, --arrow left
-		--[[18]] { x = 200, y = 340, width = 200, height = 180}, --arrow right
+		--[[17]] { x = 1, y = 340, width = 200, height = 178}, --arrow left
+		--[[18]] { x = 200, y = 340, width = 200, height = 178}, --arrow right
 		-------------------------------------------------------------
 		--[[19]] { x = 1, y = 520, width = 70, height = 100}, --Zombie Walk 1
 		--[[20]] { x = 70, y = 520, width = 70, height = 100}, --Zombie Walk 2
@@ -54,5 +54,5 @@ local sceneOpt = {
 	params = {spriteSheet = spriteSheet,level=level}
 }
 -- load first scene
-composer.gotoScene( "shop", sceneOpt);
+composer.gotoScene( "day", sceneOpt);
 
