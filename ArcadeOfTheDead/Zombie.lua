@@ -14,7 +14,7 @@ end
 
 function Zombie:spawn( spriteSheet)
 	local zombieSeqData = {
-		{name = "walk", frames={19}}
+		{name = "walk", start=19, count= 8, time = 400}
 	}
 	self.shape=display.newSprite( spriteSheet, zombieSeqData )
 	self.shape.x = self.xPos;self.shape.y = self.yPos;
@@ -23,6 +23,7 @@ function Zombie:spawn( spriteSheet)
 	self.shape.anchorX = 0; 
 	self.shape.anchorY = 100;
 	self.shape:setSequence( "walk" );
+	self.shape:play();
 	return self.shape;
 end
 

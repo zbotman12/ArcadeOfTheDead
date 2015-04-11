@@ -42,6 +42,13 @@ function scene:show( event )
 		return gun;
 	end
 
+		local DayBackground = display.newImage(sceneGroup, "images/Grass.jpg");
+		DayBackground.anchorX = 0;
+		DayBackground.anchorY = 0;
+		DayBackground.yScale = DayBackground.yScale * 2;
+		DayBackground:toBack();
+
+
 	if ( phase == "will" ) then
 
 	elseif ( phase == "did" ) then	

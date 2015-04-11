@@ -34,6 +34,13 @@ local MainSheetOpt =
 		--[[18]] { x = 200, y = 340, width = 200, height = 180}, --arrow right
 		-------------------------------------------------------------
 		--[[19]] { x = 1, y = 520, width = 70, height = 100}, --Zombie Walk 1
+		--[[20]] { x = 70, y = 520, width = 70, height = 100}, --Zombie Walk 2
+		--[[21]] { x = 140, y = 520, width = 70, height = 100}, --Zombie Walk 3
+		--[[22]] { x = 210, y = 520, width = 70, height = 100}, --Zombie Walk 4
+		--[[23]] { x = 280, y = 520, width = 70, height = 100}, --Zombie Walk 5
+		--[[24]] { x = 350, y = 520, width = 70, height = 100}, --Zombie Walk 6
+		--[[25]] { x = 420, y = 520, width = 70, height = 100}, --Zombie Walk 7
+		--[[26]] { x = 490, y = 520, width = 70, height = 100}, --Zombie Walk 8
 
 	}
 }
@@ -48,4 +55,4 @@ local sceneOpt = {
 	params = {buttonSheet = buttonSheet, spriteSheet = spriteSheet,level=level}
 }
 -- load first scene
-composer.gotoScene( "day", sceneOpt);
+composer.gotoScene( "night", sceneOpt);
