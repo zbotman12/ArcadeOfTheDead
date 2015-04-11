@@ -35,6 +35,13 @@ local buttonSheet = graphics.newImageSheet( "button.png", btnOpt );
 
 local spriteSheet = graphics.newImageSheet( "spriteSheet.png", MainSheetOpt );
 
+local yy = (display.contentCenterY - 350) * (2/3)
+local xx = display.contentCenterX * (2/3)
+print("y: "..yy)
+print("x: "..xx)
+
+print(display.contentCenterY *2)
+
 local sceneOpt = {
 	effect = "fade",
 	time = 800,

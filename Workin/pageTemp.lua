@@ -56,41 +56,60 @@ function scene:show( event )
 			composer.gotoScene( "page2", sceneOpt);
 		end
 
-		local function prevPage (event)
-			local sceneOpt = {
-				effect = "fade",
-				time = 800,
-				params = params
-			}
-			composer.gotoScene( "shop", sceneOpt);
-		end
-
 		local function equipMe( event )
 			print("Equipping shit...please wait :)");
 			if(event.target.id == "Equip1") then
-			else if (event.target.id == "Equip2") then
-			else if (event.target.id == "Equip3") then
+				equipText1 = display.newText("Equipted", display.contentCenterX-170, display.contentCenterY-130, native.systemFont, 30)
+				sceneGroup:insert(equipText1)
+			elseif (event.target.id == "Equip2") then
+				equipText2 = display.newText("Equipted", display.contentCenterX-170, display.contentCenterY+340, native.systemFont, 30)
+				sceneGroup:insert(equipText2)
+			elseif (event.target.id == "Equip3") then
+				equipText3 = display.newText("Equipted", display.contentCenterX+190, display.contentCenterY-130, native.systemFont, 30)
+				sceneGroup:insert(equipText3)
 			else -- event.target.id = "Equip4"
-			end
+				equipText4 = display.newText("Equipted", display.contentCenterX+190, display.contentCenterY+340, native.systemFont, 30)
+				sceneGroup:insert(equipText4)
+			end --end end
 
 		end
 
 		local function unequipMe( event )
 			print("fuck this crappy gun!");
 			if(event.target.id == "Unequip1") then
-			else if (event.target.id == "Unequip2") then
-			else if (event.target.id == "Unequip3") then
+				unequipText1 = display.newText("Unequipted", display.contentCenterX-160, display.contentCenterY-80, native.systemFont, 30)
+				sceneGroup:insert(unequipText1)
+			elseif (event.target.id == "Unequip2") then
+				unequipText2 = display.newText("Unequipted", display.contentCenterX-160, display.contentCenterY+390, native.systemFont, 30)
+				sceneGroup:insert(unequipText2)
+			elseif (event.target.id == "Unequip3") then
+				unequipText3 = display.newText("Unequipted", display.contentCenterX+210, display.contentCenterY-80, native.systemFont, 30)
+				sceneGroup:insert(unequipText3)
 			else -- event.target.id = "Unequip4"
-			end
+				unequipText4 = display.newText("Unequipted", display.contentCenterX+210, display.contentCenterY+390, native.systemFont, 30)
+				sceneGroup:insert(unequipText4)
+			end --end end
 		end
 
 		local function buyMe( event )
 			print("Money, Money, money $$$")
 			if(event.target.id == "Buy1") then
-			else if (event.target.id == "Buy2") then
-			else if (event.target.id == "Buy3") then
+				buyText1.text = "Bought"
+				sceneGroup:insert(buyText1)
+				--update money
+			elseif (event.target.id == "Buy2") then
+				buyText2.text = "Bought"
+				sceneGroup:insert(buyText2)
+				--update money
+			elseif (event.target.id == "Buy3") then
+				buyText3.text = "Bought"
+				sceneGroup:insert(buyText3)
+				--update money
 			else -- event.target.id = "Buy4"
-			end
+				buyText4.text = "Bought"
+				sceneGroup:insert(buyText4)
+				--update money
+			end --end end
 		end
 		
 		local continueBtn = widget.newButton(
