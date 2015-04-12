@@ -53,14 +53,7 @@ function scene:show( event )
 			group:insert(brick.shape);
 		end
 
-		function updateBrickXY(group)
-			for i=1,group.numChildren do
-				local child=group[i];
-				child.y = child.y+5;
-			end
-		end
-
-		-- put a block into play
+		--------SPAWN BLOCKS------------------
 		function spawnBlock( blockNum )
 			local y=0;
 			if (blockNum == 1)then
@@ -71,113 +64,118 @@ function scene:show( event )
 					spawnBrick(x,y,block1);
 					x=x+brickSize;
 				end
-				block1.anchorX=0;
-				block1.anchorY=0;
+				block1.anchorX=0;block1.anchorY=0;
 				block1.x=10;
-				--updateBrickXY(block1);
 				return block1;
 			elseif (blockNum == 2)then
 				local block2 = display.newGroup( );
-				local x=290;				
+				block2.anchorChildren=true;
+				local x=10;				
 				for i=1,2 do
 					for j=1,2 do
 						spawnBrick(x,y,block2);
 						y=y+brickSize;
 					end
 					x=x+brickSize;
-					y=brickSize;
+					y=0;
 				end
-				block2.x=display.contentCenterX;block2.y=70;
-				block2.anchorChildren = true;
+				block2.anchorX=0;block2.anchorY=0;
+				block2.x=10;
 				return block2;
 			elseif (blockNum == 3) then
 				local block3 = display.newGroup( );
-				local x=290;
+				block3.anchorChildren=true;
+				local x=10;
 				spawnBrick(x,y, block3);
 				y=y+brickSize;
 				for i=1,3 do
 					spawnBrick(x,y, block3);
 					x=x+brickSize;
 				end
-				block3.x=display.contentCenterX-35;block3.y=70;
-				block3.anchorChildren = true;
+				block3.anchorX=0;block3.anchorY=0;
+				block3.x=10;
 				return block3;
 			elseif (blockNum == 4) then
 				local block4 = display.newGroup( );
-				local x=430;
+				block4.anchorChildren=true;
+				local x=150;
 				spawnBrick(x,y,block4);
 				y=y+brickSize;
-				x=290;
+				x=10;
 				for i=1,3 do
 					spawnBrick(x,y,block4);
 					x=x+brickSize;
 				end
-				block4.x=display.contentCenterX-35;block4.y=70;
-				block4.anchorChildren = true;
+				block4.anchorX=0;block4.anchorY=0;
+				block4.x=10;
 				return block4;
 			elseif (blockNum == 5) then
 				local block5 = display.newGroup( );
-				local x=360;
+				block5.anchorChildren=true;
+				local x=80;
 				spawnBrick(x,y,block5);
 				y=y+brickSize;
-				x=290;
+				x=10;
 				for i=1,3 do
 					spawnBrick(x,y,block5);
 					x=x+brickSize;
 				end
-				block5.x=display.contentCenterX-35;block5.y=70;
-				block5.anchorChildren = true;
+				block5.anchorX=0;block5.anchorY=0;
+				block5.x=10;
 				return block5;
 			elseif (blockNum == 6) then
 				local block6 = display.newGroup();
-				local x = 360;
+				block6.anchorChildren=true;
+				local x = 80;
 				for i=1,2 do
 					spawnBrick(x,y,block6);
 					x=x+brickSize;
 				end
 				y=y+brickSize;
-				x=290;
+				x=10;
 				for i=1,2 do
 					spawnBrick(x,y,block6);
 					x=x+brickSize;
 				end
-				block6.x=display.contentCenterX-35;block6.y=70;
-				block6.anchorChildren = true;
+				block6.anchorX=0;block6.anchorY=0;
+				block6.x=10;
 				return block6;
 			elseif (blockNum == 7) then
 				local block7 = display.newGroup();
-				local x = 290;
+				block7.anchorChildren=true;
+				local x = 10;
 				for i=1,2 do
 					spawnBrick(x,y,block7);
 					x=x+brickSize;
 				end
 				y=y+brickSize;
-				x=360;
+				x=80;
 				for i=1,2 do
 					spawnBrick(x,y,block7);
 					x=x+brickSize;
 				end
-				block7.x=display.contentCenterX-35;block7.y=70;
-				block7.anchorChildren = true;
+				block7.anchorX=0;block7.anchorY=0;
+				block7.x=10;
 				return block7;
 			elseif (blockNum == 8)then
 				local block8 = display.newGroup( );
-				local x = 290;
+				block8.anchorChildren=true;
+				local x = 10;
 				spawnBrick(x,y,block8);
-				block8.x=display.contentCenterX-35;block8.y=35;
-				block8.anchorChildren = true;
+				block8.anchorX=0;block8.anchorY=0;
+				block8.x=10;
 				return block8;
 			elseif(blockNum == 9) then
 				local block9 = display.newGroup( );
-				local x = 290;
+				block9.anchorChildren=true;
+				local x = 10;
 				spawnBrick(x,y,block9);
 				y=y+brickSize;
 				spawnBrick(x,y,block9);
-				block9.x=display.contentCenterX-35;block9.y=70;
-				block9.anchorChildren = true;
+				block9.anchorX=0;block9.anchorY=0;
+				block9.x=10;
 				return block9;
 			end
-
 		end
 
 		-----------Cross over line------------------
@@ -218,12 +216,28 @@ function scene:show( event )
 		sceneGroup:insert( rightArrow );
 		rightArrow:setSequence( "rightArrow" );
 
-		--moving the block
+		----------MOVE BLOCK LEFT----------------------
 		function moveBlockLeft( event )
 			if event.phase == "began" then
 				local hit;
 				if(currentBlock.num==1)then
-					hit=physics.rayCast( currentBlock.x, currentBlock.y, currentBlock.x-10, currentBlock.y, "closest" );
+					hit=physics.rayCast( currentBlock.x, currentBlock.y+70, currentBlock.x-10, currentBlock.y+70, "closest" );
+				elseif(currentBlock.num==2)then
+					hit=physics.rayCast( currentBlock.x, currentBlock.y+140, currentBlock.x-10, currentBlock.y+140, "closest" );
+				elseif(currentBlock.num==3)then
+					hit=physics.rayCast( currentBlock.x, currentBlock.y+140, currentBlock.x-10, currentBlock.y+140, "closest" );
+				elseif(currentBlock.num==4)then
+					hit=physics.rayCast( currentBlock.x, currentBlock.y+140, currentBlock.x-10, currentBlock.y+140, "closest" );
+				elseif(currentBlock.num==5)then
+					hit=physics.rayCast( currentBlock.x, currentBlock.y+140, currentBlock.x-10, currentBlock.y+140, "closest" );
+				elseif(currentBlock.num==6)then
+					hit=physics.rayCast( currentBlock.x, currentBlock.y+140, currentBlock.x-10, currentBlock.y+140, "closest" );
+				elseif(currentBlock.num==7)then
+					hit=physics.rayCast( currentBlock.x, currentBlock.y+70, currentBlock.x-10, currentBlock.y+70, "closest" );
+				elseif(currentBlock.num==8)then
+					hit=physics.rayCast( currentBlock.x, currentBlock.y+70, currentBlock.x-10, currentBlock.y+70, "closest" );
+				elseif(currentBlock.num==9)then
+					hit=physics.rayCast( currentBlock.x, currentBlock.y+140, currentBlock.x-10, currentBlock.y+140, "closest" );
 				end
 				if(hit)then
 					--stays in place
@@ -239,12 +253,28 @@ function scene:show( event )
 			end
 		end
 
-		--function to handle moving the block right
+		-----------MOVE BLOCK RIGHT----------------
 		function moveBlockRight( event )
 			if event.phase == "began" then
 				local hit;
 				if(currentBlock.num==1)then
-					hit=physics.rayCast( currentBlock.x, currentBlock.y, currentBlock.x+290, currentBlock.y, "closest" );
+					hit=physics.rayCast(currentBlock.x,currentBlock.y+70,currentBlock.x+290,currentBlock.y+70,"closest");
+				elseif(currentBlock.num==2)then
+					hit=physics.rayCast(currentBlock.x,currentBlock.y+140,currentBlock.x+150,currentBlock.y+140,"closest");
+				elseif(currentBlock.num==3)then
+					hit=physics.rayCast(currentBlock.x,currentBlock.y+140,currentBlock.x+220,currentBlock.y+140,"closest");
+				elseif(currentBlock.num==4)then
+					hit=physics.rayCast(currentBlock.x,currentBlock.y+140,currentBlock.x+220,currentBlock.y+140,"closest");
+				elseif(currentBlock.num==5)then
+					hit=physics.rayCast(currentBlock.x,currentBlock.y+140,currentBlock.x+220,currentBlock.y+140,"closest");
+				elseif(currentBlock.num==6)then
+					hit=physics.rayCast(currentBlock.x,currentBlock.y+70,currentBlock.x+220,currentBlock.y+70,"closest");
+				elseif(currentBlock.num==7)then
+					hit=physics.rayCast(currentBlock.x,currentBlock.y+140,currentBlock.x+220,currentBlock.y+140,"closest");
+				elseif(currentBlock.num==8)then
+					hit=physics.rayCast(currentBlock.x,currentBlock.y+70,currentBlock.x+80,currentBlock.y+70,"closest");
+				elseif(currentBlock.num==9)then
+					hit=physics.rayCast(currentBlock.x,currentBlock.y+140,currentBlock.x+80,currentBlock.y+140,"closest");
 				end
 				if(hit)then
 					--stays in place
@@ -266,7 +296,7 @@ function scene:show( event )
 
 	elseif ( phase == "did" ) then
 		params.level=params.level+1;
-		--create a new gun
+		-------NEW GUN---------------
 		local function newGun (guntype)
 			local gun;
 			if (guntype == "pistol") then
@@ -279,7 +309,7 @@ function scene:show( event )
 			return gun;
 		end
 
-		----------Create the player display object group--------
+		----------Create the player--------
 		local heroGuy = display.newGroup( )
 		local playerSeqData;
 		if(params.hero==nil) then
@@ -323,6 +353,7 @@ function scene:show( event )
 			composer.gotoScene( "night", sceneOpt);
 		end
 	
+		-----------ADD PHYSICS TO BRICKS----------------
 		function addPhysicsToBricks(  )
 			for i=1,currentBlock.numChildren do
 				local child=currentBlock[i];
@@ -332,36 +363,71 @@ function scene:show( event )
 			spawnNewBlock();
 		end
 		-----------MOVE BLOCK DOWN--------------
-		local BlockTrans;
 		local function checkRayCast(  )
-			transition.cancel(BlockTrans);
+			transition.cancel(currentBlock);
 			if(pushedCircle==true)then
 				swapBlocks();
 			end
-			
-			BlockTrans = transition.to( currentBlock, {time=1, delay=250, y=currentBlock.y+70--[[, onComplete=checkRayCast]]} );
-			for i=1,currentBlock.numChildren do
-				local child=currentBlock[i];
-				child.y = child.y+70;
+			local hit,hit2,hit3,hit4;
+			if(currentBlock.num==1)then
+				hit=physics.rayCast(currentBlock.x+35,currentBlock.y+35,currentBlock.x+35,currentBlock.y+70,"closest");
+				hit2=physics.rayCast(currentBlock.x+105,currentBlock.y+35,currentBlock.x+105,currentBlock.y+70,"closest");
+				hit3=physics.rayCast(currentBlock.x+175,currentBlock.y+35,currentBlock.x+175,currentBlock.y+70,"closest");
+				hit4=physics.rayCast(currentBlock.x+245,currentBlock.y+35,currentBlock.x+245,currentBlock.y+70,"closest");
+			elseif(currentBlock.num==2)then
+				hit=physics.rayCast(currentBlock.x+35,currentBlock.y+105,currentBlock.x+35,currentBlock.y+175,"closest");
+				hit2=physics.rayCast(currentBlock.x+105,currentBlock.y+105,currentBlock.x+105,currentBlock.y+175,"closest");
+			elseif(currentBlock.num==3)then
+				hit=physics.rayCast(currentBlock.x+35,currentBlock.y+105,currentBlock.x+35,currentBlock.y+175,"closest");
+				hit2=physics.rayCast(currentBlock.x+105,currentBlock.y+105,currentBlock.x+105,currentBlock.y+175,"closest");
+				hit3=physics.rayCast(currentBlock.x+175,currentBlock.y+105,currentBlock.x+175,currentBlock.y+175,"closest");
+			elseif(currentBlock.num==4)then
+				hit=physics.rayCast(currentBlock.x+35,currentBlock.y+105,currentBlock.x+35,currentBlock.y+175,"closest");
+				hit2=physics.rayCast(currentBlock.x+105,currentBlock.y+105,currentBlock.x+105,currentBlock.y+175,"closest");
+				hit3=physics.rayCast(currentBlock.x+175,currentBlock.y+105,currentBlock.x+175,currentBlock.y+175,"closest");
+			elseif(currentBlock.num==5)then
+				hit=physics.rayCast(currentBlock.x+35,currentBlock.y+105,currentBlock.x+35,currentBlock.y+175,"closest");
+				hit2=physics.rayCast(currentBlock.x+105,currentBlock.y+105,currentBlock.x+105,currentBlock.y+175,"closest");
+				hit3=physics.rayCast(currentBlock.x+175,currentBlock.y+105,currentBlock.x+175,currentBlock.y+175,"closest");
+			elseif(currentBlock.num==6)then
+				hit=physics.rayCast(currentBlock.x+35,currentBlock.y+105,currentBlock.x+35,currentBlock.y+175,"closest");
+				hit2=physics.rayCast(currentBlock.x+105,currentBlock.y+105,currentBlock.x+105,currentBlock.y+175,"closest");
+				hit3=physics.rayCast(currentBlock.x+175,currentBlock.y+35,currentBlock.x+175,currentBlock.y+105,"closest");
+			elseif(currentBlock.num==7)then
+				hit=physics.rayCast(currentBlock.x+35,currentBlock.y+35,currentBlock.x+35,currentBlock.y+105,"closest");
+				hit2=physics.rayCast(currentBlock.x+105,currentBlock.y+105,currentBlock.x+105,currentBlock.y+175,"closest");
+				hit3=physics.rayCast(currentBlock.x+175,currentBlock.y+105,currentBlock.x+175,currentBlock.y+175,"closest");
+			elseif(currentBlock.num==8)then
+				hit=physics.rayCast(currentBlock.x+35,currentBlock.y+35,currentBlock.x+35,currentBlock.y+105,"closest");
+			elseif(currentBlock.num==9)then
+				hit=physics.rayCast(currentBlock.x+35,currentBlock.y+105,currentBlock.x+35,currentBlock.y+175,"closest");
 			end
-			addPhysicsToBricks();
+			if(hit or hit2 or hit3 or hit4)then
+				transition.cancel(currentBlock);
+				addPhysicsToBricks();
+			else
+				transition.to(currentBlock,{time=1, delay=250, y=currentBlock.y+70,onComplete=checkRayCast});
+				for i=1,currentBlock.numChildren do
+					local child=currentBlock[i];
+					child.y = child.y+70;
+				end
+			end
 					
 		end
 
-		local blockCounter =1;
+		local blockCounter =5;
 		function spawnNewBlock(  )
 			if(blockCounter > 0) then
 				blockCounter = blockCounter - 1;
 				local blockNum = math.random( 1,7 );
-				currentBlock = spawnBlock(1);
-				currentBlock.num=1;
+				currentBlock = spawnBlock(blockNum);
+				currentBlock.num=blockNum;
 				wall:insert( currentBlock );		
 				sceneGroup:insert( wall );	
-				--addPhysicsToBricks();	
-				--checkRayCast();
+				checkRayCast();
 			else
-				--timer.performWithDelay( 500, 
-				--	function () next()	end,1 );
+				timer.performWithDelay( 500, 
+					function () next()	end,1 );
 			end
 		end
 

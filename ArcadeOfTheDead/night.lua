@@ -98,7 +98,7 @@ function scene:show( event )
 		end		
 		local playerSpt = display.newSprite(params.spriteSheet, playerSeqData )
 		playerSpt:setSequence( "idle" );
-		local gunType="pistol";
+		local gunType="shotgun";
 		local gun = newGun(gunType);
 		local gunSpt = gun:spawn(params.spriteSheet,params.hero);
 		heroGuy:insert(playerSpt);
