@@ -12,11 +12,29 @@ function Pistol:new (o)
 	return o;
 end
 
-function Pistol:spawn(spriteSheet)
-		local pistolSeqData = {
+function Pistol:spawn(spriteSheet, costume)
+	local pistolSeqData;
+	if(costume=="MegaMan")then
+		pistolSeqData = {
+	  		{name = "idle", frames={31}},
+	  		{name = "shoot", start=31, count= 9, time = 200}
+		}
+	elseif(costume=="Link")then
+		pistolSeqData = {
+	  		{name = "idle", frames={49}},
+	  		{name = "shoot", start=49, count= 9, time = 200}
+		}
+	elseif(costume=="Kirby")then
+		pistolSeqData = {
+	  		{name = "idle", frames={40}},
+	  		{name = "shoot", start=40, count= 9, time = 200}
+		}
+	else
+		pistolSeqData = {
 	  		{name = "idle", frames={7}},
 	  		{name = "shoot", start=7, count= 9, time = 200}
 		}
+	end
 		self.spt = display.newSprite(spriteSheet, pistolSeqData )
 		self.spt.x =  self.spt.x  + 33;
 		self.spt:setSequence( "idle" );

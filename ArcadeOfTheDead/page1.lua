@@ -10,6 +10,7 @@ end
 
 local composer = require( "composer" );
 local widget = require("widget");
+local Pistol = require("Pistol");
 local scene = composer.newScene();
 local params;
 
@@ -45,6 +46,7 @@ function scene:show( event )
 	local blockHealth = 0;
 	local totalNumOfBricks = 0;
 	local repairCost=0;
+	local kirby,link,megaMan;
 
 	if ( phase == "will" ) then
 
@@ -120,12 +122,18 @@ function scene:show( event )
 			elseif (event.target.id == "Equip3") then
 				event.target.isVisible = false
 				unequipBtn3.isVisible = true
+				--equip Kirby
+				params.hero=kirby;
 			elseif (event.target.id == "Equip4") then
 				event.target.isVisible = false
 				unequipBtn4.isVisible = true
+				--equip Link
+				params.hero=link;
 			elseif (event.target.id == "Equip5") then
 				event.target.isVisible = false
 				unequipBtn5.isVisible = true
+				--equip MegaMan
+				params.hero=megaMan;
 			elseif (event.target.id == "Equip6") then
 				event.target.isVisible = false
 				unequipBtn6.isVisible = true
@@ -152,12 +160,15 @@ function scene:show( event )
 			elseif (event.target.id == "Unequip3") then
 				event.target.isVisible = false
 				equipBtn3.isVisible = true
+				params.hero=nil;
 			elseif (event.target.id == "Unequip4") then
 				event.target.isVisible = false
 				equipBtn4.isVisible = true
+				params.hero=nil;
 			elseif (event.target.id == "Unequip5") then
 				event.target.isVisible = false
 				equipBtn5.isVisible = true
+				params.hero=nil;
 			elseif (event.target.id == "Unequip6") then
 				event.target.isVisible = false
 				equipBtn6.isVisible = true
@@ -426,6 +437,21 @@ function scene:show( event )
 		unequipBtn2:setFillColor( 1,0,0 );
 		sceneGroup:insert( unequipBtn2 );
 
+		----------Create the player display object group--------
+		local playerSeqData = {
+	  		{name = "idle", frames={29}}
+		}		
+		local playerSpt = display.newSprite(params.spriteSheet, playerSeqData )
+		local gun = Pistol:new();
+		local gunSpt = gun:spawn(params.spriteSheet,"Kirby");
+		kirby = display.newGroup( )
+		kirby.x=600;
+		kirby.y = rowY-160;
+		kirby:insert(playerSpt);
+		kirby:insert(gunSpt);
+		sceneGroup:insert( kirby );
+		kirby:scale( 1.5, 1.5 );
+
 		local buyBtn3 = widget.newButton(
 		    {
 		        x = 600,
@@ -483,12 +509,27 @@ function scene:show( event )
 		--ROW 2
 		rowY = 145 + (yTack*2)
 		----Black Squares----
-		local square4 = display.newRect(sceneGroup, 120,rowY-150,220,240);
+		local square4 = display.newRect(sceneGroup, 120,rowY-155,220,240);
 		square4:setFillColor( 0,0,0,.6 );
 		local square5 = display.newRect(sceneGroup, 360,rowY-155,220,240);
 		square5:setFillColor( 0,0,0,.6 );
 		local square6 = display.newRect(sceneGroup, 600,rowY-155,220,240);
 		square6:setFillColor( 0,0,0,.6 );
+
+		----------Create the player display object group--------
+		local playerSeqData = {
+	  		{name = "idle", frames={30}}
+		};		
+		local playerSpt = display.newSprite(params.spriteSheet, playerSeqData);
+		local gun = Pistol:new();
+		local gunSpt = gun:spawn(params.spriteSheet,"Link");
+		link = display.newGroup( )
+		link.x=120;
+		link.y = rowY-155;
+		link:insert(playerSpt);
+		link:insert(gunSpt);
+		sceneGroup:insert( link );
+		link:scale( 1.5, 1.5 );
 
 		local buyBtn4 = widget.newButton(
 		    {
@@ -543,6 +584,21 @@ function scene:show( event )
 		unequipBtn4.isVisible = false
 		unequipBtn4:setFillColor( 1,0,0 );
 		sceneGroup:insert( unequipBtn4 );
+
+		----------Create the player display object group--------
+		local playerSeqData = {
+	  		{name = "idle", frames={28}}
+		};		
+		local playerSpt = display.newSprite(params.spriteSheet, playerSeqData);
+		local gun = Pistol:new();
+		local gunSpt = gun:spawn(params.spriteSheet,"MegaMan");
+		megaMan = display.newGroup( )
+		megaMan.x=360;
+		megaMan.y = rowY-155;
+		megaMan:insert(playerSpt);
+		megaMan:insert(gunSpt);
+		sceneGroup:insert( megaMan );
+		megaMan:scale( 1.5, 1.5 );
 
 		local buyBtn5 = widget.newButton(
 		    {
@@ -760,7 +816,7 @@ function scene:show( event )
 		repairCost = totalNumOfBricks - blockHealth;
 		repairCost= repairCost*10;
 
-		local repairText = display.newText("Repair\n All\nBlocks", 625, rowY-160, CompFont, 70)
+		local repairText = display.newText("Repair\n All\nBlocks", 620, rowY-145, CompFont, 70)
 		repairText:setFillColor( 1,.5,0 );
 		sceneGroup:insert(repairText)
 

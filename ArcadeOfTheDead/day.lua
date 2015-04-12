@@ -289,22 +289,24 @@ function scene:show( event )
 			end
 			return gun;
 		end
+
 		----------Create the player display object group--------
-		local playerSeqData = {
-	  		{name = "idle", frames={6}}
-		}
-		
-		local playerSpt = display.newSprite(params.spriteSheet, playerSeqData )
-		playerSpt:setSequence( "idle" );
-
-		local gun = newGun("pistol");
-		local gunSpt = gun:spawn(params.spriteSheet);
-
 		local heroGuy = display.newGroup( )
+		if(params.hero==nil) then
+			local playerSeqData = {
+		  		{name = "idle", frames={6}}
+			}		
+			local playerSpt = display.newSprite(params.spriteSheet, playerSeqData )
+			playerSpt:setSequence( "idle" );
+			local gun = newGun("pistol");
+			local gunSpt = gun:spawn(params.spriteSheet);
+			heroGuy:insert(playerSpt);
+			heroGuy:insert(gunSpt);
+		else
+			heroGuy=params.hero;
+		end		
 		heroGuy.x =   display.contentCenterX;
 		heroGuy.y = display.contentHeight-140;
-		heroGuy:insert(playerSpt);
-		heroGuy:insert(gunSpt);
 		sceneGroup:insert( heroGuy );
 		heroGuy.anchorY=0;
 
