@@ -137,10 +137,12 @@ function scene:show( event )
 			end 
 		end
 
+		--[[
 		local pageTitle = display.newText("BRICK SHOP", display.contentCenterX, display.contentCenterY - 550,CompFont, 60)
 		pageTitle:setFillColor( 0,0,0 );
 
 		sceneGroup:insert(pageTitle)
+		]]--
 
 		--DIV VERT
 		--[[
@@ -175,10 +177,20 @@ function scene:show( event )
 		if(params.ticketNum==nil)then
 			params.ticketNum=10000;
 		end
+
+		local blackBox = display.newRect( sceneGroup, display.contentCenterX-3, display.contentCenterY+600, 300, 75 );
+		blackBox:setFillColor( 0,0,0,0.7 );
 		-- update money when you buy something
+		local ticketData={{name = "ticket", frames={58}}};
+		local ticketImg = display.newSprite( params.spriteSheet, ticketData );
+		ticketImg.x=display.contentCenterX-150; ticketImg.y=display.contentCenterY + 575;
+		ticketImg.anchorX=0; ticketImg.anchorY=0;
+		ticketImg:scale( 2, 2 );
+		sceneGroup:insert( ticketImg );
+
 		function updateMoney(  )
-			moneyAvailable = display.newText("Tickets: "..params.ticketNum, display.contentCenterX, display.contentCenterY + 600, CompFont, 100)
-			moneyAvailable:setFillColor( 0,0,0 );
+			moneyAvailable = display.newText(params.ticketNum, display.contentCenterX+50, display.contentCenterY + 600, CompFont, 100)
+			moneyAvailable:setFillColor( 1,1,1 );
 			sceneGroup:insert(moneyAvailable)
 		end
 		updateMoney();
@@ -192,6 +204,16 @@ function scene:show( event )
 		square2:setFillColor( 0,0,0,.6 );
 		local square3 = display.newRect(sceneGroup, 600,rowY-160,220,240);
 		square3:setFillColor( 0,0,0,.6 );
+
+		-----BLOCK 8 --------------
+		--[[
+		local blockData={{name = "block", frames={67}}};
+		local block = display.newSprite( params.spriteSheet, blockData );
+		block.x=0; block.y=rowY;
+		block.anchorX=0; block.anchorY=0;
+		--block:scale( 3, 3 );
+		sceneGroup:insert( block );
+		]]--
 
 		buyBtn = widget.newButton(
 		    {
@@ -387,6 +409,8 @@ function scene:show( event )
 			display.remove( square7 );
 			display.remove( square8 );
 			display.remove( square9 );
+			display.remove( blackBox );
+			display.remove( ticketImg );
 		end
 
 		local function nextScene (event)

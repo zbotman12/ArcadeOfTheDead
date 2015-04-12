@@ -78,16 +78,16 @@ local MainSheetOpt =
 		--[[56]] { x = 680, y = 170, width = 18, height = 100}, --Link shoot 8
 		--[[57]] { x = 680, y = 170, width = 18, height = 100}, --Link shoot 9
 		-------------------------------------------------------------
-		--[[58]] { x = 400, y = 365, width = 50, height = 25}, --Ticket for GUI
+		--[[58]] { x = 425, y = 340, width = 50, height = 25}, --Ticket for GUI
 		--[[59]] { x = 450, y = 365, width = 180, height = 180}, --Block Swap Button
 		-------------------------------------------------------------
 		--[[60]] { x = 1,   y = 620, width = 100, height = 100}, --Block 1 icon
-		--[[61]] { x = 100, y = 620, width = 100, height = 100}, --Block 2 icon
-		--[[62]] { x = 200, y = 620, width = 100, height = 100}, --Block 3 icon
-		--[[63]] { x = 300, y = 620, width = 100, height = 100}, --Block 4 icon
-		--[[64]] { x = 400, y = 620, width = 100, height = 100}, --Block 5 icon
+		--[[61]] { x = 600, y = 620, width = 100, height = 100}, --Block 2 icon
+		--[[62]] { x = 300, y = 620, width = 100, height = 100}, --Block 3 icon
+		--[[63]] { x = 100, y = 620, width = 100, height = 100}, --Block 4 icon
+		--[[64]] { x = 200, y = 620, width = 100, height = 100}, --Block 5 icon		
 		--[[65]] { x = 500, y = 620, width = 100, height = 100}, --Block 6 icon
-		--[[66]] { x = 600, y = 620, width = 100, height = 100}, --Block 7 icon
+		--[[66]] { x = 400, y = 620, width = 100, height = 100}, --Block 7 icon		
 		--[[67]] { x = 1,   y = 720, width = 100, height = 100}, --Block 8 icon
 		--[[68]] { x = 100, y = 720, width = 100, height = 100}, --Block 9 icon
 
@@ -102,5 +102,4 @@ local sceneOpt = {
 	params = {spriteSheet = spriteSheet,level=level}
 }
 -- load first scene
-composer.gotoScene( "page1", sceneOpt);
-
+composer.gotoScene( "shop", sceneOpt);

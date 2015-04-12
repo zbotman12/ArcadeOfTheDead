@@ -38,7 +38,7 @@ function scene:show( event )
 	local heartGroup = display.newGroup();
 	local brickSize = 70;
 	local zombiesPlayerKilled=0;
-	local ticketNum,ticketText,life,zombiesToKill,crossLine;
+	local ticketNum,ticketText,life,zombiesToKill,crossLine,gun;
 	
 
 	local function newGun (guntype)
@@ -54,10 +54,10 @@ function scene:show( event )
 
 	if ( phase == "will" ) then
 		--begin music as scene loads 
-		local bgNight = audio.loadStream("sounds/night.mp3")
+		--local bgNight = audio.loadStream("sounds/night.mp3")
 		--sceneGroup:insert(bgNight)
-		audio.setMaxVolume(0.045, {channel = 1})
-		local backGroundChan = audio.play(bgNight, {channel = 1, loops = -1, fadein = 500})
+		--audio.setMaxVolume(0.045, {channel = 1})
+		--local backGroundChan = audio.play(bgNight, {channel = 1, loops = -1, fadein = 500})
 
 	elseif ( phase == "did" ) then	
 		physics.start();
@@ -75,23 +75,26 @@ function scene:show( event )
 		crossLine:setFillColor( 0,0,0,0.1 );
 
 		----------Create the player display object group--------
-		local heroGuy = display.newGroup( )
+		local heroGuy = display.newGroup( );
 		if(params.hero==nil) then
+			print( "in default" );
 			local playerSeqData = {
 		  		{name = "idle", frames={6}}
-			}		
-			local playerSpt = display.newSprite(params.spriteSheet, playerSeqData )
+			};
+			local playerSpt = display.newSprite(params.spriteSheet, playerSeqData );
 			playerSpt:setSequence( "idle" );
-			local gun = newGun("pistol");
+			gun = newGun("pistol");
 			local gunSpt = gun:spawn(params.spriteSheet);
 			heroGuy:insert(playerSpt);
 			heroGuy:insert(gunSpt);
+			sceneGroup:insert( heroGuy );
 		else
+			print( params.hero );
 			heroGuy=params.hero;
+			sceneGroup:insert( heroGuy );
 		end		
-		heroGuy.x =   display.contentCenterX;
+		heroGuy.x = display.contentCenterX;
 		heroGuy.y = display.contentHeight-140;
-		sceneGroup:insert( heroGuy );
 		heroGuy.anchorY=0;
 
 		local function movePlayer( event )
@@ -229,8 +232,8 @@ function scene:show( event )
 			
 		end
 
-		local totalNumZombies = 10;
-		zombiesToKill = 10;
+		local totalNumZombies = 1;
+		zombiesToKill = 1;
 		function spawnZombieHorde( )
 			spawnRandomZombie();
 			totalNumZombies = totalNumZombies -1;
@@ -253,7 +256,13 @@ function scene:show( event )
 		else
 			ticketNum=params.ticketNum;
 		end
-		ticketText = display.newText( sceneGroup, "Tickets: "..ticketNum, 100, 15, CompFont, 50 );
+
+		local ticketData={{name = "ticket", frames={58}}};
+		local ticketImg = display.newSprite( params.spriteSheet, ticketData );
+		ticketImg.x=10; ticketImg.y=5;
+		ticketImg.anchorX=0; ticketImg.anchorY=0;
+		sceneGroup:insert( ticketImg );
+		ticketText = display.newText( sceneGroup, ticketNum, 100, 17, CompFont, 50 );
 		ticketText:setFillColor( 1,1,1,.75 );
 
 		--------Life Total-----------------

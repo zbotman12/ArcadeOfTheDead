@@ -314,6 +314,7 @@ function scene:show( event )
 		local function next ()
 			display.remove( heroGuy );
 			params.wall=wall;
+			params.heroGuy=heroGuy;
 			local sceneOpt = {
 				effect = "fade",
 				time = 800,
@@ -379,7 +380,7 @@ function scene:show( event )
 				end			
 		end
 
-		local blockCounter =5;
+		local blockCounter =1;
 		function spawnNewBlock(  )
 			if(blockCounter > 0) then
 				blockCounter = blockCounter - 1;

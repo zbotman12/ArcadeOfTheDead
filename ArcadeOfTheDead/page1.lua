@@ -272,13 +272,14 @@ function scene:show( event )
 				end
 			end 
 		end
-		
+
+		--[[
 		local pageTitle = display.newText("MISCELANEOUS", display.contentCenterX, display.contentCenterY - 550, CompFont, 60)
 		pageTitle:setFillColor( 0,0,0 );
 		sceneGroup:insert(pageTitle)
 
 		--DIV VERT
-		--[[
+		
 		local verticalDivide = display.newRect(240,display.contentCenterY,5, display.contentCenterY *2 - 340)
 		sceneGroup:insert(verticalDivide)
 
@@ -303,19 +304,30 @@ function scene:show( event )
 		sceneGroup:insert(horionDivide4)
 		
 		--BOTTOM BAR
-		]]--
+		
 		local currentlyEquipted = display.newText("Currently Equipted Shit", display.contentCenterX, display.contentCenterY + 500, CompFont, 75);
 		currentlyEquipted:setFillColor( 0,0,0 );
 		sceneGroup:insert(currentlyEquipted)
+		]]--
 
 		if(params.ticketNum==nil)then
 			params.ticketNum=10000;
 		end
 
+		local blackBox = display.newRect( sceneGroup, display.contentCenterX-3, display.contentCenterY+600, 300, 75 );
+		blackBox:setFillColor( 0,0,0,0.7 );
+		-- update money when you buy something
+		local ticketData={{name = "ticket", frames={58}}};
+		local ticketImg = display.newSprite( params.spriteSheet, ticketData );
+		ticketImg.x=display.contentCenterX-150; ticketImg.y=display.contentCenterY + 575;
+		ticketImg.anchorX=0; ticketImg.anchorY=0;
+		ticketImg:scale( 2, 2 );
+		sceneGroup:insert( ticketImg );
+
 		function updateMoney(  )
-			moneyAvailable = display.newText("Tickets: "..params.ticketNum, display.contentCenterX, display.contentCenterY + 600, CompFont, 100);
-			moneyAvailable:setFillColor( 0,0,0 );
-			sceneGroup:insert(moneyAvailable);
+			moneyAvailable = display.newText(params.ticketNum, display.contentCenterX+50, display.contentCenterY + 600, CompFont, 100)
+			moneyAvailable:setFillColor( 1,1,1 );
+			sceneGroup:insert(moneyAvailable)
 		end
 		updateMoney();
 
@@ -849,6 +861,8 @@ function scene:show( event )
 			display.remove( square7 );
 			display.remove( square8 );
 			display.remove( square9 );
+			display.remove( blackBox );
+			display.remove( ticketImg );
 		end
 
 		function nextScene (event)
