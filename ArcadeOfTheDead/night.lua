@@ -12,6 +12,7 @@ local widget = require("widget");
 local Brick = require("Brick");
 local Pistol = require("Pistol");
 local Shotgun = require("Shotgun");
+local MachineGun = require( "MachineGun" );
 local Zombie = require("Zombie");
 local physics = require("physics");
 local CollisionFilters = require("CollisionFilters");
@@ -45,9 +46,10 @@ function scene:show( event )
 		local gun;
 		if (guntype == "pistol") then
 			gun = Pistol:new();
-		end
-		if (guntype == "shotgun") then
-			gun = Shotgun:new();
+		elseif(guntype == "shotgun") then
+				gun = Shotgun:new();
+		elseif(guntype == "machinegun") then
+			gun = MachineGun:new();
 		end
 		return gun;
 	end
@@ -75,33 +77,47 @@ function scene:show( event )
 		crossLine:setFillColor( 0,0,0,0.1 );
 
 		----------Create the player display object group--------
-		local heroGuy = display.newGroup( );
+		local heroGuy = display.newGroup( )
+		local playerSeqData;
 		if(params.hero==nil) then
-			print( "in default" );
-			local playerSeqData = {
+			playerSeqData = {
 		  		{name = "idle", frames={6}}
+			};					
+		elseif(params.hero=="MegaMan")then
+			playerSeqData = {
+		  		{name = "idle", frames={28}}
 			};
-			local playerSpt = display.newSprite(params.spriteSheet, playerSeqData );
-			playerSpt:setSequence( "idle" );
-			gun = newGun("pistol");
-			local gunSpt = gun:spawn(params.spriteSheet);
-			heroGuy:insert(playerSpt);
-			heroGuy:insert(gunSpt);
-			sceneGroup:insert( heroGuy );
-		else
-			print( params.hero );
-			heroGuy=params.hero;
-			sceneGroup:insert( heroGuy );
+		elseif(params.hero=="Kirby")then
+			playerSeqData = {
+		  		{name = "idle", frames={29}}
+			};
+		elseif(params.hero=="Link")then
+			playerSeqData = {
+		  		{name = "idle", frames={30}}
+			};
 		end		
+		local playerSpt = display.newSprite(params.spriteSheet, playerSeqData )
+		playerSpt:setSequence( "idle" );
+		local gunType="pistol";
+		local gun = newGun(gunType);
+		local gunSpt = gun:spawn(params.spriteSheet,params.hero);
+		heroGuy:insert(playerSpt);
+		heroGuy:insert(gunSpt);
 		heroGuy.x = display.contentCenterX;
 		heroGuy.y = display.contentHeight-140;
+		sceneGroup:insert( heroGuy );
 		heroGuy.anchorY=0;
 
-		local function movePlayer( event )
-			heroGuy.x = event.x;
-			gun:shoot(heroGuy);
+		local function movePlayer( event )			
+				heroGuy.x = event.x;
+				gun:shoot(heroGuy);
 		end
-		Runtime:addEventListener("tap", movePlayer);
+
+		if((gunType == "pistol") or (gunType == "shotgun")) then
+			Runtime:addEventListener("tap", movePlayer);
+		elseif(gunType == "machinegun") then
+			Runtime:addEventListener("touch", movePlayer);
+		end
 
 		--------Level-----------------------
 		local level = display.newText(sceneGroup,"Level: "..params.level,display.contentCenterX,15,CompFont, 50);
@@ -132,15 +148,7 @@ function scene:show( event )
 					zombiesPlayerKilled = zombiesPlayerKilled + 1;
 					if(zombiesToKill == zombiesPlayerKilled) then						
 						local function goToShop (event)							
-							Runtime:removeEventListener( "tap", movePlayer );
-							display.remove( heartGroup );							
-							physics.removeBody( crossLine );
-							display.remove( crossLine );
-							display.remove( ticketText );
-							display.remove( level );
-							display.remove( heroGuy );
-							params.ticketNum=ticketNum;
-							params.life=life;
+							removeStuff();
 							local sceneOpt = {
 								effect = "fade",
 								time = 800,
@@ -166,15 +174,7 @@ function scene:show( event )
 		end
 		--handler for the game ending
 		function gameOver (event)	
-			Runtime:removeEventListener( "tap", movePlayer );
-			display.remove( heartGroup );							
-			physics.removeBody( crossLine );
-			display.remove( crossLine );
-			display.remove( ticketText );
-			display.remove( level );
-			display.remove( heroGuy );
-			params.ticketNum=ticketNum;
-			params.life=life;
+			removeStuff();
 			local sceneOpt = {
 				effect = "fade",
 				time = 800,
@@ -281,6 +281,22 @@ function scene:show( event )
 			end
 		end		
 		showHearts();
+
+		function removeStuff(  )
+			if((gun == "pistol") or (gun == "shotgun")) then
+				Runtime:removeEventListener("tap", movePlayer);
+			elseif(gun == "machinegun") then
+				Runtime:removeEventListener("touch", movePlayer);
+			end
+			display.remove( heartGroup );							
+			physics.removeBody( crossLine );
+			display.remove( crossLine );
+			display.remove( ticketText );
+			display.remove( level );
+			display.remove( heroGuy );
+			params.ticketNum=ticketNum;
+			params.life=life;
+		end
 
 	end
 end

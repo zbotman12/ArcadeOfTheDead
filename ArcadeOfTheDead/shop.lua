@@ -97,7 +97,7 @@ function scene:show( event )
 			elseif (event.target.id == "Buy5") then
 				if(params.ticketNum>=250)then
 					event.target.isVisible = false;
-					purchasedBlock=3;
+					purchasedBlock=5;
 					params.ticketNum=params.ticketNum-250;
 					moneyAvailable:removeSelf( );
 					updateMoney();
@@ -105,7 +105,7 @@ function scene:show( event )
 			elseif (event.target.id == "Buy6") then
 				if(params.ticketNum>=250)then
 					event.target.isVisible = false;
-					purchasedBlock=4;
+					purchasedBlock=3;
 					params.ticketNum=params.ticketNum-250;
 					moneyAvailable:removeSelf( );
 					updateMoney();
@@ -113,7 +113,7 @@ function scene:show( event )
 			elseif (event.target.id == "Buy7") then
 				if(params.ticketNum>=250)then
 					event.target.isVisible = false;
-					purchasedBlock=5;
+					purchasedBlock=4;
 					params.ticketNum=params.ticketNum-250;
 					moneyAvailable:removeSelf( );
 					updateMoney();
@@ -319,13 +319,13 @@ function scene:show( event )
 		buyBtn4:setFillColor( 0,0.9,0.3 );
 		sceneGroup:insert( buyBtn4 );
 
-		-----BLOCK 3 --------------		
-		local blockData={{name = "block3", frames={62}}};
-		local block3 = display.newSprite( params.spriteSheet, blockData );
-		block3.x=360; block3.y=rowY-190;
-		block3.anchorY=0;
-		block3:scale( 2, 2 );
-		sceneGroup:insert( block3 );
+		-----BLOCK 5 --------------		
+		local blockData={{name = "block5", frames={62}}};
+		local block5 = display.newSprite( params.spriteSheet, blockData );
+		block5.x=360; block5.y=rowY-190;
+		block5.anchorY=0;
+		block5:scale( 2, 2 );
+		sceneGroup:insert( block5 );
 
 		buyBtn5 = widget.newButton(
 		    {
@@ -345,12 +345,12 @@ function scene:show( event )
 		sceneGroup:insert( buyBtn5 );
 
 		-----BLOCK 4 --------------		
-		local blockData={{name = "block4", frames={63}}};
-		local block4 = display.newSprite( params.spriteSheet, blockData );
-		block4.x=600; block4.y=rowY-190;
-		block4.anchorY=0;
-		block4:scale( 2, 2 );
-		sceneGroup:insert( block4 );
+		local blockData={{name = "block3", frames={63}}};
+		local block3 = display.newSprite( params.spriteSheet, blockData );
+		block3.x=600; block3.y=rowY-190;
+		block3.anchorY=0;
+		block3:scale( 2, 2 );
+		sceneGroup:insert( block3 );
 
 		buyBtn6 = widget.newButton(
 		    {
@@ -380,13 +380,13 @@ function scene:show( event )
 		local square9 = display.newRect(sceneGroup, 600,rowY-155,220,240);
 		square9:setFillColor( 0,0,0,.6 );
 
-		-----BLOCK 5 --------------		
-		local blockData={{name = "block5", frames={64}}};
-		local block5= display.newSprite( params.spriteSheet, blockData );
-		block5.x=120; block5.y=rowY-190;
-		block5.anchorY=0;
-		block5:scale( 2, 2 );
-		sceneGroup:insert( block5 );
+		-----BLOCK 4 --------------		
+		local blockData={{name = "block4", frames={64}}};
+		local block4= display.newSprite( params.spriteSheet, blockData );
+		block4.x=120; block4.y=rowY-190;
+		block4.anchorY=0;
+		block4:scale( 2, 2 );
+		sceneGroup:insert( block4 );
 
 		buyBtn7 = widget.newButton(
 		    {
@@ -473,6 +473,7 @@ function scene:show( event )
 		local function nextScene (event)
 			removeObjs( );
 			params.purchasedBlock=purchasedBlock;
+			print(params.purchasedBlock);
 			local sceneOpt = {
 				effect = "fade",
 				time = 800,

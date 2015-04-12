@@ -79,27 +79,30 @@ local MainSheetOpt =
 		--[[57]] { x = 680, y = 170, width = 18, height = 100}, --Link shoot 9
 		-------------------------------------------------------------
 		--[[58]] { x = 425, y = 340, width = 50, height = 25}, --Ticket for GUI
-		--[[59]] { x = 450, y = 365, width = 180, height = 180}, --Block Swap Button
+		--[[59]] { x = 476, y = 341, width = 180, height = 180}, --Block Swap Button
 		-------------------------------------------------------------
 		--[[60]] { x = 1,   y = 656, width = 100, height = 25}, --Block 1 icon
 		--[[61]] { x = 626, y = 643, width = 50, height = 50}, --Block 2 icon
-		--[[62]] { x = 313, y = 640, width = 75, height = 50}, --Block 3 icon
-		--[[63]] { x = 114, y = 640, width = 75, height = 50}, --Block 4 icon
-		--[[64]] { x = 213, y = 640, width = 75, height = 50}, --Block 5 icon		
+		--[[62]] { x = 313, y = 640, width = 75, height = 50}, --Block 5 icon
+		--[[63]] { x = 114, y = 640, width = 75, height = 50}, --Block 3 icon
+		--[[64]] { x = 213, y = 640, width = 75, height = 50}, --Block 4 icon		
 		--[[65]] { x = 513, y = 643, width = 75, height = 50}, --Block 6 icon
 		--[[66]] { x = 414, y = 643, width = 75, height = 50}, --Block 7 icon		
-		--[[67]] { x = 37,   y = 754, width = 25, height = 25}, --Block 8 icon
-		--[[68]] { x = 138, y = 745, width = 25, height = 50}, --Block 9 icon
+		--[[67]] { x = 36,   y = 753, width = 25, height = 25}, --Block 8 icon
+		--[[68]] { x = 137, y = 744, width = 25, height = 50}, --Block 9 icon
 
 	}
 }
 
 local spriteSheet = graphics.newImageSheet( "images/spriteSheet.png", MainSheetOpt );
 local level = 0;
+local purchasedBlock = 0;
 local sceneOpt = {
 	effect = "fade",
 	time = 800,
-	params = {spriteSheet = spriteSheet,level=level}
+	params = {spriteSheet = spriteSheet,
+			  level=level,
+			  purchasedBlock=purchasedBlock}
 }
 -- load first scene
-composer.gotoScene( "start", sceneOpt);
+composer.gotoScene( "day", sceneOpt);

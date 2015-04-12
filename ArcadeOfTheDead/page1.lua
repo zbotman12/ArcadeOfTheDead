@@ -47,6 +47,7 @@ function scene:show( event )
 	local totalNumOfBricks = 0;
 	local repairCost=0;
 	local kirby,link,megaMan;
+	params.gunType="pistol";
 
 	if ( phase == "will" ) then
 
@@ -116,36 +117,37 @@ function scene:show( event )
 			if(event.target.id == "Equip") then
 				event.target.isVisible = false
 				unequipBtn.isVisible = true
+				--PISTOL
+				params.gunType="pistol";
 			elseif (event.target.id == "Equip2") then
 				event.target.isVisible = false
 				unequipBtn2.isVisible = true
+				--SHOTGUN
+				params.gunType="shotgun";
 			elseif (event.target.id == "Equip3") then
 				event.target.isVisible = false
 				unequipBtn3.isVisible = true
-				--equip Kirby
-				params.hero=kirby;
+				--MACHINE GUN
+				params.gunType="machinegun";
 			elseif (event.target.id == "Equip4") then
 				event.target.isVisible = false
 				unequipBtn4.isVisible = true
-				--equip Link
-				params.hero=link;
+				--equip Kirby
+				params.hero="Kirby";
 			elseif (event.target.id == "Equip5") then
 				event.target.isVisible = false
 				unequipBtn5.isVisible = true
-				--equip MegaMan
-				params.hero=megaMan;
+				--equip Link
+				params.hero="Link";
 			elseif (event.target.id == "Equip6") then
 				event.target.isVisible = false
 				unequipBtn6.isVisible = true
+				--equip MegaMan
+				params.hero="MegaMan";
 			elseif (event.target.id == "Equip7") then
 				event.target.isVisible = false
 				unequipBtn7.isVisible = true
-			elseif (event.target.id == "Equip8") then
-				event.target.isVisible = false
-				unequipBtn8.isVisible = true
-			else -- event.target.id = "Equip9"
-				event.target.isVisible = false
-				unequipBtn9.isVisible = true
+				params.hero="Mario";
 			end
 
 		end
@@ -175,26 +177,12 @@ function scene:show( event )
 			elseif (event.target.id == "Unequip7") then
 				event.target.isVisible = false
 				equipBtn7.isVisible = true
-			elseif (event.target.id == "Unequip8") then
-				event.target.isVisible = false
-				equipBtn8.isVisible = true
-			else -- event.target.id = "Unequip9"
-				event.target.isVisible = false
-				equipBtn9.isVisible = true
 			end
 		end
 
 		local function buyMe( event )
-			if(event.target.id == "Buy") then
+			if(event.target.id == "Buy2") then
 				if(params.ticketNum>=1000)then
-					event.target.isVisible = false
-					equipBtn.isVisible = true
-					params.ticketNum=params.ticketNum-150;
-					moneyAvailable:removeSelf( );
-					updateMoney();
-				end
-			elseif (event.target.id == "Buy2") then
-				if(params.ticketNum>=2000)then
 					event.target.isVisible = false
 					equipBtn2.isVisible = true
 					params.ticketNum=params.ticketNum-150;
@@ -202,7 +190,7 @@ function scene:show( event )
 					updateMoney();
 				end
 			elseif (event.target.id == "Buy3") then
-				if(params.ticketNum>=1000)then
+				if(params.ticketNum>=2000)then
 					event.target.isVisible = false
 					equipBtn3.isVisible = true
 					params.ticketNum=params.ticketNum-150;
@@ -210,7 +198,7 @@ function scene:show( event )
 					updateMoney();
 				end
 			elseif (event.target.id == "Buy4") then
-				if(params.ticketNum>=500)then
+				if(params.ticketNum>=1000)then
 					event.target.isVisible = false
 					equipBtn4.isVisible = true
 					params.ticketNum=params.ticketNum-150;
@@ -218,7 +206,7 @@ function scene:show( event )
 					updateMoney();
 				end
 			elseif (event.target.id == "Buy5") then
-				if(params.ticketNum>=400)then
+				if(params.ticketNum>=500)then
 					event.target.isVisible = false
 					equipBtn5.isVisible = true
 					params.ticketNum=params.ticketNum-150;
@@ -226,7 +214,7 @@ function scene:show( event )
 					updateMoney();
 				end
 			elseif (event.target.id == "Buy6") then
-				if(params.ticketNum>=250)then
+				if(params.ticketNum>=400)then
 					event.target.isVisible = false
 					equipBtn6.isVisible = true
 					params.ticketNum=params.ticketNum-150;
@@ -342,23 +330,9 @@ function scene:show( event )
 		local square3 = display.newRect(sceneGroup, 600,rowY-160,220,240);
 		square3:setFillColor( 0,0,0,.6 );
 
-		local buyBtn = widget.newButton(
-		    {
-		        x = 120,
-		        y = rowY,    
-		        id = "Buy",
-		        label = 1000,
-		        fontSize=100,
-		        font = BlockFont,
-		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
-		        sheet = params.spriteSheet,
-		        defaultFrame = 16,
-		        onPress = buyMe,
-		    }
-		);
-
-		buyBtn:setFillColor( 0,0.9,0.3 );
-		sceneGroup:insert( buyBtn );
+		local pistolText = display.newText("Pistol", 120, rowY-160, CompFont, 70);
+		pistolText:setFillColor( 1,.5,0 );
+		sceneGroup:insert(pistolText);
 
 		equipBtn = widget.newButton(
 		    {
@@ -374,7 +348,7 @@ function scene:show( event )
 		        onPress = equipMe,
 		    }
 		);
-		equipBtn.isVisible = false
+		equipBtn.isVisible = false;
 		equipBtn:setFillColor(0.5,0,0.5);
 		sceneGroup:insert( equipBtn );
 
@@ -392,16 +366,19 @@ function scene:show( event )
 		        onPress = unequipMe,
 		    }
 		);
-		unequipBtn.isVisible = false
 		unequipBtn:setFillColor( 1,0,0 );
 		sceneGroup:insert( unequipBtn );
+
+		local shotGunText = display.newText("ShotGun", 360, rowY-160, CompFont, 70);
+		shotGunText:setFillColor( 1,.5,0 );
+		sceneGroup:insert(shotGunText);
 
 		local buyBtn2 = widget.newButton(
 		    {
 		        x = 360,
 		        y = rowY,    
 		        id = "Buy2",
-		        label = 2000,
+		        label = 1000,
 		        fontSize=100,
 		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
@@ -449,27 +426,16 @@ function scene:show( event )
 		unequipBtn2:setFillColor( 1,0,0 );
 		sceneGroup:insert( unequipBtn2 );
 
-		----------Create the player display object group--------
-		local playerSeqData = {
-	  		{name = "idle", frames={29}}
-		}		
-		local playerSpt = display.newSprite(params.spriteSheet, playerSeqData )
-		local gun = Pistol:new();
-		local gunSpt = gun:spawn(params.spriteSheet,"Kirby");
-		kirby = display.newGroup( )
-		kirby.x=600;
-		kirby.y = rowY-160;
-		kirby:insert(playerSpt);
-		kirby:insert(gunSpt);
-		sceneGroup:insert( kirby );
-		kirby:scale( 1.5, 1.5 );
+		local machineGunText = display.newText("Machine\n Gun", 620, rowY-160, CompFont, 70);
+		machineGunText:setFillColor( 1,.5,0 );
+		sceneGroup:insert(machineGunText);
 
 		local buyBtn3 = widget.newButton(
 		    {
 		        x = 600,
 		        y = rowY,    
 		        id = "Buy3",
-		        label = 1000,
+		        label = 2000,
 		        fontSize=100,
 		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
@@ -530,25 +496,25 @@ function scene:show( event )
 
 		----------Create the player display object group--------
 		local playerSeqData = {
-	  		{name = "idle", frames={30}}
-		};		
-		local playerSpt = display.newSprite(params.spriteSheet, playerSeqData);
+	  		{name = "idle", frames={29}}
+		}		
+		local playerSpt = display.newSprite(params.spriteSheet, playerSeqData )
 		local gun = Pistol:new();
-		local gunSpt = gun:spawn(params.spriteSheet,"Link");
-		link = display.newGroup( )
-		link.x=120;
-		link.y = rowY-155;
-		link:insert(playerSpt);
-		link:insert(gunSpt);
-		sceneGroup:insert( link );
-		link:scale( 1.5, 1.5 );
+		local gunSpt = gun:spawn(params.spriteSheet,"Kirby");
+		kirby = display.newGroup( )
+		kirby.x=120;
+		kirby.y = rowY-160;
+		kirby:insert(playerSpt);
+		kirby:insert(gunSpt);
+		sceneGroup:insert( kirby );
+		kirby:scale( 1.5, 1.5 );
 
 		local buyBtn4 = widget.newButton(
 		    {
 		        x = 120,
 		        y = rowY,    
 		        id = "Buy4",
-		        label = 500,
+		        label = 1000,
 		        fontSize=100,
 		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
@@ -599,25 +565,25 @@ function scene:show( event )
 
 		----------Create the player display object group--------
 		local playerSeqData = {
-	  		{name = "idle", frames={28}}
+	  		{name = "idle", frames={30}}
 		};		
 		local playerSpt = display.newSprite(params.spriteSheet, playerSeqData);
 		local gun = Pistol:new();
-		local gunSpt = gun:spawn(params.spriteSheet,"MegaMan");
-		megaMan = display.newGroup( )
-		megaMan.x=360;
-		megaMan.y = rowY-155;
-		megaMan:insert(playerSpt);
-		megaMan:insert(gunSpt);
-		sceneGroup:insert( megaMan );
-		megaMan:scale( 1.5, 1.5 );
+		local gunSpt = gun:spawn(params.spriteSheet,"Link");
+		link = display.newGroup( )
+		link.x=360;
+		link.y = rowY-155;
+		link:insert(playerSpt);
+		link:insert(gunSpt);
+		sceneGroup:insert( link );
+		link:scale( 1.5, 1.5 );
 
 		local buyBtn5 = widget.newButton(
 		    {
 		        x = 360,
 		        y = rowY,    
 		        id = "Buy5",
-		        label = 400,
+		        label = 500,
 		        fontSize=100,
 		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
@@ -666,12 +632,27 @@ function scene:show( event )
 		unequipBtn5:setFillColor( 1,0,0 );
 		sceneGroup:insert( unequipBtn5 );
 
+		----------Create the player display object group--------
+		local playerSeqData = {
+	  		{name = "idle", frames={28}}
+		};		
+		local playerSpt = display.newSprite(params.spriteSheet, playerSeqData);
+		local gun = Pistol:new();
+		local gunSpt = gun:spawn(params.spriteSheet,"MegaMan");
+		megaMan = display.newGroup( )
+		megaMan.x=600;
+		megaMan.y = rowY-155;
+		megaMan:insert(playerSpt);
+		megaMan:insert(gunSpt);
+		sceneGroup:insert( megaMan );
+		megaMan:scale( 1.5, 1.5 );
+
 		local buyBtn6 = widget.newButton(
 		    {
 		        x = 600,
 		        y = rowY,    
 		        id = "Buy6",
-		        label = 250,
+		        label = 400,
 		        fontSize=100,
 		        font = BlockFont,
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
@@ -828,9 +809,9 @@ function scene:show( event )
 		repairCost = totalNumOfBricks - blockHealth;
 		repairCost= repairCost*10;
 
-		local repairText = display.newText("Repair\n All\nBlocks", 620, rowY-145, CompFont, 70)
+		local repairText = display.newText("Repair\n All\nBlocks", 620, rowY-145, CompFont, 70);
 		repairText:setFillColor( 1,.5,0 );
-		sceneGroup:insert(repairText)
+		sceneGroup:insert(repairText);
 
 		local buyBtn9 = widget.newButton(
 		    {

@@ -1,30 +1,29 @@
---SHOTGUN CLASS
-
+----------Machine Gun ---------
 --Prototype
-local Shotgun =  {tag="Shotgun", ammo = 4, fireSpd = 500, reloadSpd = 800};
+local MachineGun =  {tag="MachineGun", ammo = 15, fireSpd = 100, reloadSpd = 500};
 
 --Constructor
-function Shotgun:new (o)
+function MachineGun:new (o)
 	o = o or {};
 	setmetatable(o, self);
 	self.__index = self;
 	return o;
 end
 
-function Shotgun:spawn(spriteSheet, costume)
-	local ShotgunSeqData;
+function MachineGun:spawn(spriteSheet, costume)
+	local MachineGunSeqData;
 	if(costume=="MegaMan")then
-		ShotgunSeqData = {
+		MachineGunSeqData = {
 	  		{name = "idle", frames={31}},
 	  		{name = "shoot", start=31, count= 9, time = 200}
 		}
 	elseif(costume=="Link")then
-		ShotgunSeqData = {
+		MachineGunSeqData = {
 	  		{name = "idle", frames={49}},
 	  		{name = "shoot", start=49, count= 9, time = 200}
 		}
 	elseif(costume=="Kirby")then
-		ShotgunSeqData = {
+		MachineGunSeqData = {
 	  		{name = "idle", frames={40}},
 	  		{name = "shoot", start=40, count= 9, time = 200}
 		}
@@ -34,18 +33,18 @@ function Shotgun:spawn(spriteSheet, costume)
 	  		{name = "shoot", start=40, count= 9, time = 200}
 		}
 	else
-		ShotgunSeqData = {
+		MachineGunSeqData = {
 	  		{name = "idle", frames={7}},
 	  		{name = "shoot", start=7, count= 9, time = 200}
 		}
 	end
-	self.spt = display.newSprite(spriteSheet, ShotgunSeqData )
+	self.spt = display.newSprite(spriteSheet, MachineGunSeqData )
 	self.spt.x =  self.spt.x  + 33;
 	self.spt:setSequence( "idle" );
 	return self.spt;
 end
 
-function Shotgun:shoot(playerGroup)
+function MachineGun:shoot(playerGroup)
 
 	if (ammo ~= 0) then 
 		local bullet = display.newCircle (playerGroup.x + 30, playerGroup.y-16, 5);
@@ -60,11 +59,11 @@ function Shotgun:shoot(playerGroup)
 		bullet:applyForce(0, -2, bullet.x, bullet.y);
 		--audio.play( soundTable["shootSound"] );
 		bullet.tag = "shot";
-		local shotsFired = audio.loadSound("sounds/pistol.mp3")
-		audio.play(shotsFired, {channel = 13})
-		audio.setMaxVolume(0.20, {channel = 13})
+		--local shotsFired = audio.loadSound("sounds/pistol.mp3")
+		--audio.play(shotsFired, {channel = 13})
+		--audio.setMaxVolume(0.20, {channel = 13})
 		return bullet;
 	end
 end
 
-return Shotgun;
+return MachineGun;

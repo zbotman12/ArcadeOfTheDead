@@ -26,6 +26,8 @@ function Brick:spawn(spriteSheet)
 	self.shape:setFillColor (math.random(), math.random(), math.random() );
 	self.shape.x = self.xPos;
 	self.shape.y = self.yPos;
+	self.shape.anchorX=0;
+	self.shape.anchorY=0;
 	return self.shape;
 end
 
