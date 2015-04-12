@@ -205,15 +205,14 @@ function scene:show( event )
 		local square3 = display.newRect(sceneGroup, 600,rowY-160,220,240);
 		square3:setFillColor( 0,0,0,.6 );
 
-		-----BLOCK 8 --------------
-		--[[
-		local blockData={{name = "block", frames={67}}};
-		local block = display.newSprite( params.spriteSheet, blockData );
-		block.x=0; block.y=rowY;
-		block.anchorX=0; block.anchorY=0;
-		--block:scale( 3, 3 );
-		sceneGroup:insert( block );
-		]]--
+		-----BLOCK 8 --------------		
+		local blockData={{name = "block8", frames={67}}};
+		local block8 = display.newSprite( params.spriteSheet, blockData );
+		block8.x=120; block8.y=rowY-185;
+		block8.anchorY=0;
+		block8:scale( 2, 2 );
+		sceneGroup:insert( block8 );
+		
 
 		buyBtn = widget.newButton(
 		    {
@@ -233,6 +232,14 @@ function scene:show( event )
 		buyBtn:setFillColor( 0,0.9,0.3 );
 		sceneGroup:insert( buyBtn );
 
+		-----BLOCK 9 --------------		
+		local blockData={{name = "block9", frames={68}}};
+		local block9 = display.newSprite( params.spriteSheet, blockData );
+		block9.x=360; block9.y=rowY-205;
+		block9.anchorY=0;
+		block9:scale( 2, 2 );
+		sceneGroup:insert( block9 );
+
 		buyBtn2 = widget.newButton(
 		    {
 		        x = 360,
@@ -249,6 +256,14 @@ function scene:show( event )
 		);
 		buyBtn2:setFillColor( 0,0.9,0.3 );
 		sceneGroup:insert( buyBtn2 );
+
+		-----BLOCK 1 --------------		
+		local blockData={{name = "block1", frames={60}}};
+		local block1 = display.newSprite( params.spriteSheet, blockData );
+		block1.x=600; block1.y=rowY-185;
+		block1.anchorY=0;
+		block1:scale( 2, 2 );
+		sceneGroup:insert( block1 );
 
 		buyBtn3 = widget.newButton(
 		    {
@@ -279,6 +294,14 @@ function scene:show( event )
 		local square6 = display.newRect(sceneGroup, 600,rowY-155,220,240);
 		square6:setFillColor( 0,0,0,.6 );
 
+		-----BLOCK 2 --------------		
+		local blockData={{name = "block2", frames={61}}};
+		local block2 = display.newSprite( params.spriteSheet, blockData );
+		block2.x=120; block2.y=rowY-190;
+		block2.anchorY=0;
+		block2:scale( 2, 2 );
+		sceneGroup:insert( block2 );
+
 		buyBtn4 = widget.newButton(
 		    {
 		        x = 120,
@@ -293,9 +316,16 @@ function scene:show( event )
 		        onPress = buyMe,
 		    }
 		);
-
 		buyBtn4:setFillColor( 0,0.9,0.3 );
 		sceneGroup:insert( buyBtn4 );
+
+		-----BLOCK 3 --------------		
+		local blockData={{name = "block3", frames={62}}};
+		local block3 = display.newSprite( params.spriteSheet, blockData );
+		block3.x=360; block3.y=rowY-190;
+		block3.anchorY=0;
+		block3:scale( 2, 2 );
+		sceneGroup:insert( block3 );
 
 		buyBtn5 = widget.newButton(
 		    {
@@ -311,9 +341,16 @@ function scene:show( event )
 		        onPress = buyMe,
 		    }
 		);
-
 		buyBtn5:setFillColor( 0,0.9,0.3 );
 		sceneGroup:insert( buyBtn5 );
+
+		-----BLOCK 4 --------------		
+		local blockData={{name = "block4", frames={63}}};
+		local block4 = display.newSprite( params.spriteSheet, blockData );
+		block4.x=600; block4.y=rowY-190;
+		block4.anchorY=0;
+		block4:scale( 2, 2 );
+		sceneGroup:insert( block4 );
 
 		buyBtn6 = widget.newButton(
 		    {
@@ -329,7 +366,6 @@ function scene:show( event )
 		        onPress = buyMe,
 		    }
 		);
-
 		buyBtn6:setFillColor( 0,0.9,0.3 );
 		sceneGroup:insert( buyBtn6 );
 
@@ -343,6 +379,14 @@ function scene:show( event )
 		square8:setFillColor( 0,0,0,.6 );
 		local square9 = display.newRect(sceneGroup, 600,rowY-155,220,240);
 		square9:setFillColor( 0,0,0,.6 );
+
+		-----BLOCK 5 --------------		
+		local blockData={{name = "block5", frames={64}}};
+		local block5= display.newSprite( params.spriteSheet, blockData );
+		block5.x=120; block5.y=rowY-190;
+		block5.anchorY=0;
+		block5:scale( 2, 2 );
+		sceneGroup:insert( block5 );
 
 		buyBtn7 = widget.newButton(
 		    {
@@ -358,9 +402,16 @@ function scene:show( event )
 		        onPress = buyMe,
 		    }
 		);
-
 		buyBtn7:setFillColor( 0,0.9,0.3 );
 		sceneGroup:insert( buyBtn7 );
+
+		-----BLOCK 6 --------------		
+		local blockData={{name = "block6", frames={65}}};
+		local block6= display.newSprite( params.spriteSheet, blockData );
+		block6.x=360; block6.y=rowY-190;
+		block6.anchorY=0;
+		block6:scale( 2, 2 );
+		sceneGroup:insert( block6 );
 
 		buyBtn8 = widget.newButton(
 		    {
@@ -376,9 +427,16 @@ function scene:show( event )
 		        onPress = buyMe,
 		    }
 		);
-
 		buyBtn8:setFillColor( 0,0.9,0.3 );
 		sceneGroup:insert( buyBtn8 );
+
+		-----BLOCK 7 --------------		
+		local blockData={{name = "block7", frames={66}}};
+		local block7= display.newSprite( params.spriteSheet, blockData );
+		block7.x=600; block7.y=rowY-190;
+		block7.anchorY=0;
+		block7:scale( 2, 2 );
+		sceneGroup:insert( block7 );
 
 		buyBtn9 = widget.newButton(
 		    {
@@ -394,7 +452,6 @@ function scene:show( event )
 		        onPress = buyMe,
 		    }
 		);
-
 		buyBtn9:setFillColor( 0,0.9,0.3 );
 		sceneGroup:insert( buyBtn9);
 
