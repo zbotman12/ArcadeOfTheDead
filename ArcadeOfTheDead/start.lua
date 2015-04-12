@@ -23,7 +23,6 @@ function scene:create( event )
     sceneGroup:insert( bg );
 end
 
-
 --scene:show
 function scene:show( event )
 	local sceneGroup = self.view;
@@ -65,7 +64,7 @@ function scene:show( event )
 				time = 800,
 				params = params
 			}
-			composer.gotoScene( "intro", sceneOpt);
+			composer.gotoScene( "tutorial", sceneOpt);
 		end
 		local howToPlay = widget.newButton(
 		    {
