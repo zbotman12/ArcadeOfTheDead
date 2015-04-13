@@ -49,6 +49,11 @@ end
 function Shotgun:shoot(playerGroup)
 
 	if (self.ammo ~= 0) then
+		
+		local shotsFired = audio.loadSound("sounds/pistol.mp3");
+		audio.play(shotsFired, {channel = 13});
+		audio.setMaxVolume(0.20, {channel = 13});
+		
 		self.ammo = self.ammo - 1; 
 		local bullet1 = display.newCircle (playerGroup.x + 30, playerGroup.y-16, 5);
 		bullet1.anchorY = 1;
@@ -81,15 +86,7 @@ function Shotgun:shoot(playerGroup)
 		self.spt:setSequence( "shoot" );
 		self.spt:play( );
 		timer.performWithDelay( 200, function () self.spt:setSequence( "idle" ); self.spt:play( ); end );
-
-
-
-
-
-
-		local shotsFired = audio.loadSound("sounds/pistol.mp3");
-		audio.play(shotsFired, {channel = 13});
-		audio.setMaxVolume(0.20, {channel = 13});
+		audio.stop(13)
 
 		return bullet1, bullet2, bullet3;
 	end
