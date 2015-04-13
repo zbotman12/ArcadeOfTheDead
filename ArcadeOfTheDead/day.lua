@@ -53,7 +53,7 @@ function scene:show( event )
 
 		physics.start();
 		physics.setGravity(0,0);
-		physics.setDrawMode( "hybrid" );
+		--physics.setDrawMode( "hybrid" );
 		
 		if(params.wall~=nil)then
 			sceneGroup:insert(params.wall);	
@@ -453,7 +453,7 @@ function scene:show( event )
 					
 		end
 
-		local blockCounter =1;
+		local blockCounter =5;
 		function spawnNewBlock( num )
 			if(blockCounter > 0) then
 				blockCounter = blockCounter - 1;

@@ -18,8 +18,9 @@ local physics = require("physics");
 local CollisionFilters = require("CollisionFilters");
 local scene = composer.newScene();
 local params;
-local gun, gunSpt, playerSpt, totalNumZombies;
-local zombieTable, zombie, zombieMakeTimer,sceneIsHidden;
+local gun;
+local zombieTable;
+
 --scene:create
 function scene:create( event )
 	local sceneGroup = self.view
@@ -39,9 +40,12 @@ function scene:show( event )
 	local heartGroup = display.newGroup();
 	local brickSize = 70;
 	local zombiesPlayerKilled=0;
-	local ticketNum,ticketText,life,zombiesToKill,crossLine;
+	local ticketNum,ticketText,life,zombiesToKill,crossLine,gun;
 	zombieTable = {};
-	sceneIsHidden = false;
+
+	local function newGun (guntype)
+		if (guntype == "pistol") then
+	print(params.gunType);
 
 	local function newGun (gunType)
 		local gun;
@@ -64,7 +68,7 @@ function scene:show( event )
 	elseif ( phase == "did" ) then	
 		physics.start();
 		physics.setGravity(0,0);
-		physics.setDrawMode( "hybrid" );
+		--physics.setDrawMode( "hybrid" );
 		if(params.wall~=nil)then
 			sceneGroup:insert(params.wall);	
 		end
@@ -96,11 +100,11 @@ function scene:show( event )
 		  		{name = "idle", frames={30}}
 			};
 		end		
-		playerSpt = display.newSprite(params.spriteSheet, playerSeqData )
+		local playerSpt = display.newSprite(params.spriteSheet, playerSeqData )
 		playerSpt:setSequence( "idle" );
 		local gunType=params.gunType;
-		gun = newGun(gunType);
-		gunSpt = gun:spawn(params.spriteSheet,params.hero);
+		local gun = newGun(gunType);
+		local gunSpt = gun:spawn(params.spriteSheet,params.hero);
 		heroGuy:insert(playerSpt);
 		heroGuy:insert(gunSpt);
 		heroGuy.x = display.contentCenterX;
@@ -126,7 +130,7 @@ function scene:show( event )
 				time = 800,
 				params = params
 			}
-			audio.stop(bgNight);
+			audio.stop(bgNight)
 			composer.gotoScene( "GameOver", sceneOpt);
 		end	
 
@@ -191,7 +195,7 @@ function scene:show( event )
 					heartGroup = display.newGroup();
 					if(life > 0)then
 						showHearts();
-					elseif(life == 0) then
+					else
 						local scream = audio.loadSound("sounds/scream.mp3")
 						audio.play(scream, {channel = 17})
 						audio.setMaxVolume(0.20, {channel = 17})
@@ -227,31 +231,33 @@ function scene:show( event )
 			    test = transition.to( zombie, {time=self.fT, delay=1, y=zombie.y+100, onComplete=go} );
 			end
 		end
-		--make a new zmobie
-		local i = 0; 
+		--make a new zmobie 
 		function spawnZombie( x, y )
-			i = i + 1;
-			zombieTable[i] = Zombie:new({xPos=x, yPos=y});
-			zombieTable[i]:spawn(params.spriteSheet);
+			local zombie = Zombie:new({xPos=x, yPos=y});
+			table.insert(zombieTable, zombie);
+			zombie:spawn(params.spriteSheet);
 			local test = {-30,-50,-30,50,30,50,30,-50};
-			physics.addBody( zombieTable[i].shape , "dynamic", {filter=CollisionFilters.zombie, shape=test} );
-			sceneGroup:insert( zombieTable[i].shape);
-			zombieTable[i].shape:addEventListener( "collision", zombieAttackBrick );				
-			moveZombie(zombieTable[i].shape);
+			physics.addBody( zombie.shape , "dynamic", {filter=CollisionFilters.zombie, shape=test} );
+			sceneGroup:insert( zombie.shape );
+			zombie.shape:addEventListener( "collision", zombieAttackBrick );				
+			moveZombie(zombie.shape);
+		end
+		--put random zombie into play
+		function spawnRandomZombie(  )
+			spawnZombie((math.random(0,9) * 70) + 10,100) ;
 		end
 
-		--put random zombie into play
-		totalNumZombies = 5;
+		local totalNumZombies = 5;
 		zombiesToKill = 5;
 		function spawnZombieHorde( )
-			spawnZombie((math.random(0,9) * 70) + 10,100);
+			spawnRandomZombie();
 			totalNumZombies = totalNumZombies -1;
-			if(totalNumZombies >0 and (sceneIsHidden == false))then
-				zombieMakeTimer = timer.performWithDelay(100, spawnZombieHorde,1);
+			if(totalNumZombies >0)then
+				timer.performWithDelay(1000, spawnZombieHorde,1);
 			end
 		end
 		
-		spawnZombieHorde();
+		spawnZombieHorde()
 
 		---------Status Bar ----------------
 		local statusBar = display.newRect( sceneGroup, 0, 0, display.contentWidth, 35 );
@@ -292,15 +298,6 @@ function scene:show( event )
 		showHearts();
 
 		function removeStuff(  )
-
-		end
-end
-
-function scene:hide(event)
-		if(event.phase == "will") then
-			print("hiding");
-			sceneIsHidden = true;
-			timer.cancel(zombieMakeTimer);
 			if((gun.tag == "Pistol") or (gun.tag == "Shotgun")) then
 				Runtime:removeEventListener("tap", movePlayer);
 
@@ -309,11 +306,11 @@ function scene:hide(event)
 			end
 			Runtime:removeEventListener(accelerometer, reloadGun);
 			display.remove( heartGroup );
-			for i = 1, #zombieTable do
-				--if(zombieTable[i].shape ~= nil) then
-					print("killing Orphans");
-						zombieTable[i]:hit();
-				--end
+			for i = 1, totalNumZombies do
+				if(zombieTable[i] ~= nil) then
+					display.removeBody(zombieTable[i]);
+					display.remove(zombieTable[i]);
+				end
 			end							
 			physics.removeBody( crossLine );
 			display.remove( crossLine );
@@ -323,14 +320,15 @@ function scene:hide(event)
 			params.ticketNum=ticketNum;
 			params.life=life;
 		end
-	end
 
+	end
 end
+
+--scene:hide
 --scene:destroy
 
 
 scene:addEventListener( "create", scene );
 scene:addEventListener( "show", scene );
-scene:addEventListener( "hide", scene );
 
 return scene;
