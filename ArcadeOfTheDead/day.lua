@@ -373,8 +373,7 @@ function scene:show( event )
 		function addPhysicsToBricks(  )
 			for i=1,currentBlock.numChildren do
 				local child=currentBlock[i];
-				local physBody=physics.addBody( child, "static", {filter=CollisionFilters.brick} );
-				sceneGroup:insert(physBody);
+				physics.addBody( child, "static", {filter=CollisionFilters.brick} );
 			end
 			spawnNewBlock();
 		end

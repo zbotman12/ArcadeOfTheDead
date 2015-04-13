@@ -1,4 +1,4 @@
----Tutorial page 2----
+---Tutorial page 4----
 local composer = require( "composer" );
 local widget = require("widget");
 local scene = composer.newScene();
@@ -9,7 +9,7 @@ local params;
 function scene:create( event )
 	local sceneGroup = self.view;
 	params = event.params;
-	local bg = display.newImage ("images/tut2.png");
+	local bg = display.newImage ("images/tut4.png");
 	bg.anchorX=0; bg.anchorY=0;
     bg:toBack();
     sceneGroup:insert( bg );
@@ -30,7 +30,7 @@ function scene:show( event )
 				time = 800,
 				params = params
 			}
-			composer.gotoScene( "tutorial3", sceneOpt);
+			composer.gotoScene( "start", sceneOpt);
 		end
 		Runtime:addEventListener( "tap", instructionScene );
 	end
