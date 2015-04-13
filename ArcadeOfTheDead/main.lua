@@ -107,4 +107,4 @@ local sceneOpt = {
 			  purchasedBlock=purchasedBlock}
 }
 -- load first scene
-composer.gotoScene( "start", sceneOpt);
+composer.gotoScene( "shop", sceneOpt);
