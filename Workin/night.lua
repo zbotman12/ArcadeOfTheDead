@@ -94,7 +94,7 @@ function scene:show( event )
 				time = 800,
 				params = params
 			}
-			audio.stop(bgNight)
+			audio.stop(1)
 			composer.gotoScene( "GameOver", sceneOpt);
 		end		
 

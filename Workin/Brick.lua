@@ -52,6 +52,7 @@ function Brick:hit ()
 		self.shape=nil;
 		self = nil;
 	end
+	audio.stop(11)
 end
 
 return Brick;

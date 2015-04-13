@@ -36,6 +36,12 @@ function scene:show( event )
 
 
 	if ( phase == "will" ) then
+
+		--music for the backgroud
+		local bgShop = audio.loadStream("sounds/shoply.mp3")
+		audio.setMaxVolume(.015, {channel = 1})
+		local backGroundChan = audio.play(bgShop, {channel = 1, loops = -1, fadein = 500})
+
 		local function reshowBuyBtn( isThingBought )
 			if(isThingBought == "Buy") then
 				buyBtn.isVisible = true;
@@ -58,7 +64,13 @@ function scene:show( event )
 			end
 		end
 		--button logic to use the buy function of the shop
-		local function buyMe( event )
+		local function buyMe( event )	
+
+			--sound effect for button
+			local coinz = audio.loadSound("sounds/coin.mp3")
+			audio.play(coinz, {channel = 2})
+			audio.setMaxVolume(.80, {channel = 2})
+
 			reshowBuyBtn(isThingBought);
 			isThingBought = event.target.id;
 			if(event.target.id == "Buy") then
@@ -135,43 +147,11 @@ function scene:show( event )
 					updateMoney();
 				end
 			end 
+			audio.stop(2)
 		end
 
-		--[[
-		local pageTitle = display.newText("BRICK SHOP", display.contentCenterX, display.contentCenterY - 550,CompFont, 60)
-		pageTitle:setFillColor( 0,0,0 );
-
-		sceneGroup:insert(pageTitle)
-		]]--
-
-		--DIV VERT
-		--[[
-		local verticalDivide = display.newRect(240,display.contentCenterY,5, display.contentCenterY *2 - 340)
-		sceneGroup:insert(verticalDivide)
-
-		local verticalDivide2 = display.newRect(480,display.contentCenterY,5, display.contentCenterY *2 - 340)
-		sceneGroup:insert(verticalDivide2)
-		]]--
-		--DIV HOR
 		local yTack = ((display.contentCenterY * 2) - 342)/3;
-		--print(yTack)
-		--[[
-		local horionDivide1 = display.newRect(display.contentCenterX, 172, display.contentCenterX*2, 5) -- y = 172
-		sceneGroup:insert(horionDivide1)
 
-		local horionDivide2 = display.newRect(display.contentCenterX, 172 + yTack, display.contentCenterX*2, 5) -- y = 500
-		sceneGroup:insert(horionDivide2)
-
-		local horionDivide3 = display.newRect(display.contentCenterX, 172 + (2*yTack), display.contentCenterX*2, 5) -- y = 828
-		sceneGroup:insert(horionDivide3)
-
-		local horionDivide4 = display.newRect(display.contentCenterX, 172 + (3*yTack), display.contentCenterX*2, 5) -- y = 1110
-		sceneGroup:insert(horionDivide4)
-
-		--BOTTOM BAR
-		]]--
-
-		--local currentlyEquiptedShit = display.newText("Currently Equipted Shit", display.contentCenterX, display.contentCenterY + 500, native.systemFont, 50)
 		--sceneGroup:insert(currentlyEquiptedShit)
 		--ticket parameters to pass from scene to scene
 		if(params.ticketNum==nil)then
@@ -479,6 +459,7 @@ function scene:show( event )
 				time = 800,
 				params = params
 			}
+			audio.stop(1)
 			composer.gotoScene( "day", sceneOpt);
 		end
 
@@ -490,6 +471,7 @@ function scene:show( event )
 				time = 800,
 				params = params
 			}
+			audio.stop(1)
 			composer.gotoScene( "page1", sceneOpt);
 		end
 

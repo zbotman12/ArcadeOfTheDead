@@ -51,6 +51,10 @@ function scene:show( event )
 
 	if ( phase == "will" ) then
 
+		local bgShop = audio.loadStream("sounds/shoply.mp3")
+		audio.setMaxVolume(.015, {channel = 1})
+		local backGroundChan = audio.play(bgShop, {channel = 1, loops = -1, fadein = 500})
+
 		function nextScene (event)
 			moneyAvailable:removeSelf( );
 			local sceneOpt = {
@@ -58,6 +62,7 @@ function scene:show( event )
 				time = 800,
 				params = params
 			}
+			audio.stop(1)
 			composer.gotoScene( "day", sceneOpt);
 		end
 
@@ -68,6 +73,7 @@ function scene:show( event )
 				time = 800,
 				params = params
 			}
+			audio.stop(1)
 			composer.gotoScene( "page2", sceneOpt);
 		end
 
@@ -77,6 +83,7 @@ function scene:show( event )
 				time = 800,
 				params = params
 			}
+			audio.stop(1)
 			composer.gotoScene( "shop", sceneOpt);
 		end
 
@@ -111,7 +118,12 @@ function scene:show( event )
 			end
 		end
 
-		local function equipMe( event )			
+		local function equipMe( event )	
+			--sound effect
+			local equipz = audio.loadSound("sounds/gunCock.mp3")
+			audio.play(equipz, {channel = 3})
+			audio.setMaxVolume(1, {channel = 3})
+
 			removeEquip(isThingEquipped);
 			isThingEquipped = event.target.id;
 			if(event.target.id == "Equip") then
@@ -149,6 +161,7 @@ function scene:show( event )
 				unequipBtn7.isVisible = true
 				params.hero="Mario";
 			end
+			audio.stop(3)
 
 		end
 
@@ -181,6 +194,11 @@ function scene:show( event )
 		end
 
 		local function buyMe( event )
+			--sounds
+			local coinz = audio.loadSound("sounds/coin.mp3")
+			audio.play(coinz, {channel = 2})
+			audio.setMaxVolume(.8, {channel = 2})
+
 			if(event.target.id == "Buy2") then
 				if(params.ticketNum>=1000)then
 					event.target.isVisible = false
@@ -259,44 +277,11 @@ function scene:show( event )
 					updateMoney();
 				end
 			end 
+
+			audio.stop(2)
 		end
-
-		--[[
-		local pageTitle = display.newText("MISCELANEOUS", display.contentCenterX, display.contentCenterY - 550, CompFont, 60)
-		pageTitle:setFillColor( 0,0,0 );
-		sceneGroup:insert(pageTitle)
-
-		--DIV VERT
 		
-		local verticalDivide = display.newRect(240,display.contentCenterY,5, display.contentCenterY *2 - 340)
-		sceneGroup:insert(verticalDivide)
-
-		local verticalDivide2 = display.newRect(480,display.contentCenterY,5, display.contentCenterY *2 - 340)
-		sceneGroup:insert(verticalDivide2)
-
-		--DIV HOR
-		]]--
 		local yTack = ((display.contentCenterY * 2) - 342)/3;
-		--print(yTack)
-		--[[
-		local horionDivide1 = display.newRect(display.contentCenterX, 172, display.contentCenterX*2, 5) -- y = 172
-		sceneGroup:insert(horionDivide1)
-
-		local horionDivide2 = display.newRect(display.contentCenterX, 172 + yTack, display.contentCenterX*2, 5) -- y = 500
-		sceneGroup:insert(horionDivide2)
-
-		local horionDivide3 = display.newRect(display.contentCenterX, 172 + (2*yTack), display.contentCenterX*2, 5) -- y = 828
-		sceneGroup:insert(horionDivide3)
-
-		local horionDivide4 = display.newRect(display.contentCenterX, 172 + (3*yTack), display.contentCenterX*2, 5) -- y = 1110
-		sceneGroup:insert(horionDivide4)
-		
-		--BOTTOM BAR
-		
-		local currentlyEquipted = display.newText("Currently Equipted Shit", display.contentCenterX, display.contentCenterY + 500, CompFont, 75);
-		currentlyEquipted:setFillColor( 0,0,0 );
-		sceneGroup:insert(currentlyEquipted)
-		]]--
 
 		if(params.ticketNum==nil)then
 			params.ticketNum=10000;

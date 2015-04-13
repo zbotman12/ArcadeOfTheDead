@@ -37,6 +37,12 @@ function scene:show( event )
 	local switchingScenes=false;
 
 	if ( phase == "will" ) then	
+		--background music
+
+		local bgDay = audio.loadStream("sounds/tetris.mp3")
+		audio.setMaxVolume(.015, {channel = 1})
+		local backGroundChan = audio.play(bgDay, {channel = 1, loops = -1, fadein = 500})
+
 		physics.start();
 		physics.setGravity(0,0);
 		--physics.setDrawMode( "hybrid" );
@@ -367,7 +373,8 @@ function scene:show( event )
 				effect = "fade",
 				time = 800,
 				params = params
-			}			
+			}
+			audio.stop(1)			
 			composer.gotoScene( "night", sceneOpt);
 		end
 	

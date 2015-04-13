@@ -35,8 +35,8 @@ function scene:show( event )
 	local polygon;
 	
 	--music
-	--local bgDay = audio.loadStream("sounds/tetris.mp3")
-	--audio.setMaxVolume(.015, {channel = 1})
+	local bgDay = audio.loadStream("sounds/tetris.mp3")
+	audio.setMaxVolume(.015, {channel = 1})
 
 	if ( phase == "will" ) then	
 		physics.start();
@@ -331,7 +331,8 @@ function scene:show( event )
 				effect = "fade",
 				time = 800,
 				params = params
-			}			
+			}
+			audio.stop(1)			
 			composer.gotoScene( "night", sceneOpt);
 		end
 
