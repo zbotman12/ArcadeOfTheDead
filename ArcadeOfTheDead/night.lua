@@ -17,15 +17,14 @@ local Zombie = require("Zombie");
 local physics = require("physics");
 local CollisionFilters = require("CollisionFilters");
 local scene = composer.newScene();
-local params;
-local gun;
-local zombieTable;
+local params,gun;
+local orphans={};
 
 --scene:create
 function scene:create( event )
 	local sceneGroup = self.view
 	params = event.params
-	local bg = display.newImage ("images/NightBG.png");
+	local bg = display.newImage ("images/NightBG.png"); table.insert( orphans, bg );
 	bg.anchorX=0; bg.anchorY=0;
     bg:toBack();
     sceneGroup:insert( bg );
@@ -36,18 +35,13 @@ end
 function scene:show( event )
 	local sceneGroup = self.view;
 	local phase = event.phase;
-	local wall = display.newGroup();
 	local heartGroup = display.newGroup();
 	local brickSize = 70;
 	local zombiesPlayerKilled=0;
 	local ticketNum,ticketText,life,zombiesToKill,crossLine,gun;
-	zombieTable = {};
+	table.insert( orphans, ticketText );
 
-	local function newGun (guntype)
-		if (guntype == "pistol") then
-	print(params.gunType);
-
-	local function newGun (gunType)
+	function newGun (gunType)
 		local gun;
 		if (gunType == "pistol") then
 			gun = Pistol:new();
@@ -61,9 +55,9 @@ function scene:show( event )
 
 	if ( phase == "will" ) then
 		--begin music as scene loads 
-		local bgNight = audio.loadStream("sounds/night.mp3")
-		audio.setMaxVolume(0.045, {channel = 1})
-		local backGroundChan = audio.play(bgNight, {channel = 1, loops = -1, fadein = 500})
+		local bgNight = audio.loadStream("sounds/night.mp3");
+		audio.setMaxVolume(0.045, {channel = 1});
+		local backGroundChan = audio.play(bgNight, {channel = 1, loops = -1, fadein = 500});
 
 	elseif ( phase == "did" ) then	
 		physics.start();
@@ -75,7 +69,7 @@ function scene:show( event )
 
 		-----------Cross over line------------------
 		local width = display.contentHeight - (display.contentHeight-180);
-		crossLine = display.newRect( sceneGroup, 0, 1050, display.contentWidth, 5 );
+		crossLine = display.newRect( sceneGroup, 0, 1050, display.contentWidth, 5 ); table.insert( orphans, crossline );
 		crossLine.anchorX=0; crossLine.anchorY=0;
 		physics.addBody( crossLine, "static", {filters=CollisionFilters.crossLine} );
 		crossLine:setFillColor( 0,0,0,0.1 );
@@ -100,11 +94,11 @@ function scene:show( event )
 		  		{name = "idle", frames={30}}
 			};
 		end		
-		local playerSpt = display.newSprite(params.spriteSheet, playerSeqData )
+		local playerSpt = display.newSprite(params.spriteSheet, playerSeqData ); table.insert( orphans, playerSpt );
 		playerSpt:setSequence( "idle" );
 		local gunType=params.gunType;
 		local gun = newGun(gunType);
-		local gunSpt = gun:spawn(params.spriteSheet,params.hero);
+		local gunSpt = gun:spawn(params.spriteSheet,params.hero); table.insert( orphans, gunSpt );
 		heroGuy:insert(playerSpt);
 		heroGuy:insert(gunSpt);
 		heroGuy.x = display.contentCenterX;
@@ -143,7 +137,7 @@ function scene:show( event )
 		Runtime:addEventListener( "accelerometer", reloadGun);
 
 		--------Level-----------------------
-		local level = display.newText(sceneGroup,"Level: "..params.level,display.contentCenterX,15,CompFont, 50);
+		local level = display.newText(sceneGroup,"Level: "..params.level,display.contentCenterX,15,CompFont, 50); table.insert( orphans, level );
 		level:setFillColor( 1,1,1,.75 );
 
 		local function zombieAttackBrick( event )
@@ -208,7 +202,6 @@ function scene:show( event )
 
 		--handler for the game ending
 		function gameOver (event)	
-
 			removeStuff();
 			local sceneOpt = {
 				effect = "fade",
@@ -233,8 +226,7 @@ function scene:show( event )
 		end
 		--make a new zmobie 
 		function spawnZombie( x, y )
-			local zombie = Zombie:new({xPos=x, yPos=y});
-			table.insert(zombieTable, zombie);
+			local zombie = Zombie:new({xPos=x, yPos=y}); table.insert(orphans, zombie);
 			zombie:spawn(params.spriteSheet);
 			local test = {-30,-50,-30,50,30,50,30,-50};
 			physics.addBody( zombie.shape , "dynamic", {filter=CollisionFilters.zombie, shape=test} );
@@ -257,10 +249,10 @@ function scene:show( event )
 			end
 		end
 		
-		spawnZombieHorde()
+		spawnZombieHorde();
 
 		---------Status Bar ----------------
-		local statusBar = display.newRect( sceneGroup, 0, 0, display.contentWidth, 35 );
+		local statusBar = display.newRect( sceneGroup, 0, 0, display.contentWidth, 35 ); table.insert( orphans, statusBar );
 		statusBar.anchorX=0; statusBar.anchorY=0;
 		statusBar:setFillColor( 0.5,0.5,.5,0.35 );
 		statusBar:toFront( );
@@ -273,7 +265,7 @@ function scene:show( event )
 		end
 
 		local ticketData={{name = "ticket", frames={58}}};
-		local ticketImg = display.newSprite( params.spriteSheet, ticketData );
+		local ticketImg = display.newSprite( params.spriteSheet, ticketData ); table.insert( orphans, ticketImg );
 		ticketImg.x=10; ticketImg.y=5;
 		ticketImg.anchorX=0; ticketImg.anchorY=0;
 		sceneGroup:insert( ticketImg );
@@ -284,11 +276,9 @@ function scene:show( event )
 		life = 3;
 		function showHearts(  )
 			local heartX = display.contentWidth-30;
-			local heart;
 			for i=1,life do
-				--heart = display.newRect(sceneGroup, heartX, 7,25,25);
 				local heartData={{name = "heart", frames={27}}};
-				heart = display.newSprite( params.spriteSheet, heartData )
+				local heart = display.newSprite( params.spriteSheet, heartData ); table.insert(orphans, heart);
 				heart.x=heartX; heart.y=7;
 				heart.anchorX=0; heart.anchorY=0;				
 				heartX = heartX - 30;
@@ -307,16 +297,14 @@ function scene:show( event )
 			Runtime:removeEventListener(accelerometer, reloadGun);
 			display.remove( heartGroup );
 			for i = 1, totalNumZombies do
-				if(zombieTable[i] ~= nil) then
-					display.removeBody(zombieTable[i]);
-					display.remove(zombieTable[i]);
+				if(orphans[i] ~= nil) then
+					physics.removeBody(orphans[i]);
+					display.remove(orphans[i]);
 				end
-			end							
-			physics.removeBody( crossLine );
-			display.remove( crossLine );
-			display.remove( ticketText );
-			display.remove( level );
+			end					
+			--remove groups		
 			display.remove( heroGuy );
+			display.remove( heartGroup );
 			params.ticketNum=ticketNum;
 			params.life=life;
 		end
