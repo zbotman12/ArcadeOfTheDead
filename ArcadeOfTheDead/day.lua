@@ -9,6 +9,12 @@ local physics = require("physics");
 local CollisionFilters = require("CollisionFilters");
 local currentBlock=nil;
 local params;
+local crossLine;
+local sidebarRight;
+local sidebarLeft;
+local leftArrow;
+local rightArrow;
+
 
 
 --scene:create
@@ -179,25 +185,25 @@ function scene:show( event )
 
 		-----------Cross over line------------------
 		local height = display.contentHeight - (display.contentHeight-180);
-		local crossLine = display.newRect( sceneGroup, 0, 1050, display.contentWidth, 5 );
+		crossLine = display.newRect( sceneGroup, 0, 1050, display.contentWidth, 5 );
 		crossLine.anchorX=0; crossLine.anchorY=0;
 		physics.addBody( crossLine, "static", {filters=CollisionFilters.crossLine} );
 		crossLine:setFillColor( 0,0,0,0.1 );
 
 		-----------Side Bar Right--------------------
-		local sidebarRight = display.newRect(sceneGroup, display.contentWidth-5, 0, 5, display.contentHeight);
+		sidebarRight = display.newRect(sceneGroup, display.contentWidth-5, 0, 5, display.contentHeight);
 		sidebarRight.anchorX=0; sidebarRight.anchorY=0;
 		physics.addBody( sidebarRight, "static" );
 		sidebarRight:setFillColor( 0,0,0,0.1 );
 
 		-----------Side Bar Left--------------------
-		local sidebarLeft = display.newRect(sceneGroup, 0, 0, 5, display.contentHeight);
+		sidebarLeft = display.newRect(sceneGroup, 0, 0, 5, display.contentHeight);
 		sidebarLeft.anchorX=0; sidebarLeft.anchorY=0;
 		physics.addBody( sidebarLeft, "static" );
 		sidebarLeft:setFillColor( 0,0,0,0.1 );
 
 		----------LEFT ARROW---------------------
-		local leftArrow = display.newSprite( params.spriteSheet, {{name = "leftarrow", frames={17}}} );
+		leftArrow = display.newSprite( params.spriteSheet, {{name = "leftarrow", frames={17}}} );
 		leftArrow.anchorX=0; leftArrow.anchorY=0;
 		leftArrow.x = 0; leftArrow.y = display.contentHeight-180;
 		leftArrow:scale( 0.75, 0.75 );
@@ -206,7 +212,7 @@ function scene:show( event )
 		leftArrow:setSequence( "leftarrow" );
 
 		----------RIGHT ARROW---------------------
-		local rightArrow = display.newSprite( params.spriteSheet, {{name = "rightarrow", frames={18}}} );
+		rightArrow = display.newSprite( params.spriteSheet, {{name = "rightarrow", frames={18}}} );
 		rightArrow.anchorX=0; rightArrow.anchorY=0;
 		rightArrow.x = display.contentWidth-150;
 		rightArrow.y = display.contentHeight-180;
@@ -363,6 +369,10 @@ function scene:show( event )
 			display.remove( heroGuy );
 			params.wall=wall;
 			params.heroGuy=heroGuy;
+			display.remove( leftArrow );
+			leftArrow = nil;
+			display.remove( rightArrow );
+			rightArrow = nil;
 			local sceneOpt = {
 				effect = "fade",
 				time = 800,

@@ -34,7 +34,6 @@ function scene:show( event )
 	local buyBtn, buyBtn2, buyBtn3, buyBtn4, buyBtn5, buyBtn6, buyBtn7, buyBtn8, buyBtn9;
 
 
-
 	if ( phase == "will" ) then
 		local function reshowBuyBtn( isThingBought )
 			if(isThingBought == "Buy") then

@@ -16,7 +16,7 @@ local params;
 --scene:create
 function scene:create( event )
 	local sceneGroup = self.view
-	params = event.params
+	oldParams = event.params;
 	local bg = display.newImage ("images/GameOver.png");
 	bg.anchorX=0; bg.anchorY=0;
     bg:toBack();
@@ -35,12 +35,19 @@ function scene:show( event )
 		audio.setMaxVolume(0.045, {channel = 1})
 		local backGroundChan = audio.play(GO, {channel = 1, loops = -1, fadein = 500})
 		
-	elseif ( phase == "did" ) then	
+	elseif ( phase == "did" ) then
+
 		local function nextScene (event)
 			local sceneOpt = {
 				effect = "fade",
 				time = 800,
-				params = params
+				params = {spriteSheet = oldParams.spriteSheet,
+			  	level=0,
+			  	purchasedBlock=0,
+			  	ticketNum = 0,
+			  	hero = nil,
+			  	wall = nil
+			  	}
 			}
 			audio.stop(GO)
 			composer.gotoScene( "start", sceneOpt);
@@ -54,7 +61,7 @@ function scene:show( event )
 		        fontSize=55,
 		        font=CompFont;
 		        labelColor = { default={ 1, 1, 1}, over={ 0, 0, 0 } },    
-		        sheet = params.spriteSheet,
+		        sheet = oldParams.spriteSheet,
 		        defaultFrame = 16,
 		        onPress = nextScene,
 		    }

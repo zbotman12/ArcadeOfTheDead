@@ -48,18 +48,36 @@ end
 
 function Shotgun:shoot(playerGroup)
 
+	local bullet1, bullet2, bullet3;
+
+	local function removeBullets()
+		if(bullet1 ~= nil and bullet1.tag ~= "-") then
+			bullet1:removeSelf( );
+			bullet1 = nil;
+		end
+		if(bullet2 ~= nil and bullet2.tag ~= "-") then
+			bullet2:removeSelf( );
+			bullet2 = nil;
+		end
+		if(bullet3 ~= nil and bullet3.tag ~= "-") then
+			bullet3:removeSelf( );
+			bullet3 = nil;
+		end
+	end
+
 	if (self.ammo ~= 0) then
+		removeBullets();
 		self.ammo = self.ammo - 1; 
-		local bullet1 = display.newCircle (playerGroup.x + 30, playerGroup.y-16, 5);
+		bullet1 = display.newCircle (playerGroup.x + 30, playerGroup.y-16, 5);
 		bullet1.anchorY = 1;
 		bullet1:setFillColor(0,1,0);
 		bullet1.isBullet = true;
 		physics.addBody (bullet1, "dynamic", {radius=5, filter=CollisionFilters.bullet} );
-		bullet1:applyForce(math.random(-1,-.2), -2, bullet1.x, bullet1.y);
+		bullet1:applyForce(-1, -2, bullet1.x, bullet1.y);
 		--audio.play( soundTable["shootSound"] );
 		bullet1.tag = "shot";
 
-		local bullet2 = display.newCircle (playerGroup.x + 30, playerGroup.y-16, 5);
+		bullet2 = display.newCircle (playerGroup.x + 30, playerGroup.y-16, 5);
 		bullet2.anchorY = 1;
 		bullet2:setFillColor(0,1,0);
 		bullet2.isBullet = true;
@@ -68,21 +86,21 @@ function Shotgun:shoot(playerGroup)
 		--audio.play( soundTable["shootSound"] );
 		bullet2.tag = "shot";
 
-		local bullet3 = display.newCircle (playerGroup.x + 30, playerGroup.y-16, 5);
+		bullet3 = display.newCircle (playerGroup.x + 30, playerGroup.y-16, 5);
 		bullet3.anchorY = 1;
 		bullet3:setFillColor(0,1,0);
 		bullet3.isBullet = true;
 		physics.addBody (bullet3, "dynamic", {radius=5, filter=CollisionFilters.bullet} );
-		bullet3:applyForce(math.random(.2,1), -2, bullet3.x, bullet3.y);
+		bullet3:applyForce(1, -2, bullet3.x, bullet3.y);
 		--audio.play( soundTable["shootSound"] );
 		bullet3.tag = "shot";
 	
 
+
 		self.spt:setSequence( "shoot" );
 		self.spt:play( );
-		timer.performWithDelay( 200, function () self.spt:setSequence( "idle" ); self.spt:play( ); end );
-
-
+		timer.performWithDelay( 200, function () if (self.spt ~= nil) then self.spt:setSequence( "idle" ); self.spt:play( ); end end );
+		timer.performWithDelay(800, removeBullets);
 
 
 

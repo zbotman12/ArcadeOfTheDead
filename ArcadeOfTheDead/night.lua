@@ -18,7 +18,8 @@ local physics = require("physics");
 local CollisionFilters = require("CollisionFilters");
 local scene = composer.newScene();
 local params;
-
+local gun;
+local zombieTable;
 
 --scene:create
 function scene:create( event )
@@ -40,10 +41,9 @@ function scene:show( event )
 	local brickSize = 70;
 	local zombiesPlayerKilled=0;
 	local ticketNum,ticketText,life,zombiesToKill,crossLine,gun;
-	
+	zombieTable = {};
 
 	local function newGun (guntype)
-		local gun;
 		if (guntype == "pistol") then
 			gun = Pistol:new();
 		elseif(guntype == "shotgun") then
@@ -118,6 +118,17 @@ function scene:show( event )
 				gun:reload()
 			end
 		end
+		--handler for the game ending
+		function gameOver (event)	
+			removeStuff();
+			local sceneOpt = {
+				effect = "fade",
+				time = 800,
+				params = params
+			}
+			audio.stop(bgNight)
+			composer.gotoScene( "GameOver", sceneOpt);
+		end	
 
 		if((gunType == "pistol") or (gunType == "shotgun")) then
 			Runtime:addEventListener("tap", movePlayer);
@@ -139,16 +150,21 @@ function scene:show( event )
 					local function test()
 						local function go( )
 					   		moveZombie(event.target);
-					   end
+					   	end
 					   if(event.target.y~=nil)then
 							transition.to(event.target, {x=event.target.x, y=event.target.y-1, time=1, onComplete=go} );
 						end
 					end
 					timer.performWithDelay(500,test,1);
 				elseif(event.other.tag == "shot") then
+
 					event.target.pp:hit();
-					event.other:removeSelf();
-					event.other=nil;
+					if(event.other ~= nil) then
+						event.other.tag = "-";
+						event.other:removeSelf();
+						event.other=nil;
+					end
+
 					ticketNum = ticketNum + 10;
 					ticketText:removeSelf( );
 					ticketText = display.newText( sceneGroup, "Tickets: "..ticketNum, 100, 15, CompFont, 50 );
@@ -162,10 +178,9 @@ function scene:show( event )
 								time = 800,
 								params = params
 							}
-							timer.performWithDelay( 500, 
-								function () composer.gotoScene( "shop", sceneOpt);	end,1 );							
+							composer.gotoScene( "shop", sceneOpt);							
 						end
-						goToShop();
+						timer.performWithDelay(500, goToShop);
 					end
 				else --crossline
 					life = life -1;
@@ -180,17 +195,7 @@ function scene:show( event )
 				end
 			end
 		end
-		--handler for the game ending
-		function gameOver (event)	
-			removeStuff();
-			local sceneOpt = {
-				effect = "fade",
-				time = 800,
-				params = params
-			}
-			audio.stop(bgNight)
-			composer.gotoScene( "GameOver", sceneOpt);
-		end	
+
 		--make the zmobie move
 		function moveZombie( zombie )
 			local hits;
@@ -206,6 +211,7 @@ function scene:show( event )
 		--make a new zmobie 
 		function spawnZombie( x, y )
 			local zombie = Zombie:new({xPos=x, yPos=y});
+			table.insert(zombieTable, zombie);
 			zombie:spawn(params.spriteSheet);
 			local test = {-30,-50,-30,50,30,50,30,-50};
 			physics.addBody( zombie.shape , "dynamic", {filter=CollisionFilters.zombie, shape=test} );
@@ -215,33 +221,11 @@ function scene:show( event )
 		end
 		--put random zombie into play
 		function spawnRandomZombie(  )
-			local location = math.random(1,10);
-			if (location == 1) then
-				spawnZombie(10,100);
-			elseif(location == 2) then
-				spawnZombie(80,100);
-			elseif(location == 3) then
-				spawnZombie(150,100);
-			elseif(location == 4) then
-				spawnZombie(220,100);
-			elseif(location == 5) then
-				spawnZombie(290,100);
-			elseif(location == 6) then
-				spawnZombie(355,100);
-			elseif(location == 7) then
-				spawnZombie(430,100);
-			elseif(location == 8) then
-				spawnZombie(500,100);
-			elseif(location == 9) then
-				spawnZombie(570,100);
-			elseif(location == 10) then
-				spawnZombie(640,100);
-			end
-			
+			spawnZombie((math.random(0,9) * 70) + 10,100) ;
 		end
 
-		local totalNumZombies = 50;
-		zombiesToKill = 50
+		local totalNumZombies = 5;
+		zombiesToKill = 5;
 		function spawnZombieHorde( )
 			spawnRandomZombie();
 			totalNumZombies = totalNumZombies -1;
@@ -291,12 +275,20 @@ function scene:show( event )
 		showHearts();
 
 		function removeStuff(  )
-			if((gun == "pistol") or (gun == "shotgun")) then
+			if((gun.tag == "Pistol") or (gun.tag == "Shotgun")) then
 				Runtime:removeEventListener("tap", movePlayer);
-			elseif(gun == "machinegun") then
+
+			elseif(gun.tag == "MachineGun") then
 				Runtime:removeEventListener("touch", movePlayer);
 			end
-			display.remove( heartGroup );							
+			Runtime:removeEventListener(accelerometer, reloadGun);
+			display.remove( heartGroup );
+			for i = 1, totalNumZombies do
+				if(zombieTable[i] ~= nil) then
+					display.removeBody(zombieTable[i]);
+					display.remove(zombieTable[i]);
+				end
+			end							
 			physics.removeBody( crossLine );
 			display.remove( crossLine );
 			display.remove( ticketText );

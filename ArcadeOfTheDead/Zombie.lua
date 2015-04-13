@@ -49,9 +49,11 @@ function Zombie:hit ()
 			timer.cancel ( self.timerRef );
 		end
 		-- die
-		self.shape:removeSelf();
-		self.shape=nil;
-		self = nil;
+		if(self.shape ~= nil) then
+			self.shape:removeSelf();
+			self.shape=nil;
+			self = nil;
+		end
 	end
 end
 
