@@ -34,6 +34,7 @@ function scene:show( event )
 	local brickSize = 70;	
 	local shiftNum = 0;	
 	local swappedOut=false;	
+	local switchingScenes=false;
 
 	if ( phase == "will" ) then	
 		physics.start();
@@ -358,6 +359,7 @@ function scene:show( event )
 
 		---------------Next Scene-----------------
 		local function next ()
+			switchingScenes=true;
 			display.remove( heroGuy );
 			params.wall=wall;
 			params.heroGuy=heroGuy;
