@@ -88,7 +88,7 @@ function Shotgun:shoot(playerGroup)
 		self.spt:play( );
 		timer.performWithDelay( 200, function () self.spt:setSequence( "idle" ); self.spt:play( ); end );
 
-		audio.stop(13)
+		timer.performWithDelay(1000, function() audio.stop(13); end)
 
 		return bullet1, bullet2, bullet3;
 	end
@@ -102,7 +102,7 @@ function Shotgun:reload()
 
 		self.ammo = Shotgun.ammo;
 
-		audio.stop(14)
+		timer.performWithDelay(1000, function() audio.stop(14); end)
 end
 
 return Shotgun;

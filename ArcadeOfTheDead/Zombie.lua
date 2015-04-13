@@ -28,7 +28,7 @@ function Zombie:spawn( spriteSheet)
 	self.shape.anchorY = 100;
 	self.shape:setSequence( "walk" );
 	self.shape:play();
-	audio.stop(10)
+	timer.performWithDelay(1000, function() audio.stop(10); end)
 	return self.shape;
 end
 

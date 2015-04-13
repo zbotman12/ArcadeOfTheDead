@@ -74,7 +74,7 @@ function Pistol:shoot(playerGroup)
 		--audio.play( soundTable["shootSound"] );
 		bullet.tag = "shot";
 
-		audio.stop(12)
+		timer.performWithDelay(1000, function() audio.stop(12); end)
 
 		return bullet;
 	end
@@ -89,7 +89,7 @@ function Pistol:reload()
 
 		self.ammo = Pistol.ammo;
 
-		audio.stop(13)
+		timer.performWithDelay(1000, function() audio.stop(13); end)
 end
 
 return Pistol;

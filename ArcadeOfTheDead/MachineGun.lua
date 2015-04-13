@@ -63,7 +63,7 @@ function MachineGun:shoot(playerGroup)
 		bullet:applyForce(0, -2, bullet.x, bullet.y);
 		--audio.play( soundTable["shootSound"] );
 		bullet.tag = "shot";
-		audio.stop(17)
+		timer.performWithDelay(1000, function() audio.stop(17); end)
 		return bullet;
 	end
 end
