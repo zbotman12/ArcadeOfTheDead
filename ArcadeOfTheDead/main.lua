@@ -99,12 +99,11 @@ local MainSheetOpt =
 local spriteSheet = graphics.newImageSheet( "images/spriteSheet.png", MainSheetOpt );
 local level = 0;
 local purchasedBlock = 0;
+local gunType="pistol";
 local sceneOpt = {
 	effect = "fade",
 	time = 800,
-	params = {spriteSheet = spriteSheet,
-			  level=level,
-			  purchasedBlock=purchasedBlock}
+	params = {spriteSheet=spriteSheet,level=level,purchasedBlock=purchasedBlock,gunType=gunType}
 }
 -- load first scene
-composer.gotoScene( "start", sceneOpt);
+composer.gotoScene( "page1", sceneOpt);
