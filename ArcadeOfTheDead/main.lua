@@ -109,5 +109,5 @@ local sceneOpt = {
 }
 -- load first scene
 
-composer.gotoScene( "shop", sceneOpt);
+composer.gotoScene( "start", sceneOpt);
 
