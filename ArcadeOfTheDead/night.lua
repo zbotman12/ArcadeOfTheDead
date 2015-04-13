@@ -40,15 +40,15 @@ function scene:show( event )
 	local brickSize = 70;
 	local zombiesPlayerKilled=0;
 	local ticketNum,ticketText,life,zombiesToKill,crossLine,gun;
-	
+	print(params.gunType);
 
-	local function newGun (guntype)
+	local function newGun (gunType)
 		local gun;
-		if (guntype == "pistol") then
+		if (gunType == "pistol") then
 			gun = Pistol:new();
-		elseif(guntype == "shotgun") then
+		elseif(gunType == "shotgun") then
 				gun = Shotgun:new();
-		elseif(guntype == "machinegun") then
+		elseif(gunType == "machinegun") then
 			gun = MachineGun:new();
 		end
 		return gun;
@@ -97,7 +97,7 @@ function scene:show( event )
 		end		
 		local playerSpt = display.newSprite(params.spriteSheet, playerSeqData )
 		playerSpt:setSequence( "idle" );
-		local gunType="shotgun";
+		local gunType=params.gunType;
 		local gun = newGun(gunType);
 		local gunSpt = gun:spawn(params.spriteSheet,params.hero);
 		heroGuy:insert(playerSpt);

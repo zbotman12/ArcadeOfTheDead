@@ -14,7 +14,8 @@ local params;
 --scene:create
 function scene:create( event )
 	local sceneGroup = self.view;
-	params = event.params
+	params = event.params;
+
 	local bg = display.newImage ("images/DayBG.png");
 	bg.anchorX=0; bg.anchorY=0;
     bg:toBack();
@@ -35,6 +36,7 @@ function scene:show( event )
 	local shiftNum = 0;	
 	local swappedOut=false;	
 	local switchingScenes=false;
+
 
 	if ( phase == "will" ) then	
 		--background music
@@ -320,11 +322,11 @@ function scene:show( event )
 	elseif ( phase == "did" ) then
 		params.level=params.level+1;
 		-------NEW GUN---------------
-		local function newGun (guntype)
+		local function newGun (gunType)
 			local gun;
-			if (guntype == "pistol") then
+			if (gunType == "pistol") then
 				gun = Pistol:new();
-			elseif(guntype == "shotgun") then
+			elseif(gunType == "shotgun") then
 				gun = Shotgun:new();
 			elseif(guntype == "machinegun") then
 				gun = MachineGun:new();
@@ -354,7 +356,7 @@ function scene:show( event )
 		end		
 		local playerSpt = display.newSprite(params.spriteSheet, playerSeqData )
 		playerSpt:setSequence( "idle" );
-		local gun = newGun("pistol");
+		local gun = newGun(params.gunType);
 		local gunSpt = gun:spawn(params.spriteSheet,params.hero);
 		heroGuy:insert(playerSpt);
 		heroGuy:insert(gunSpt);

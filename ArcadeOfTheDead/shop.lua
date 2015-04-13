@@ -32,6 +32,7 @@ function scene:show( event )
 	local moneyAvailable;
 	local isThingBought=false;
 	local buyBtn, buyBtn2, buyBtn3, buyBtn4, buyBtn5, buyBtn6, buyBtn7, buyBtn8, buyBtn9;
+	local refund=0;
 
 
 
@@ -77,8 +78,10 @@ function scene:show( event )
 				if(params.ticketNum>=150)then
 					event.target.isVisible = false;
 					--update money
-					purchasedBlock=8;				
+					purchasedBlock=8;
+					params.ticketNum=params.ticketNum+refund;				
 					params.ticketNum=params.ticketNum-150;
+					refund=150;
 					moneyAvailable:removeSelf( );
 					updateMoney();
 				end
@@ -86,7 +89,9 @@ function scene:show( event )
 				if(params.ticketNum>=300)then
 					event.target.isVisible = false;
 					purchasedBlock=9;
+					params.ticketNum=params.ticketNum+refund;
 					params.ticketNum=params.ticketNum-300;
+					refund=300;
 					moneyAvailable:removeSelf( );
 					updateMoney();
 				end
@@ -94,7 +99,9 @@ function scene:show( event )
 				if(params.ticketNum>=500)then
 					event.target.isVisible = false;
 					purchasedBlock=1;
+					params.ticketNum=params.ticketNum+refund;
 					params.ticketNum=params.ticketNum-500;
+					refund=500;
 					moneyAvailable:removeSelf( );
 					updateMoney();
 				end
@@ -102,7 +109,9 @@ function scene:show( event )
 				if(params.ticketNum>=400)then
 					event.target.isVisible = false;
 					purchasedBlock=2;
+					params.ticketNum=params.ticketNum+refund;
 					params.ticketNum=params.ticketNum-400;
+					refund=400;
 					moneyAvailable:removeSelf( );
 					updateMoney();
 				end
@@ -110,7 +119,9 @@ function scene:show( event )
 				if(params.ticketNum>=250)then
 					event.target.isVisible = false;
 					purchasedBlock=5;
+					params.ticketNum=params.ticketNum+refund;
 					params.ticketNum=params.ticketNum-250;
+					refund=250;
 					moneyAvailable:removeSelf( );
 					updateMoney();
 				end
@@ -118,7 +129,9 @@ function scene:show( event )
 				if(params.ticketNum>=250)then
 					event.target.isVisible = false;
 					purchasedBlock=3;
+					params.ticketNum=params.ticketNum+refund;
 					params.ticketNum=params.ticketNum-250;
+					refund=250;
 					moneyAvailable:removeSelf( );
 					updateMoney();
 				end
@@ -126,7 +139,9 @@ function scene:show( event )
 				if(params.ticketNum>=250)then
 					event.target.isVisible = false;
 					purchasedBlock=4;
+					params.ticketNum=params.ticketNum+refund;
 					params.ticketNum=params.ticketNum-250;
+					refund=250;
 					moneyAvailable:removeSelf( );
 					updateMoney();
 				end
@@ -134,7 +149,9 @@ function scene:show( event )
 				if(params.ticketNum>=250)then
 					event.target.isVisible = false;
 					purchasedBlock=6;
+					params.ticketNum=params.ticketNum+refund;
 					params.ticketNum=params.ticketNum-250;
+					refund=250;
 					moneyAvailable:removeSelf( );
 					updateMoney();
 				end
@@ -142,7 +159,9 @@ function scene:show( event )
 				if(params.ticketNum>=250)then
 					event.target.isVisible = false;
 					purchasedBlock=7;
+					params.ticketNum=params.ticketNum+refund;
 					params.ticketNum=params.ticketNum-250;
+					refund=250;
 					moneyAvailable:removeSelf( );
 					updateMoney();
 				end
