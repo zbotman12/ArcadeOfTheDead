@@ -105,7 +105,7 @@ local gunType="pistol";
 local sceneOpt = {
 	effect = "fade",
 	time = 800,
-	params = {spriteSheet=spriteSheet,level=level,purchasedBlock=purchasedBlock,gunType=gunType}
+	params = {spriteSheet=spriteSheet,level=level,purchasedBlock=purchasedBlock,gunType=gunType,newGame=true}
 }
 -- load first scene
 

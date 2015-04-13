@@ -24,10 +24,11 @@ local orphans={};
 function scene:create( event )
 	local sceneGroup = self.view
 	params = event.params
-	local bg = display.newImage ("images/NightBG.png"); table.insert( orphans, bg );
+	local bg = display.newImage ("images/NightBG.png");
 	bg.anchorX=0; bg.anchorY=0;
     bg:toBack();
     sceneGroup:insert( bg );
+	print(params.newGame);
 end
 
 
@@ -37,9 +38,11 @@ function scene:show( event )
 	local phase = event.phase;
 	local heartGroup = display.newGroup();
 	local brickSize = 70;
-	local zombiesPlayerKilled=0;
+	local zombiesKilled=0;
 	local ticketNum,ticketText,life,zombiesToKill,crossLine,gun;
 	table.insert( orphans, ticketText );
+	local removingStuff=false;
+	--local wall=display.newGroup();
 
 	function newGun (gunType)
 		local gun;
@@ -63,8 +66,8 @@ function scene:show( event )
 		physics.start();
 		physics.setGravity(0,0);
 		--physics.setDrawMode( "hybrid" );
-		if(params.wall~=nil)then
-			sceneGroup:insert(params.wall);	
+		if(params.wall~=nil)then			
+			sceneGroup:insert(params.wall);
 		end
 
 		-----------Cross over line------------------
@@ -140,69 +143,78 @@ function scene:show( event )
 		local level = display.newText(sceneGroup,"Level: "..params.level,display.contentCenterX,15,CompFont, 50); table.insert( orphans, level );
 		level:setFillColor( 1,1,1,.75 );
 
+		local function checkZombieCount(  )
+			if(zombiesToKill == zombiesKilled) then						
+				local function goToShop (event)							
+					removeStuff(false);					
+					params.newGame=false;
+					local sceneOpt = {
+						effect = "fade",
+						time = 800,
+						params = params
+					}
+					composer.gotoScene( "shop", sceneOpt);							
+					audio.stop(1)
+					timer.performWithDelay( 500, 
+						function () composer.gotoScene( "shop", sceneOpt);	end,1 );							
+				end
+				timer.performWithDelay(500, goToShop);
+			end
+		end
+
 		local function zombieAttackBrick( event )
 			if(event.phase=="began")then
-				transition.cancel( event.target );
-				if (event.other.tag == "Brick") then
-					event.other.pp:hit();
-					local function test()
-						local function go( )
-					   		moveZombie(event.target);
-					   	end
-					   if(event.target.y~=nil)then
-							transition.to(event.target, {x=event.target.x, y=event.target.y-1, time=1, onComplete=go} );
+				if(removingStuff==false)then
+					transition.cancel( event.target );
+					if (event.other.tag == "Brick") then
+						event.other.pp:hit();
+						local function test()
+							local function go( )
+						   		moveZombie(event.target);
+						   	end
+						   if(event.target.y~=nil)then
+								transition.to(event.target, {x=event.target.x, y=event.target.y-1, time=1, onComplete=go} );
+							end
 						end
-					end
-					timer.performWithDelay(500,test,1);
-				elseif(event.other.tag == "shot") then
-
-					event.target.pp:hit();
-					if(event.other ~= nil) then
-						event.other.tag = "-";
-						event.other:removeSelf();
-						event.other=nil;
-					end
-
-					ticketNum = ticketNum + 10;
-					ticketText:removeSelf( );
-					ticketText = display.newText( sceneGroup, "Tickets: "..ticketNum, 100, 15, CompFont, 50 );
-					ticketText:setFillColor( 1,1,1,.75 );
-					zombiesPlayerKilled = zombiesPlayerKilled + 1;
-					if(zombiesToKill == zombiesPlayerKilled) then						
-						local function goToShop (event)							
-							removeStuff();
-							local sceneOpt = {
-								effect = "fade",
-								time = 800,
-								params = params
-							}
-							composer.gotoScene( "shop", sceneOpt);							
-							audio.stop(1)
-							timer.performWithDelay( 500, 
-								function () composer.gotoScene( "shop", sceneOpt);	end,1 );							
+						timer.performWithDelay(500,test,1);
+					elseif(event.other.tag == "shot") then											
+						zombiesKilled = zombiesKilled + 1;
+						event.target.pp:hit();
+						if(event.other ~= nil) then
+							event.other.tag = "-";
+							event.other:removeSelf();
+							event.other=nil;
 						end
-						timer.performWithDelay(500, goToShop);
+
+						ticketNum = ticketNum + 10;
+						display.remove(ticketText);
+						ticketText = display.newText( sceneGroup, ticketNum, 150, 17, CompFont, 50 );
+						ticketText:setFillColor( 1,1,1,.75 );
+						checkZombieCount();
+					else --crossline
+						life = life -1;											
+						zombiesKilled = zombiesKilled + 1;
+						display.remove(heartGroup);
+						heartGroup = display.newGroup();
+						if(life > 0)then
+							showHearts();
+							checkZombieCount();
+						else
+							local scream = audio.loadSound("sounds/scream.mp3")
+							audio.play(scream, {channel = 17})
+							audio.setMaxVolume(0.20, {channel = 17})
+							gameOver();
+						end
+						event.target.pp:hit();
 					end
-				else --crossline
-					life = life -1;
-					display.remove(heartGroup);
-					heartGroup = display.newGroup();
-					if(life > 0)then
-						showHearts();
-					else
-						local scream = audio.loadSound("sounds/scream.mp3")
-						audio.play(scream, {channel = 17})
-						audio.setMaxVolume(0.20, {channel = 17})
-						gameOver();
-					end
-					event.target.pp:hit();
 				end
 			end
 		end
 
 		--handler for the game ending
 		function gameOver (event)	
-			removeStuff();
+			removeStuff(true);
+			params.newGame=true;
 			local sceneOpt = {
 				effect = "fade",
 				time = 800,
@@ -210,7 +222,10 @@ function scene:show( event )
 			}
 			audio.stop(17)
 			audio.stop(1)
-			composer.gotoScene( "GameOver", sceneOpt);
+			local function go(  )
+				composer.gotoScene( "GameOver", sceneOpt);
+			end
+			timer.performWithDelay(100, go, 1);
 		end	
 		--make the zmobie move
 		function moveZombie( zombie )
@@ -239,8 +254,8 @@ function scene:show( event )
 			spawnZombie((math.random(0,9) * 70) + 10,100) ;
 		end
 
-		local totalNumZombies = 5;
-		zombiesToKill = 5;
+		local totalNumZombies = 7;
+		zombiesToKill = 7;
 		function spawnZombieHorde( )
 			spawnRandomZombie();
 			totalNumZombies = totalNumZombies -1;
@@ -287,7 +302,8 @@ function scene:show( event )
 		end		
 		showHearts();
 
-		function removeStuff(  )
+		function removeStuff( isGameOver )
+			removingStuff=true;
 			if((gun.tag == "Pistol") or (gun.tag == "Shotgun")) then
 				Runtime:removeEventListener("tap", movePlayer);
 
@@ -295,16 +311,26 @@ function scene:show( event )
 				Runtime:removeEventListener("touch", movePlayer);
 			end
 			Runtime:removeEventListener(accelerometer, reloadGun);
-			display.remove( heartGroup );
-			for i = 1, totalNumZombies do
+			for i, v in ipairs(orphans) do
 				if(orphans[i] ~= nil) then
-					physics.removeBody(orphans[i]);
-					display.remove(orphans[i]);
+					--print(orphans[i]);
+					transition.cancel( orphans[i] );
+					display.remove(orphans[i]);					
 				end
-			end					
+			end				
 			--remove groups		
 			display.remove( heroGuy );
 			display.remove( heartGroup );
+			if(isGameOver==true)then
+				for i=1,params.wall.numChildren do
+					local child=params.wall[i];
+					for j=1,child.numChildren do
+						local brick=child[j];
+						display.remove( brick );
+					end
+				end
+				display.remove( params.wall );
+			end
 			params.ticketNum=ticketNum;
 			params.life=life;
 		end

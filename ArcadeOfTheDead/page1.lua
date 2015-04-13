@@ -53,6 +53,11 @@ function scene:show( event )
 	local kirby,link,megaMan;
 
 	if ( phase == "will" ) then
+		--music for the backgroud
+		local bgShop = audio.loadStream("sounds/shoply.mp3")
+		audio.setMaxVolume(.015, {channel = 1})
+		local backGroundChan = audio.play(bgShop, {channel = 1, loops = -1, fadein = 500})
+
 		print(params.gunType);
 		print(params.purchasedBlock);
 		--------REMOVE EQUIPPED ITEM----------
@@ -852,6 +857,7 @@ function scene:show( event )
 				time = 800,
 				params = params
 			}
+			audio.stop(1)
 			composer.gotoScene( "day", sceneOpt);
 		end
 
@@ -862,6 +868,7 @@ function scene:show( event )
 				time = 800,
 				params = params
 			}
+			audio.stop(1)
 			composer.gotoScene( "page2", sceneOpt);
 		end
 
@@ -872,6 +879,7 @@ function scene:show( event )
 				time = 800,
 				params = params
 			}
+			audio.stop(1)
 			composer.gotoScene( "shop", sceneOpt);
 		end
 

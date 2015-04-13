@@ -17,6 +17,7 @@ local rightArrow;
 
 
 
+
 --scene:create
 function scene:create( event )
 	local sceneGroup = self.view;
@@ -34,15 +35,16 @@ end
 function scene:show( event )
 	local sceneGroup = self.view;
 	local phase = event.phase;
-	local wall = display.newGroup();
-	if(params.wall~=nil)then
-		wall:insert( params.wall );
-	end
 	local brickSize = 70;	
 	local shiftNum = 0;	
 	local swappedOut=false;	
 	local switchingScenes=false;
-
+	print(params.newGame);
+	if(params.newGame==false)then
+		sceneGroup:insert(params.wall);	
+	else
+		params.wall=display.newGroup( );
+	end
 
 	if ( phase == "will" ) then	
 		--background music
@@ -55,14 +57,10 @@ function scene:show( event )
 		physics.setGravity(0,0);
 		--physics.setDrawMode( "hybrid" );
 		
-		if(params.wall~=nil)then
-			sceneGroup:insert(params.wall);	
-		end
-		
 		--make a brick
 		function spawnBrick( x, y, group )
 			local brick = Brick:new({xPos=x, yPos=y} );
-			brick:spawn(params.spriteSheet);				
+			brick:spawn(params.spriteSheet);		
 			group:insert(brick.shape);
 		end
 
@@ -79,6 +77,7 @@ function scene:show( event )
 				end
 				block1.anchorX=0;block1.anchorY=0;
 				block1.x=10;
+				sceneGroup:insert( block1 );
 				return block1;
 			elseif (blockNum == 2)then
 				local block2 = display.newGroup( );
@@ -94,6 +93,7 @@ function scene:show( event )
 				end
 				block2.anchorX=0;block2.anchorY=0;
 				block2.x=10;
+				sceneGroup:insert( block2 );
 				return block2;
 			elseif (blockNum == 3) then
 				local block3 = display.newGroup( );
@@ -107,6 +107,7 @@ function scene:show( event )
 				end
 				block3.anchorX=0;block3.anchorY=0;
 				block3.x=10;
+				sceneGroup:insert( block3 );
 				return block3;
 			elseif (blockNum == 4) then
 				local block4 = display.newGroup( );
@@ -121,6 +122,7 @@ function scene:show( event )
 				end
 				block4.anchorX=0;block4.anchorY=0;
 				block4.x=10;
+				sceneGroup:insert( block4 );
 				return block4;
 			elseif (blockNum == 5) then
 				local block5 = display.newGroup( );
@@ -135,6 +137,7 @@ function scene:show( event )
 				end
 				block5.anchorX=0;block5.anchorY=0;
 				block5.x=10;
+				sceneGroup:insert( block5 );
 				return block5;
 			elseif (blockNum == 6) then
 				local block6 = display.newGroup();
@@ -152,6 +155,7 @@ function scene:show( event )
 				end
 				block6.anchorX=0;block6.anchorY=0;
 				block6.x=10;
+				sceneGroup:insert( block6 );
 				return block6;
 			elseif (blockNum == 7) then
 				local block7 = display.newGroup();
@@ -169,6 +173,7 @@ function scene:show( event )
 				end
 				block7.anchorX=0;block7.anchorY=0;
 				block7.x=10;
+				sceneGroup:insert( block7 );
 				return block7;
 			elseif (blockNum == 8)then
 				local block8 = display.newGroup( );
@@ -177,6 +182,7 @@ function scene:show( event )
 				spawnBrick(x,y,block8);
 				block8.anchorX=0;block8.anchorY=0;
 				block8.x=10;
+				sceneGroup:insert( block8 );
 				return block8;
 			elseif(blockNum == 9) then
 				local block9 = display.newGroup( );
@@ -187,6 +193,7 @@ function scene:show( event )
 				spawnBrick(x,y,block9);
 				block9.anchorX=0;block9.anchorY=0;
 				block9.x=10;
+				sceneGroup:insert( block9 );
 				return block9;
 			end
 		end
@@ -375,12 +382,10 @@ function scene:show( event )
 		local function next ()
 			switchingScenes=true;
 			display.remove( heroGuy );
-			params.wall=wall;
 			params.heroGuy=heroGuy;
 			display.remove( leftArrow );
-			leftArrow = nil;
 			display.remove( rightArrow );
-			rightArrow = nil;
+			params.newGame=false;
 			local sceneOpt = {
 				effect = "fade",
 				time = 800,
@@ -453,7 +458,7 @@ function scene:show( event )
 					
 		end
 
-		local blockCounter =5;
+		local blockCounter =3;
 		function spawnNewBlock( num )
 			if(blockCounter > 0) then
 				blockCounter = blockCounter - 1;
@@ -469,8 +474,8 @@ function scene:show( event )
 					currentBlock = spawnBlock(blockNum);
 					currentBlock.num=blockNum;
 				end
-				wall:insert( currentBlock );		
-				sceneGroup:insert( wall );
+				params.wall:insert(currentBlock);
+				sceneGroup:insert( params.wall );
 				checkRayCast();
 			else
 				timer.performWithDelay( 500, 

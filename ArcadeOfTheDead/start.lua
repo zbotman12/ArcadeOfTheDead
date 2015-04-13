@@ -21,6 +21,7 @@ function scene:create( event )
 	bg.anchorX=0; bg.anchorY=0;
     bg:toBack();
     sceneGroup:insert( bg );
+	print(params.newGame);
 end
 
 --scene:show
