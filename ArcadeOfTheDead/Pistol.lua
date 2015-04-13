@@ -2,7 +2,7 @@
 local CollisionFilters = require("CollisionFilters");
 
 --Prototype
-local Pistol =  {tag="Pistol", ammo = 9, fireSpd = 200, reloadSpd = 500};
+local Pistol =  {tag="Pistol", ammo = 6, fireSpd = 200, reloadSpd = 500};
 
 --Constructor
 function Pistol:new (o)
@@ -48,7 +48,9 @@ end
 
 function Pistol:shoot(playerGroup)
 
-	if (ammo ~= 0) then 
+	if (self.ammo ~= 0) then
+		self.ammo = self.ammo - 1; 
+
 		local shotsFired = audio.loadSound("sounds/pistol.mp3")
 		audio.play(shotsFired, {channel = 12})
 		audio.setMaxVolume(0.20, {channel = 12})
@@ -57,14 +59,13 @@ function Pistol:shoot(playerGroup)
 			bullet:setFillColor(1,0,0);
 		self.spt:setSequence( "shoot" );
 		self.spt:play( );
-		--[[timer.performWithDelay( 200, 
+		timer.performWithDelay( 200, 
 			function () 
 				if(self.spt~=nil)then
 					self.spt:setSequence( "idle" );
 					self.spt:play( );
 				end
 			end );
-]]--
 		physics.addBody (bullet, "dynamic", {radius=5, filter=CollisionFilters.bullet} );
 		--bullet.isSensor = true;
 		bullet.isBullet =true;
@@ -74,6 +75,10 @@ function Pistol:shoot(playerGroup)
 		return bullet;
 	end
 
+end
+
+function Pistol:reload()
+		self.ammo = Pistol.ammo;
 end
 
 return Pistol;

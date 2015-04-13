@@ -1,4 +1,5 @@
 --SHOTGUN CLASS
+local CollisionFilters = require("CollisionFilters");
 
 --Prototype
 local Shotgun =  {tag="Shotgun", ammo = 4, fireSpd = 500, reloadSpd = 800};
@@ -47,24 +48,56 @@ end
 
 function Shotgun:shoot(playerGroup)
 
-	if (ammo ~= 0) then 
-		local bullet = display.newCircle (playerGroup.x + 30, playerGroup.y-16, 5);
-		bullet.anchorY = 1;
-		bullet:setFillColor(0,1,0);
+	if (self.ammo ~= 0) then
+		self.ammo = self.ammo - 1; 
+		local bullet1 = display.newCircle (playerGroup.x + 30, playerGroup.y-16, 5);
+		bullet1.anchorY = 1;
+		bullet1:setFillColor(0,1,0);
+		bullet1.isBullet = true;
+		physics.addBody (bullet1, "dynamic", {radius=5, filter=CollisionFilters.bullet} );
+		bullet1:applyForce(math.random(-1,-.2), -2, bullet1.x, bullet1.y);
+		--audio.play( soundTable["shootSound"] );
+		bullet1.tag = "shot";
+
+		local bullet2 = display.newCircle (playerGroup.x + 30, playerGroup.y-16, 5);
+		bullet2.anchorY = 1;
+		bullet2:setFillColor(0,1,0);
+		bullet2.isBullet = true;
+		physics.addBody (bullet2, "dynamic", {radius=5, filter=CollisionFilters.bullet} );
+		bullet2:applyForce(0, -2, bullet2.x, bullet2.y);
+		--audio.play( soundTable["shootSound"] );
+		bullet2.tag = "shot";
+
+		local bullet3 = display.newCircle (playerGroup.x + 30, playerGroup.y-16, 5);
+		bullet3.anchorY = 1;
+		bullet3:setFillColor(0,1,0);
+		bullet3.isBullet = true;
+		physics.addBody (bullet3, "dynamic", {radius=5, filter=CollisionFilters.bullet} );
+		bullet3:applyForce(math.random(.2,1), -2, bullet3.x, bullet3.y);
+		--audio.play( soundTable["shootSound"] );
+		bullet3.tag = "shot";
+	
+
 		self.spt:setSequence( "shoot" );
 		self.spt:play( );
-		timer.performWithDelay( 200, function () self.spt:setSequence( "idle" ); self.spt:play( ); end )
-		physics.addBody (bullet, "dynamic", {radius=5} );
-		--bullet.isSensor = true;
-		bullet.isBullet =true;
-		bullet:applyForce(0, -2, bullet.x, bullet.y);
-		--audio.play( soundTable["shootSound"] );
-		bullet.tag = "shot";
-		local shotsFired = audio.loadSound("sounds/pistol.mp3")
-		audio.play(shotsFired, {channel = 13})
-		audio.setMaxVolume(0.20, {channel = 13})
-		return bullet;
+		timer.performWithDelay( 200, function () self.spt:setSequence( "idle" ); self.spt:play( ); end );
+
+
+
+
+
+
+		local shotsFired = audio.loadSound("sounds/pistol.mp3");
+		audio.play(shotsFired, {channel = 13});
+		audio.setMaxVolume(0.20, {channel = 13});
+
+		return bullet1, bullet2, bullet3;
 	end
+end
+
+
+function Shotgun:reload()
+		self.ammo = Shotgun.ammo;
 end
 
 return Shotgun;

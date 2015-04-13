@@ -113,11 +113,19 @@ function scene:show( event )
 				gun:shoot(heroGuy);
 		end
 
+		function reloadGun(event)
+			if (event.isShake) then
+				gun:reload()
+			end
+		end
+
 		if((gunType == "pistol") or (gunType == "shotgun")) then
 			Runtime:addEventListener("tap", movePlayer);
 		elseif(gunType == "machinegun") then
 			Runtime:addEventListener("touch", movePlayer);
 		end
+
+		Runtime:addEventListener( "accelerometer", reloadGun);
 
 		--------Level-----------------------
 		local level = display.newText(sceneGroup,"Level: "..params.level,display.contentCenterX,15,CompFont, 50);
@@ -232,8 +240,8 @@ function scene:show( event )
 			
 		end
 
-		local totalNumZombies = 1;
-		zombiesToKill = 1;
+		local totalNumZombies = 50;
+		zombiesToKill = 50
 		function spawnZombieHorde( )
 			spawnRandomZombie();
 			totalNumZombies = totalNumZombies -1;

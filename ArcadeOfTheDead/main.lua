@@ -90,6 +90,8 @@ local MainSheetOpt =
 		--[[66]] { x = 414, y = 643, width = 75, height = 50}, --Block 7 icon		
 		--[[67]] { x = 36,   y = 753, width = 25, height = 25}, --Block 8 icon
 		--[[68]] { x = 137, y = 744, width = 25, height = 50}, --Block 9 icon
+		--------------------------------------------------------------
+		--[[69]] { x = 350, y = 1, width = 70, height = 70}, --Golden Block
 
 	}
 }
