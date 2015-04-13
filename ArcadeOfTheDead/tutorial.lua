@@ -23,6 +23,11 @@ function scene:show( event )
 
 	if ( phase == "will" ) then
 	elseif ( phase == "did" ) then
+		
+		local t1 = audio.loadStream("sounds/what.mp3");
+		audio.setMaxVolume(.015, {channel = 1});
+		local backGroundChan = audio.play(t1, {channel = 1, loops = -1, fadein = 500});
+		
 		local function instructionScene (event)
 			Runtime:removeEventListener( "tap", instructionScene );
 			local sceneOpt = {
@@ -30,6 +35,7 @@ function scene:show( event )
 				time = 800,
 				params = params
 			}
+			audio.stop(1)
 			composer.gotoScene( "tutorial2", sceneOpt);
 		end
 		Runtime:addEventListener( "tap", instructionScene );
