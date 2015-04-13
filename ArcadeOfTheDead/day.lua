@@ -33,15 +33,13 @@ function scene:show( event )
 	end
 	local brickSize = 70;	
 	local shiftNum = 0;	
-	local polygon;
-	local pushedCircle=false;
-	
+	local swappedOut=false;	
 
 	if ( phase == "will" ) then	
 		physics.start();
 		physics.setGravity(0,0);
-		physics.setDrawMode( "hybrid" );
-		--sceneGroup:insert(wall);
+		--physics.setDrawMode( "hybrid" );
+		
 		if(params.wall~=nil)then
 			sceneGroup:insert(params.wall);	
 		end
@@ -219,35 +217,44 @@ function scene:show( event )
 		----------MOVE BLOCK LEFT----------------------
 		function moveBlockLeft( event )
 			if event.phase == "began" then
-				local hit;
-				if(currentBlock.num==1)then
-					hit=physics.rayCast( currentBlock.x, currentBlock.y+70, currentBlock.x-10, currentBlock.y+70, "closest" );
-				elseif(currentBlock.num==2)then
-					hit=physics.rayCast( currentBlock.x, currentBlock.y+140, currentBlock.x-10, currentBlock.y+140, "closest" );
-				elseif(currentBlock.num==3)then
-					hit=physics.rayCast( currentBlock.x, currentBlock.y+140, currentBlock.x-10, currentBlock.y+140, "closest" );
-				elseif(currentBlock.num==4)then
-					hit=physics.rayCast( currentBlock.x, currentBlock.y+140, currentBlock.x-10, currentBlock.y+140, "closest" );
-				elseif(currentBlock.num==5)then
-					hit=physics.rayCast( currentBlock.x, currentBlock.y+140, currentBlock.x-10, currentBlock.y+140, "closest" );
-				elseif(currentBlock.num==6)then
-					hit=physics.rayCast( currentBlock.x, currentBlock.y+140, currentBlock.x-10, currentBlock.y+140, "closest" );
-				elseif(currentBlock.num==7)then
-					hit=physics.rayCast( currentBlock.x, currentBlock.y+70, currentBlock.x-10, currentBlock.y+70, "closest" );
-				elseif(currentBlock.num==8)then
-					hit=physics.rayCast( currentBlock.x, currentBlock.y+70, currentBlock.x-10, currentBlock.y+70, "closest" );
-				elseif(currentBlock.num==9)then
-					hit=physics.rayCast( currentBlock.x, currentBlock.y+140, currentBlock.x-10, currentBlock.y+140, "closest" );
-				end
-				if(hit)then
-					--stays in place
-					currentBlock.x=currentBlock.x;
-				else
-					--moves left 70 px
-					currentBlock.x=currentBlock.x-70;
-					for i=1,currentBlock.numChildren do
-						local child=currentBlock[i];
-						child.x = child.x-70;
+				if(switchingScenes==false)then
+					local hit;
+					if(currentBlock.num==1)then
+						hit=physics.rayCast( currentBlock.x, currentBlock.y+70, currentBlock.x-10, currentBlock.y+70, "closest" );
+					elseif(currentBlock.num==2)then
+						hit=physics.rayCast( currentBlock.x, currentBlock.y+70, currentBlock.x-10, currentBlock.y+70, "closest" );
+						hit=physics.rayCast( currentBlock.x, currentBlock.y+140, currentBlock.x-10, currentBlock.y+140, "closest" );
+					elseif(currentBlock.num==3)then
+						hit=physics.rayCast( currentBlock.x, currentBlock.y+70, currentBlock.x-10, currentBlock.y+70, "closest" );
+						hit=physics.rayCast( currentBlock.x, currentBlock.y+140, currentBlock.x-10, currentBlock.y+140, "closest" );
+					elseif(currentBlock.num==4)then
+						hit=physics.rayCast( currentBlock.x+140, currentBlock.y, currentBlock.x+130, currentBlock.y, "closest" );
+						hit=physics.rayCast( currentBlock.x, currentBlock.y+140, currentBlock.x-10, currentBlock.y+140, "closest" );
+					elseif(currentBlock.num==5)then
+						hit=physics.rayCast( currentBlock.x+70, currentBlock.y, currentBlock.x+60, currentBlock.y, "closest" );
+						hit=physics.rayCast( currentBlock.x, currentBlock.y+140, currentBlock.x-10, currentBlock.y+140, "closest" );
+					elseif(currentBlock.num==6)then
+						hit=physics.rayCast( currentBlock.x+70, currentBlock.y, currentBlock.x+60, currentBlock.y, "closest" );
+						hit=physics.rayCast( currentBlock.x, currentBlock.y+140, currentBlock.x-10, currentBlock.y+140, "closest" );
+					elseif(currentBlock.num==7)then
+						hit=physics.rayCast( currentBlock.x, currentBlock.y+70, currentBlock.x-10, currentBlock.y+70, "closest" );
+						hit=physics.rayCast( currentBlock.x+70, currentBlock.y+140, currentBlock.x+60, currentBlock.y+140, "closest" );
+					elseif(currentBlock.num==8)then
+						hit=physics.rayCast( currentBlock.x, currentBlock.y+70, currentBlock.x-10, currentBlock.y+70, "closest" );
+					elseif(currentBlock.num==9)then
+						hit=physics.rayCast( currentBlock.x, currentBlock.y+70, currentBlock.x-10, currentBlock.y+70, "closest" );
+						hit=physics.rayCast( currentBlock.x, currentBlock.y+140, currentBlock.x-10, currentBlock.y+140, "closest" );
+					end
+					if(hit)then
+						--stays in place
+						currentBlock.x=currentBlock.x;
+					else
+						--moves left 70 px
+						currentBlock.x=currentBlock.x-70;
+						for i=1,currentBlock.numChildren do
+							local child=currentBlock[i];
+							child.x = child.x-70;
+						end
 					end
 				end
 			end
@@ -256,35 +263,44 @@ function scene:show( event )
 		-----------MOVE BLOCK RIGHT----------------
 		function moveBlockRight( event )
 			if event.phase == "began" then
-				local hit;
-				if(currentBlock.num==1)then
-					hit=physics.rayCast(currentBlock.x,currentBlock.y+70,currentBlock.x+290,currentBlock.y+70,"closest");
-				elseif(currentBlock.num==2)then
-					hit=physics.rayCast(currentBlock.x,currentBlock.y+140,currentBlock.x+150,currentBlock.y+140,"closest");
-				elseif(currentBlock.num==3)then
-					hit=physics.rayCast(currentBlock.x,currentBlock.y+140,currentBlock.x+220,currentBlock.y+140,"closest");
-				elseif(currentBlock.num==4)then
-					hit=physics.rayCast(currentBlock.x,currentBlock.y+140,currentBlock.x+220,currentBlock.y+140,"closest");
-				elseif(currentBlock.num==5)then
-					hit=physics.rayCast(currentBlock.x,currentBlock.y+140,currentBlock.x+220,currentBlock.y+140,"closest");
-				elseif(currentBlock.num==6)then
-					hit=physics.rayCast(currentBlock.x,currentBlock.y+70,currentBlock.x+220,currentBlock.y+70,"closest");
-				elseif(currentBlock.num==7)then
-					hit=physics.rayCast(currentBlock.x,currentBlock.y+140,currentBlock.x+220,currentBlock.y+140,"closest");
-				elseif(currentBlock.num==8)then
-					hit=physics.rayCast(currentBlock.x,currentBlock.y+70,currentBlock.x+80,currentBlock.y+70,"closest");
-				elseif(currentBlock.num==9)then
-					hit=physics.rayCast(currentBlock.x,currentBlock.y+140,currentBlock.x+80,currentBlock.y+140,"closest");
-				end
-				if(hit)then
-					--stays in place
-					currentBlock.x=currentBlock.x;
-				else
-					--moves right 70 px
-					currentBlock.x=currentBlock.x+70;						
-					for i=1,currentBlock.numChildren do
-						local child=currentBlock[i];
-						child.x = child.x+70;
+				if(switchingScenes==false)then
+					local hit;
+					if(currentBlock.num==1)then
+						hit=physics.rayCast(currentBlock.x,currentBlock.y+70,currentBlock.x+290,currentBlock.y+70,"closest");
+					elseif(currentBlock.num==2)then
+						hit=physics.rayCast(currentBlock.x,currentBlock.y+70,currentBlock.x+150,currentBlock.y+70,"closest");
+						hit=physics.rayCast(currentBlock.x,currentBlock.y+140,currentBlock.x+150,currentBlock.y+140,"closest");
+					elseif(currentBlock.num==3)then
+						hit=physics.rayCast(currentBlock.x,currentBlock.y+70,currentBlock.x+80,currentBlock.y+70,"closest");
+						hit=physics.rayCast(currentBlock.x,currentBlock.y+140,currentBlock.x+220,currentBlock.y+140,"closest");
+					elseif(currentBlock.num==4)then
+						hit=physics.rayCast(currentBlock.x+210,currentBlock.y+70,currentBlock.x+220,currentBlock.y+70,"closest");
+						hit=physics.rayCast(currentBlock.x,currentBlock.y+140,currentBlock.x+220,currentBlock.y+140,"closest");
+					elseif(currentBlock.num==5)then
+						hit=physics.rayCast(currentBlock.x+140,currentBlock.y+70,currentBlock.x+150,currentBlock.y+70,"closest");
+						hit=physics.rayCast(currentBlock.x,currentBlock.y+140,currentBlock.x+220,currentBlock.y+140,"closest");
+					elseif(currentBlock.num==6)then
+						hit=physics.rayCast(currentBlock.x,currentBlock.y+70,currentBlock.x+220,currentBlock.y+70,"closest");
+						hit=physics.rayCast(currentBlock.x,currentBlock.y+140,currentBlock.x+150,currentBlock.y+140,"closest");
+					elseif(currentBlock.num==7)then
+						hit=physics.rayCast(currentBlock.x+140,currentBlock.y+70,currentBlock.x+150,currentBlock.y+70,"closest");
+						hit=physics.rayCast(currentBlock.x,currentBlock.y+140,currentBlock.x+220,currentBlock.y+140,"closest");
+					elseif(currentBlock.num==8)then
+						hit=physics.rayCast(currentBlock.x,currentBlock.y+70,currentBlock.x+80,currentBlock.y+70,"closest");
+					elseif(currentBlock.num==9)then
+						hit=physics.rayCast(currentBlock.x,currentBlock.y+70,currentBlock.x+80,currentBlock.y+70,"closest");
+						hit=physics.rayCast(currentBlock.x,currentBlock.y+140,currentBlock.x+80,currentBlock.y+140,"closest");
+					end
+					if(hit)then
+						--stays in place
+						currentBlock.x=currentBlock.x;
+					else
+						--moves right 70 px
+						currentBlock.x=currentBlock.x+70;						
+						for i=1,currentBlock.numChildren do
+							local child=currentBlock[i];
+							child.x = child.x+70;
+						end
 					end
 				end
 			end
@@ -357,16 +373,18 @@ function scene:show( event )
 		function addPhysicsToBricks(  )
 			for i=1,currentBlock.numChildren do
 				local child=currentBlock[i];
-				physics.addBody( child, "static", {filter=CollisionFilters.brick} );
-				--child.anchorX=10;
+				local physBody=physics.addBody( child, "static", {filter=CollisionFilters.brick} );
+				sceneGroup:insert(physBody);
 			end
 			spawnNewBlock();
 		end
 		-----------MOVE BLOCK DOWN--------------
 		local function checkRayCast(  )
 			transition.cancel(currentBlock);
-			if(pushedCircle==true)then
-				swapBlocks();
+			if(swappedOut==true)then
+				swappedOut=false;
+				display.remove(currentBlock);
+				spawnNewBlock(params.purchasedBlock);
 			end
 			local hit,hit2,hit3,hit4;
 			if(currentBlock.num==1)then
@@ -416,14 +434,23 @@ function scene:show( event )
 		end
 
 		local blockCounter =5;
-		function spawnNewBlock(  )
+		function spawnNewBlock( num )
 			if(blockCounter > 0) then
 				blockCounter = blockCounter - 1;
 				local blockNum = math.random( 1,7 );
-				currentBlock = spawnBlock(blockNum);
-				currentBlock.num=blockNum;
+				if(num~=nil)then
+					currentBlock = spawnBlock(num);
+					currentBlock.num=num;
+					for i=1,currentBlock.numChildren do
+						local child=currentBlock[i];
+						child.y = child.y-70;
+					end
+				else
+					currentBlock = spawnBlock(blockNum);
+					currentBlock.num=blockNum;
+				end
 				wall:insert( currentBlock );		
-				sceneGroup:insert( wall );	
+				sceneGroup:insert( wall );
 				checkRayCast();
 			else
 				timer.performWithDelay( 500, 
@@ -471,24 +498,14 @@ function scene:show( event )
 		sceneGroup:insert( swapBtn );
 
 		function switchBlocks( event )
-			pushedCircle = true;
+			if(params.purchasedBlock~=nil)then							
+				display.remove( blockPic );
+				swapBtn:removeEventListener( "tap", switchBlocks );	
+				swappedOut=true;	
+			end
 		end
 
 		swapBtn:addEventListener( "tap", switchBlocks );
-
-		--------SWAP BLOCKS------------------
-		function swapBlocks(  )
-			if(params.purchasedBlock~=nil)then
-				pushedCircle=false;
-				display.remove( currentBlock );
-				currentBlock = spawnBlock(params.purchasedBlock);
-				currentBlock.num=params.purchasedBlock;
-				display.remove( blockPic );
-				wall:insert( currentBlock );		
-				sceneGroup:insert( wall );	
-				checkRayCast();
-			end
-		end
 	end
 end
 

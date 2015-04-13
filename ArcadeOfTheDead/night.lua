@@ -262,7 +262,7 @@ function scene:show( event )
 		ticketImg.x=10; ticketImg.y=5;
 		ticketImg.anchorX=0; ticketImg.anchorY=0;
 		sceneGroup:insert( ticketImg );
-		ticketText = display.newText( sceneGroup, ticketNum, 100, 17, CompFont, 50 );
+		ticketText = display.newText( sceneGroup, ticketNum, 150, 17, CompFont, 50 );
 		ticketText:setFillColor( 1,1,1,.75 );
 
 		--------Life Total-----------------
