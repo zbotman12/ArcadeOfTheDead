@@ -49,8 +49,9 @@ end
 function Shotgun:shoot(playerGroup)
 
 	if (self.ammo ~= 0) then
+
 		--shot sound
-		local shotsFired = audio.loadSound("sounds/pistol.mp3");
+		local shotsFired = audio.loadSound("sounds/shotgun.mp3");
 		audio.play(shotsFired, {channel = 13});
 		audio.setMaxVolume(0.20, {channel = 13});
 

@@ -24,6 +24,7 @@ function scene:show( event )
 	if ( phase == "will" ) then
 	elseif ( phase == "did" ) then	
 
+
 		local t3 = audio.loadStream("sounds/night.mp3");
 		audio.setMaxVolume(.015, {channel = 1});
 		local backGroundChan = audio.play(t3, {channel = 1, loops = -1, fadein = 500});

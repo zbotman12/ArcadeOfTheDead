@@ -35,6 +35,7 @@ function scene:show( event )
 				time = 800,
 				params = params
 			}
+			audio.stop(1)
 			composer.gotoScene( "start", sceneOpt);
 		end
 		Runtime:addEventListener( "tap", instructionScene );
