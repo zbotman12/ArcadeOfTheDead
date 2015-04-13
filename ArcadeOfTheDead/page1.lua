@@ -28,8 +28,7 @@ local equipBtn9, unequipBtn9;
 --scene:create
 function scene:create( event )
 	local sceneGroup = self.view
-	params = event.params
-
+	params = event.params;
 	local bg = display.newImage ("images/ShopBG.png");
 	bg.anchorX=0; bg.anchorY=0;
     bg:toBack();
@@ -41,45 +40,22 @@ end
 function scene:show( event )
 	local sceneGroup = self.view;
 	local phase = event.phase;	
-	local isThingEquipped=false;
+	local isThingEquipped;
+	if(params.gunType=="pistol")then
+		isThingEquipped="Equip";
+	else
+		isThingEquipped=false;
+	end
 	local wall = params.wall;
 	local blockHealth = 0;
 	local totalNumOfBricks = 0;
 	local repairCost=0;
 	local kirby,link,megaMan;
-	params.gunType="pistol";
 
 	if ( phase == "will" ) then
-
-		function nextScene (event)
-			moneyAvailable:removeSelf( );
-			local sceneOpt = {
-				effect = "fade",
-				time = 800,
-				params = params
-			}
-			composer.gotoScene( "day", sceneOpt);
-		end
-
-		function nextPage (event)
-			moneyAvailable:removeSelf( );
-			local sceneOpt = {
-				effect = "fade",
-				time = 800,
-				params = params
-			}
-			composer.gotoScene( "page2", sceneOpt);
-		end
-
-		function prevPage (event)
-			local sceneOpt = {
-				effect = "fade",
-				time = 800,
-				params = params
-			}
-			composer.gotoScene( "shop", sceneOpt);
-		end
-
+		print(params.gunType);
+		print(params.purchasedBlock);
+		--------REMOVE EQUIPPED ITEM----------
 		local function removeEquip( isThingEquipped )
 			if(isThingEquipped == "Equip") then
 				equipBtn.isVisible = true;
@@ -111,7 +87,14 @@ function scene:show( event )
 			end
 		end
 
-		local function equipMe( event )			
+		---------EQUIP ITEMS-------------------
+		local function equipMe( event )	
+			--sound effect
+			local equipz = audio.loadSound("sounds/gunCock.mp3")
+			audio.play(equipz, {channel = 3})
+			audio.setMaxVolume(1, {channel = 3})
+
+
 			removeEquip(isThingEquipped);
 			isThingEquipped = event.target.id;
 			if(event.target.id == "Equip") then
@@ -150,8 +133,10 @@ function scene:show( event )
 				params.hero="Mario";
 			end
 
-		end
+			audio.stop(3)
 
+		end
+		-----------UNEQUIP ITEMS-----------------
 		local function unequipMe( event )
 			if(event.target.id == "Unequip") then
 				event.target.isVisible = false
@@ -179,8 +164,13 @@ function scene:show( event )
 				equipBtn7.isVisible = true
 			end
 		end
-
+		----------BUY ITEMS---------------------
 		local function buyMe( event )
+			--sounds
+			local coinz = audio.loadSound("sounds/coin.mp3")
+			audio.play(coinz, {channel = 2})
+			audio.setMaxVolume(.8, {channel = 2})
+
 			if(event.target.id == "Buy2") then
 				if(params.ticketNum>=1000)then
 					event.target.isVisible = false
@@ -259,52 +249,19 @@ function scene:show( event )
 					updateMoney();
 				end
 			end 
+
+			audio.stop(2)
 		end
-
-		--[[
-		local pageTitle = display.newText("MISCELANEOUS", display.contentCenterX, display.contentCenterY - 550, CompFont, 60)
-		pageTitle:setFillColor( 0,0,0 );
-		sceneGroup:insert(pageTitle)
-
-		--DIV VERT
 		
-		local verticalDivide = display.newRect(240,display.contentCenterY,5, display.contentCenterY *2 - 340)
-		sceneGroup:insert(verticalDivide)
-
-		local verticalDivide2 = display.newRect(480,display.contentCenterY,5, display.contentCenterY *2 - 340)
-		sceneGroup:insert(verticalDivide2)
-
-		--DIV HOR
-		]]--
 		local yTack = ((display.contentCenterY * 2) - 342)/3;
-		--print(yTack)
-		--[[
-		local horionDivide1 = display.newRect(display.contentCenterX, 172, display.contentCenterX*2, 5) -- y = 172
-		sceneGroup:insert(horionDivide1)
-
-		local horionDivide2 = display.newRect(display.contentCenterX, 172 + yTack, display.contentCenterX*2, 5) -- y = 500
-		sceneGroup:insert(horionDivide2)
-
-		local horionDivide3 = display.newRect(display.contentCenterX, 172 + (2*yTack), display.contentCenterX*2, 5) -- y = 828
-		sceneGroup:insert(horionDivide3)
-
-		local horionDivide4 = display.newRect(display.contentCenterX, 172 + (3*yTack), display.contentCenterX*2, 5) -- y = 1110
-		sceneGroup:insert(horionDivide4)
-		
-		--BOTTOM BAR
-		
-		local currentlyEquipted = display.newText("Currently Equipted Shit", display.contentCenterX, display.contentCenterY + 500, CompFont, 75);
-		currentlyEquipted:setFillColor( 0,0,0 );
-		sceneGroup:insert(currentlyEquipted)
-		]]--
 
 		if(params.ticketNum==nil)then
 			params.ticketNum=10000;
 		end
 
+		---------TICKET MONEY-----------------------
 		local blackBox = display.newRect( sceneGroup, display.contentCenterX-3, display.contentCenterY+600, 300, 75 );
 		blackBox:setFillColor( 0,0,0,0.7 );
-		-- update money when you buy something
 		local ticketData={{name = "ticket", frames={58}}};
 		local ticketImg = display.newSprite( params.spriteSheet, ticketData );
 		ticketImg.x=display.contentCenterX-150; ticketImg.y=display.contentCenterY + 575;
@@ -319,7 +276,7 @@ function scene:show( event )
 		end
 		updateMoney();
 
-		-----ROW 1------
+		-----ROW 1---------------------------------------------------------------
 		local rowY = 145 + yTack
 		
 		----Black Squares----
@@ -330,6 +287,7 @@ function scene:show( event )
 		local square3 = display.newRect(sceneGroup, 600,rowY-160,220,240);
 		square3:setFillColor( 0,0,0,.6 );
 
+		------------PISTOL-------------------
 		local pistolText = display.newText("Pistol", 120, rowY-160, CompFont, 70);
 		pistolText:setFillColor( 1,.5,0 );
 		sceneGroup:insert(pistolText);
@@ -348,7 +306,11 @@ function scene:show( event )
 		        onPress = equipMe,
 		    }
 		);
-		equipBtn.isVisible = false;
+		if(params.gunType=="pistol")then
+			equipBtn.isVisible = false;
+		else
+			equipBtn.isVisible = true;
+		end
 		equipBtn:setFillColor(0.5,0,0.5);
 		sceneGroup:insert( equipBtn );
 
@@ -366,9 +328,15 @@ function scene:show( event )
 		        onPress = unequipMe,
 		    }
 		);
+		if(params.gunType=="pistol")then
+			unequipBtn.isVisible = true;
+		else
+			unequipBtn.isVisible = false;
+		end
 		unequipBtn:setFillColor( 1,0,0 );
 		sceneGroup:insert( unequipBtn );
 
+		-----------SHOTGUN---------------------
 		local shotGunText = display.newText("ShotGun", 360, rowY-160, CompFont, 70);
 		shotGunText:setFillColor( 1,.5,0 );
 		sceneGroup:insert(shotGunText);
@@ -387,6 +355,11 @@ function scene:show( event )
 		        onPress = buyMe,
 		    }
 		);
+		if(params.gunType=="shotgun")then
+			buyBtn2.isVisible = false;
+		else
+			buyBtn2.isVisible = true;
+		end
 		buyBtn2:setFillColor( 0,0.9,0.3 );
 		sceneGroup:insert( buyBtn2 );
 
@@ -404,7 +377,11 @@ function scene:show( event )
 		        onPress = equipMe,
 		    }
 		);
-		equipBtn2.isVisible = false
+		if(params.gunType=="shotgun") or (buyBtn2.isVisible==true)then
+			equipBtn2.isVisible = false;
+		else
+			equipBtn2.isVisible = true;
+		end
 		equipBtn2:setFillColor( 0.5,0,0.5);
 		sceneGroup:insert( equipBtn2 );
 
@@ -422,10 +399,15 @@ function scene:show( event )
 		        onPress = unequipMe,
 		    }
 		);
-		unequipBtn2.isVisible = false
+		if(params.gunType=="shotgun")then
+			unequipBtn2.isVisible = true;
+		else
+			unequipBtn2.isVisible = false;
+		end
 		unequipBtn2:setFillColor( 1,0,0 );
 		sceneGroup:insert( unequipBtn2 );
 
+		--------------MACHINE GUN------------------------
 		local machineGunText = display.newText("Machine\n Gun", 620, rowY-160, CompFont, 70);
 		machineGunText:setFillColor( 1,.5,0 );
 		sceneGroup:insert(machineGunText);
@@ -444,7 +426,11 @@ function scene:show( event )
 		        onPress = buyMe,
 		    }
 		);
-
+		if(params.gunType=="machinegun")then
+			buyBtn3.isVisible = false;
+		else
+			buyBtn3.isVisible = true;
+		end
 		buyBtn3:setFillColor( 0,0.9,0.3 );
 		sceneGroup:insert( buyBtn3 );
 
@@ -462,7 +448,11 @@ function scene:show( event )
 		        onPress = equipMe,
 		    }
 		);
-		equipBtn3.isVisible = false
+		if(params.gunType=="machinegun") or (buyBtn3.isVisible==true)then
+			equipBtn3.isVisible = false;
+		else
+			equipBtn3.isVisible = true;
+		end
 		equipBtn3:setFillColor(0.5,0,0.5);
 		sceneGroup:insert( equipBtn3 );
 
@@ -480,11 +470,16 @@ function scene:show( event )
 		        onPress = unequipMe,
 		    }
 		);
-		unequipBtn3.isVisible = false
+		if(params.gunType=="machinegun")then
+			unequipBtn3.isVisible = true;
+		else
+			unequipBtn3.isVisible = false;
+		end
 		unequipBtn3:setFillColor( 1,0,0 );
 		sceneGroup:insert( unequipBtn3 );
 
-		--ROW 2
+
+		-----------ROW 2----------------------------------------------------------------
 		rowY = 145 + (yTack*2)
 		----Black Squares----
 		local square4 = display.newRect(sceneGroup, 120,rowY-155,220,240);
@@ -494,7 +489,7 @@ function scene:show( event )
 		local square6 = display.newRect(sceneGroup, 600,rowY-155,220,240);
 		square6:setFillColor( 0,0,0,.6 );
 
-		----------Create the player display object group--------
+		----------KIRBY------------------------------
 		local playerSeqData = {
 	  		{name = "idle", frames={29}}
 		}		
@@ -563,7 +558,7 @@ function scene:show( event )
 		unequipBtn4:setFillColor( 1,0,0 );
 		sceneGroup:insert( unequipBtn4 );
 
-		----------Create the player display object group--------
+		----------LINK----------------------------
 		local playerSeqData = {
 	  		{name = "idle", frames={30}}
 		};		
@@ -632,7 +627,7 @@ function scene:show( event )
 		unequipBtn5:setFillColor( 1,0,0 );
 		sceneGroup:insert( unequipBtn5 );
 
-		----------Create the player display object group--------
+		----------MEGAMAN------------------------------------
 		local playerSeqData = {
 	  		{name = "idle", frames={28}}
 		};		
@@ -701,7 +696,7 @@ function scene:show( event )
 		unequipBtn6:setFillColor( 1,0,0 );
 		sceneGroup:insert( unequipBtn6 );
 
-		--ROW 3
+		--------------ROW 3------------------------------------------------------
 		rowY = 145 + (yTack*3)
 		----Black Squares----
 		local square7 = display.newRect(sceneGroup, 120,rowY-150,220,240);
@@ -711,6 +706,7 @@ function scene:show( event )
 		local square9 = display.newRect(sceneGroup, 600,rowY-155,220,240);
 		square9:setFillColor( 0,0,0,.6 );
 
+		-------------MARIO---------------------
 		local buyBtn7 = widget.newButton(
 		    {
 		        x = 120,
@@ -765,6 +761,7 @@ function scene:show( event )
 		unequipBtn7:setFillColor( 1,0,0 );
 		sceneGroup:insert( unequipBtn7 );
 
+		------------BUY HEARTS-----------------
 		local heartData={{name = "heart", frames={27}}};
 		local heart = display.newSprite( params.spriteSheet, heartData );
 		heart.x=330; heart.y=rowY-180;
@@ -792,13 +789,13 @@ function scene:show( event )
 		buyBtn8:setFillColor( 0,0.9,0.3 );
 		sceneGroup:insert( buyBtn8 );
 
+		-----CALCULATE REPAIR COST---------
 		if(wall~=nil) then
 			for i=1,wall.numChildren do
 				local child = wall[i];
 				for j=1,child.numChildren do
 					local brick = child[j];
 					if(brick.pp~=nil)then
-						print(brick.pp.HP);
 						blockHealth = blockHealth + brick.pp.HP;
 						totalNumOfBricks = totalNumOfBricks +1;
 					end
@@ -809,6 +806,7 @@ function scene:show( event )
 		repairCost = totalNumOfBricks - blockHealth;
 		repairCost= repairCost*10;
 
+		--------REPAIR BRICKS--------------------
 		local repairText = display.newText("Repair\n All\nBlocks", 620, rowY-145, CompFont, 70);
 		repairText:setFillColor( 1,.5,0 );
 		sceneGroup:insert(repairText);
@@ -831,7 +829,8 @@ function scene:show( event )
 		buyBtn9:setFillColor( 0,0.9,0.3 );
 		sceneGroup:insert( buyBtn9);
 
-		function removeObjs(  )		
+		function removeObjs(  )
+			print(params.gunType);
 			moneyAvailable:removeSelf( );
 			display.remove( square1 );
 			display.remove( square2 );

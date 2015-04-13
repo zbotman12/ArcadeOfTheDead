@@ -55,6 +55,8 @@ function Brick:hit ()
 		self.shape=nil;
 		self = nil;
 	end
+
+	timer.performWithDelay(1000, function() audio.stop(11); end)
 end
 
 return Brick;

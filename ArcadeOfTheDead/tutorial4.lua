@@ -23,6 +23,11 @@ function scene:show( event )
 
 	if ( phase == "will" ) then
 	elseif ( phase == "did" ) then	
+
+		local t4 = audio.loadStream("sounds/shoply.mp3");
+		audio.setMaxVolume(.015, {channel = 1});
+		local backGroundChan = audio.play(t4, {channel = 1, loops = -1, fadein = 500});
+
 		local function instructionScene (event)
 			Runtime:removeEventListener( "tap", instructionScene );
 			local sceneOpt = {
@@ -30,6 +35,7 @@ function scene:show( event )
 				time = 800,
 				params = params
 			}
+			audio.stop(1)
 			composer.gotoScene( "start", sceneOpt);
 		end
 		Runtime:addEventListener( "tap", instructionScene );

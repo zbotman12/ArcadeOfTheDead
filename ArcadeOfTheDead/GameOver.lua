@@ -49,7 +49,7 @@ function scene:show( event )
 			  	wall = nil
 			  	}
 			}
-			audio.stop(GO)
+			audio.stop(1)
 			composer.gotoScene( "start", sceneOpt);
 		end
 		local startGameBtn = widget.newButton(

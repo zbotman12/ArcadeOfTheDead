@@ -29,9 +29,10 @@ function scene:show( event )
 	local phase = event.phase;
 
 	if ( phase == "will" ) then
-		local intro = audio.loadStream("sounds/fuckeryhalfpace.mp3");
+		local start = audio.loadSound("sounds/what.mp3");
 		audio.setMaxVolume(.015, {channel = 1});
-		local backGroundChan = audio.play(intro, {channel = 1, loops = -1, fadein = 500});
+		local backGroundChan = audio.play(start, {channel = 1, loops = -1, fadein = 500});
+
 	elseif ( phase == "did" ) then	
 		local function nextScene (event)
 			local sceneOpt = {
@@ -39,6 +40,7 @@ function scene:show( event )
 				time = 800,
 				params = params
 			}
+			audio.stop(1)
 			composer.gotoScene( "day", sceneOpt);
 		end
 		local startGameBtn = widget.newButton(
@@ -64,6 +66,7 @@ function scene:show( event )
 				time = 800,
 				params = params
 			}
+			audio.stop(1)
 			composer.gotoScene( "tutorial", sceneOpt);
 		end
 		local howToPlay = widget.newButton(

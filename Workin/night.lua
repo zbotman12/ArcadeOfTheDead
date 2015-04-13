@@ -94,7 +94,7 @@ function scene:show( event )
 				time = 800,
 				params = params
 			}
-			audio.stop(bgNight)
+			audio.stop(1)
 			composer.gotoScene( "GameOver", sceneOpt);
 		end		
 
@@ -137,6 +137,9 @@ function scene:show( event )
 					end
 				else
 					life = life -1;
+					local dead = audio.loadSound("sounds/scream.mp3")
+					audio.play(dead, {channel = 23})
+					audio.setMaxVolume(1, {channel = 23})
 					display.remove(heartGroup);
 					heartGroup = display.newGroup();
 					if(life >= 0)then

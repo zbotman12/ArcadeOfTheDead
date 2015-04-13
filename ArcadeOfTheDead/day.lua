@@ -20,7 +20,8 @@ local rightArrow;
 --scene:create
 function scene:create( event )
 	local sceneGroup = self.view;
-	params = event.params
+	params = event.params;
+
 	local bg = display.newImage ("images/DayBG.png");
 	bg.anchorX=0; bg.anchorY=0;
     bg:toBack();
@@ -42,7 +43,14 @@ function scene:show( event )
 	local swappedOut=false;	
 	local switchingScenes=false;
 
+
 	if ( phase == "will" ) then	
+		--background music
+
+		local bgDay = audio.loadStream("sounds/tetris.mp3")
+		audio.setMaxVolume(.015, {channel = 1})
+		local backGroundChan = audio.play(bgDay, {channel = 1, loops = -1, fadein = 500})
+
 		physics.start();
 		physics.setGravity(0,0);
 		--physics.setDrawMode( "hybrid" );
@@ -320,11 +328,11 @@ function scene:show( event )
 	elseif ( phase == "did" ) then
 		params.level=params.level+1;
 		-------NEW GUN---------------
-		local function newGun (guntype)
+		local function newGun (gunType)
 			local gun;
-			if (guntype == "pistol") then
+			if (gunType == "pistol") then
 				gun = Pistol:new();
-			elseif(guntype == "shotgun") then
+			elseif(gunType == "shotgun") then
 				gun = Shotgun:new();
 			elseif(guntype == "machinegun") then
 				gun = MachineGun:new();
@@ -354,7 +362,7 @@ function scene:show( event )
 		end		
 		local playerSpt = display.newSprite(params.spriteSheet, playerSeqData )
 		playerSpt:setSequence( "idle" );
-		local gun = newGun("pistol");
+		local gun = newGun(params.gunType);
 		local gunSpt = gun:spawn(params.spriteSheet,params.hero);
 		heroGuy:insert(playerSpt);
 		heroGuy:insert(gunSpt);
@@ -377,7 +385,8 @@ function scene:show( event )
 				effect = "fade",
 				time = 800,
 				params = params
-			}			
+			}
+			audio.stop(1)			
 			composer.gotoScene( "night", sceneOpt);
 		end
 	

@@ -67,6 +67,12 @@ function Shotgun:shoot(playerGroup)
 
 	if (self.ammo ~= 0) then
 		removeBullets();
+
+		--shot sound
+		local shotsFired = audio.loadSound("sounds/shotgun.mp3");
+		audio.play(shotsFired, {channel = 13});
+		audio.setMaxVolume(0.20, {channel = 13});
+		
 		self.ammo = self.ammo - 1; 
 		bullet1 = display.newCircle (playerGroup.x + 30, playerGroup.y-16, 5);
 		bullet1.anchorY = 1;
@@ -108,6 +114,9 @@ function Shotgun:shoot(playerGroup)
 		local shotsFired = audio.loadSound("sounds/pistol.mp3");
 		audio.play(shotsFired, {channel = 13});
 		audio.setMaxVolume(0.20, {channel = 13});
+		timer.performWithDelay( 200, function () self.spt:setSequence( "idle" ); self.spt:play( ); end );
+
+		timer.performWithDelay(1000, function() audio.stop(13); end)
 
 		return bullet1, bullet2, bullet3;
 	end
@@ -115,7 +124,13 @@ end
 
 
 function Shotgun:reload()
+		local shotsFired = audio.loadSound("sounds/gunCock.mp3");
+		audio.play(shotsFired, {channel = 14});
+		audio.setMaxVolume(0.20, {channel = 14});
+
 		self.ammo = Shotgun.ammo;
+
+		timer.performWithDelay(1000, function() audio.stop(14); end)
 end
 
 return Shotgun;

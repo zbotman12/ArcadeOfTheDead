@@ -45,10 +45,15 @@ function scene:show( event )
 
 	local function newGun (guntype)
 		if (guntype == "pistol") then
+	print(params.gunType);
+
+	local function newGun (gunType)
+		local gun;
+		if (gunType == "pistol") then
 			gun = Pistol:new();
-		elseif(guntype == "shotgun") then
+		elseif(gunType == "shotgun") then
 				gun = Shotgun:new();
-		elseif(guntype == "machinegun") then
+		elseif(gunType == "machinegun") then
 			gun = MachineGun:new();
 		end
 		return gun;
@@ -56,10 +61,9 @@ function scene:show( event )
 
 	if ( phase == "will" ) then
 		--begin music as scene loads 
-		--local bgNight = audio.loadStream("sounds/night.mp3")
-		--sceneGroup:insert(bgNight)
-		--audio.setMaxVolume(0.045, {channel = 1})
-		--local backGroundChan = audio.play(bgNight, {channel = 1, loops = -1, fadein = 500})
+		local bgNight = audio.loadStream("sounds/night.mp3")
+		audio.setMaxVolume(0.045, {channel = 1})
+		local backGroundChan = audio.play(bgNight, {channel = 1, loops = -1, fadein = 500})
 
 	elseif ( phase == "did" ) then	
 		physics.start();
@@ -98,7 +102,7 @@ function scene:show( event )
 		end		
 		local playerSpt = display.newSprite(params.spriteSheet, playerSeqData )
 		playerSpt:setSequence( "idle" );
-		local gunType="shotgun";
+		local gunType=params.gunType;
 		local gun = newGun(gunType);
 		local gunSpt = gun:spawn(params.spriteSheet,params.hero);
 		heroGuy:insert(playerSpt);
@@ -179,6 +183,9 @@ function scene:show( event )
 								params = params
 							}
 							composer.gotoScene( "shop", sceneOpt);							
+							audio.stop(1)
+							timer.performWithDelay( 500, 
+								function () composer.gotoScene( "shop", sceneOpt);	end,1 );							
 						end
 						timer.performWithDelay(500, goToShop);
 					end
@@ -189,6 +196,9 @@ function scene:show( event )
 					if(life > 0)then
 						showHearts();
 					else
+						local scream = audio.loadSound("sounds/scream.mp3")
+						audio.play(scream, {channel = 17})
+						audio.setMaxVolume(0.20, {channel = 17})
 						gameOver();
 					end
 					event.target.pp:hit();
@@ -196,6 +206,19 @@ function scene:show( event )
 			end
 		end
 
+		--handler for the game ending
+		function gameOver (event)	
+
+			removeStuff();
+			local sceneOpt = {
+				effect = "fade",
+				time = 800,
+				params = params
+			}
+			audio.stop(17)
+			audio.stop(1)
+			composer.gotoScene( "GameOver", sceneOpt);
+		end	
 		--make the zmobie move
 		function moveZombie( zombie )
 			local hits;
