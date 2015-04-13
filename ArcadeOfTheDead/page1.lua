@@ -86,8 +86,15 @@ function scene:show( event )
 				unequipBtn9.isVisible = false;
 			end
 		end
+
 		---------EQUIP ITEMS-------------------
-		local function equipMe( event )			
+		local function equipMe( event )	
+			--sound effect
+			local equipz = audio.loadSound("sounds/gunCock.mp3")
+			audio.play(equipz, {channel = 3})
+			audio.setMaxVolume(1, {channel = 3})
+
+
 			removeEquip(isThingEquipped);
 			isThingEquipped = event.target.id;
 			if(event.target.id == "Equip") then
@@ -125,6 +132,9 @@ function scene:show( event )
 				unequipBtn7.isVisible = true
 				params.hero="Mario";
 			end
+
+			audio.stop(3)
+
 		end
 		-----------UNEQUIP ITEMS-----------------
 		local function unequipMe( event )
@@ -156,6 +166,11 @@ function scene:show( event )
 		end
 		----------BUY ITEMS---------------------
 		local function buyMe( event )
+			--sounds
+			local coinz = audio.loadSound("sounds/coin.mp3")
+			audio.play(coinz, {channel = 2})
+			audio.setMaxVolume(.8, {channel = 2})
+
 			if(event.target.id == "Buy2") then
 				if(params.ticketNum>=1000)then
 					event.target.isVisible = false
@@ -234,10 +249,12 @@ function scene:show( event )
 					updateMoney();
 				end
 			end 
-		end
 
-		local yTack = ((display.contentCenterY * 2) - 342)/3;
+			audio.stop(2)
+		end
 		
+		local yTack = ((display.contentCenterY * 2) - 342)/3;
+
 		if(params.ticketNum==nil)then
 			params.ticketNum=10000;
 		end

@@ -54,6 +54,7 @@ function Pistol:shoot(playerGroup)
 		local shotsFired = audio.loadSound("sounds/pistol.mp3")
 		audio.play(shotsFired, {channel = 12})
 		audio.setMaxVolume(0.20, {channel = 12})
+
 		local bullet = display.newCircle (playerGroup.x + 30, playerGroup.y-16, 5);
 			bullet.anchorY = 1;
 			bullet:setFillColor(1,0,0);
@@ -72,13 +73,23 @@ function Pistol:shoot(playerGroup)
 		bullet:applyForce(0, -2, bullet.x, bullet.y);
 		--audio.play( soundTable["shootSound"] );
 		bullet.tag = "shot";
+
+		audio.stop(12)
+
 		return bullet;
 	end
 
 end
 
 function Pistol:reload()
+
+		local shotsFired = audio.loadSound("sounds/gunCock.mp3")
+		audio.play(shotsFired, {channel = 13})
+		audio.setMaxVolume(0.20, {channel = 13})
+
 		self.ammo = Pistol.ammo;
+
+		audio.stop(13)
 end
 
 return Pistol;

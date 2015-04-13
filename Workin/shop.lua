@@ -36,13 +36,6 @@ local unequipBtn8
 local equipBtn9
 local unequipBtn9
 
-
-local soundTable = {
-	buySound  = audio.loadSound("sound/coin.mp3"),
-	equipSound = audio.loadSound("sounds/gunCock.mp3"),
-	--bgShop = audio.loadStr("shoply.mp3")
-}
-
 --scene:create
 function scene:create( event )
 	local sceneGroup = self.view
@@ -70,7 +63,7 @@ function scene:show( event )
 				time = 800,
 				params = params
 			}
-			audio.stop(bgShop)
+			audio.stop(1)
 			composer.gotoScene( "day", sceneOpt);
 		end
 
@@ -117,7 +110,7 @@ function scene:show( event )
 				event.target.isVisible = false
 				unequipBtn9.isVisible = true
 			end
-
+			audio.stop(3)
 
 		end
 
@@ -188,6 +181,8 @@ function scene:show( event )
 				event.target.isVisible = false
 				equipBtn9.isVisible = true
 			end --end end
+
+			audio.stop(2)
 		end
 		
 		local continueBtn = widget.newButton(

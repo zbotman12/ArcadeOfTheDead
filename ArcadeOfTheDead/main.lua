@@ -106,4 +106,6 @@ local sceneOpt = {
 	params = {spriteSheet=spriteSheet,level=level,purchasedBlock=purchasedBlock,gunType=gunType}
 }
 -- load first scene
-composer.gotoScene( "page1", sceneOpt);
+
+composer.gotoScene( "shop", sceneOpt);
+

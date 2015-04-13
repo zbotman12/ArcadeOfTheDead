@@ -9,11 +9,18 @@ local CollisionFilters = require("CollisionFilters");
 local currentBlock=nil;
 local params;
 
+local currentBlock
+local BlockTrans
+
 
 --scene:create
 function scene:create( event )
 	local sceneGroup = self.view;
 	params = event.params
+	local bg = display.newImage ("images/DayBG.png");
+	bg.anchorX=0; bg.anchorY=0;
+    bg:toBack();
+    sceneGroup:insert( bg );
 end
 
 
@@ -27,21 +34,15 @@ function scene:show( event )
 	local shiftNum = 0;	
 	local polygon;
 	
+	--music
+	local bgDay = audio.loadStream("sounds/tetris.mp3")
+	audio.setMaxVolume(.015, {channel = 1})
+
 	if ( phase == "will" ) then	
 		physics.start();
 		physics.setGravity(0,0);
 		--physics.setDrawMode( "hybrid" );
-		sceneGroup:insert(wall);
-
-		local bgDay = audio.loadStream("sounds/tetris.mp3")
-		audio.setMaxVolume(0.045, {channel = 1})
-		local backGroundChan = audio.play(bgDay, {channel = 1, loops = -1, fadein = 500})
-
-		local DayBackground = display.newImage(sceneGroup, "images/Grass.jpg");
-		DayBackground.anchorX = 0;
-		DayBackground.anchorY = 0;
-		DayBackground.yScale = DayBackground.yScale * 2;
-		DayBackground:toBack();
+		--sceneGroup:insert(wall);
 
 		function spawnBrick( x, y, group )
 			local brick = Brick:new({xPos=x, yPos=y} );
@@ -89,7 +90,6 @@ function scene:show( event )
 					y=brickSize;
 				end
 				block2.x=display.contentCenterX;block2.y=70;
-				block2.tag="doNotRotate";
 				block2.anchorChildren = true;
 				return block2;
 			elseif (blockNum == 3) then
@@ -162,6 +162,22 @@ function scene:show( event )
 				block7.x=display.contentCenterX-35;block7.y=70;
 				block7.anchorChildren = true;
 				return block7;
+			elseif (blockNum == 8)then
+				local block8 = display.newGroup( );
+				local x = 290;
+				spawnBrick(x,y,block8);
+				block8.x=display.contentCenterX-35;block8.y=35;
+				block8.anchorChildren = true;
+				return block8;
+			elseif(blockNum == 9) then
+				local block9 = display.newGroup( );
+				local x = 290;
+				spawnBrick(x,y,block9);
+				y=y+brickSize;
+				spawnBrick(x,y,block9);
+				block9.x=display.contentCenterX-35;block9.y=70;
+				block9.anchorChildren = true;
+				return block9;
 			end
 
 		end
@@ -189,13 +205,20 @@ function scene:show( event )
 		physics.addBody( sidebarLeft, "static" );
 		sidebarLeft:setFillColor( 0,0,0,0.1 );
 
-		local leftArrow = display.newRect( sceneGroup, 0, display.contentHeight-180, 200, height );
+		local leftArrow = display.newSprite( params.spriteSheet, {{name = "leftarrow", frames={17}}} );
 		leftArrow.anchorX=0; leftArrow.anchorY=0;
-		leftArrow:setFillColor(1,0,0);
+		leftArrow.x = 0; leftArrow.y = display.contentHeight-180;
+		leftArrow:scale( 0.75, 0.75 );
+		sceneGroup:insert( leftArrow );
+		leftArrow:setSequence( "leftarrow" );
 
-		local rightArrow = display.newRect( sceneGroup, display.contentWidth-200, display.contentHeight-180, 200, height );
+		local rightArrow = display.newSprite( params.spriteSheet, {{name = "rightarrow", frames={18}}} );
 		rightArrow.anchorX=0; rightArrow.anchorY=0;
-		rightArrow:setFillColor(0,0,1);
+		rightArrow.x = display.contentWidth-150;
+		rightArrow.y = display.contentHeight-180;
+		rightArrow:scale( 0.75, 0.75 );
+		sceneGroup:insert( rightArrow );
+		rightArrow:setSequence( "rightArrow" );
 
 		function moveBlockLeft( event )
 			if event.phase == "began" then
@@ -267,20 +290,11 @@ function scene:show( event )
 		end
 		leftArrow:addEventListener("touch", moveBlockLeft);
 		rightArrow:addEventListener("touch", moveBlockRight);
-
-		--switch brick box
-		local swapBox = display.newRect(display.contentWidth - 100, 100, 200, 200)
-		sceneGroup:insert(swapBox)
-
-		function swapBrick(event)
-			--code to switch out the bricks
-			if(purcasedBlock == 1) then 
-			end
-		end
-		swapBox:addEventListener("tap", swapBrick)
+		--
 
 	elseif ( phase == "did" ) then
 
+		params.level=params.level+1;
 		local function newGun (guntype)
 			local gun;
 			if (guntype == "pistol") then
@@ -313,17 +327,16 @@ function scene:show( event )
 		---------------Next Scene-----------------
 		local function next ()
 			params.wall=wall;
-
 			local sceneOpt = {
 				effect = "fade",
 				time = 800,
 				params = params
 			}
-			audio.stop(bgDay)
+			audio.stop(1)			
 			composer.gotoScene( "night", sceneOpt);
 		end
 
-		local BlockTrans;
+		--local BlockTrans;
 		local function checkRayCast(  )
 			transition.cancel(BlockTrans);
 			local hits,hits2,hits3,hits4;
@@ -376,7 +389,7 @@ function scene:show( event )
 						local child=currentBlock[i];
 						child.y=child.y+70;
 					end
-				    BlockTrans = transition.to( currentBlock, {time=1, delay=250, y=currentBlock.y+70, onComplete=checkRayCast} );
+				   BlockTrans = transition.to( currentBlock, {time=1, delay=250, y=currentBlock.y+70, onComplete=checkRayCast} );
 				end			
 		end
 
@@ -392,6 +405,92 @@ function scene:show( event )
 				print ("block is :" .. blockNum);
 				wall:insert( currentBlock );				
 				checkRayCast();
+
+						--switch brick box
+				local swapBox = display.newRect(display.contentWidth - 100, 100, 200, 200)
+				sceneGroup:insert(swapBox)
+
+				function swapBlock(event)
+					print("swappage")
+					 local purchasedBlock = 1
+					--code to switch out the bricks
+					if(purchasedBlock == 1) then 
+						transition.cancel(BlockTrans);
+						--display.remove(event.target)
+						--event.target = nil
+						display.remove(currentBlock)
+						--currentBlock = nil
+						currentBlock = spawnBlock(1)
+						BlockTrans = transition.to( currentBlock, {time=1, delay=250, y=currentBlock.y+70, onComplete=checkRayCast} );
+					elseif(purchasedBlock == 2)then
+						transition.cancel(BlockTrans);
+						--display.remove(event.target)
+						--event.target = nil
+						display.remove(currentBlock)
+						--currentBlock = nil
+						currentBlock = spawnBlock(2)
+						BlockTrans = transition.to( currentBlock, {time=1, delay=250, y=currentBlock.y+70, onComplete=checkRayCast} );
+						spawnBlock(2)
+					elseif(purchasedBlock == 3)then
+						transition.cancel(BlockTrans);
+						--display.remove(event.target)
+						--event.target = nil
+						display.remove(currentBlock)
+						--currentBlock = nil
+						currentBlock = spawnBlock(3)
+						BlockTrans = transition.to( currentBlock, {time=1, delay=250, y=currentBlock.y+70, onComplete=checkRayCast} );
+					elseif(purchasedBlock == 4)then
+						transition.cancel(BlockTrans);
+						--display.remove(event.target)
+						--event.target = nil
+						display.remove(currentBlock)
+						--currentBlock = nil
+						currentBlock = spawnBlock(4)
+						BlockTrans = transition.to( currentBlock, {time=1, delay=250, y=currentBlock.y+70, onComplete=checkRayCast} );
+					elseif(purchasedBlock == 5)then
+						transition.cancel(BlockTrans);
+						--display.remove(event.target)
+						--event.target = nil
+						display.remove(currentBlock)
+						--currentBlock = nil
+						currentBlock = spawnBlock(5)
+						BlockTrans = transition.to( currentBlock, {time=1, delay=250, y=currentBlock.y+70, onComplete=checkRayCast} );
+					elseif(purchasedBlock == 6)then
+						transition.cancel(BlockTrans);
+						--display.remove(event.target)
+						--event.target = nil
+						display.remove(currentBlock)
+						--currentBlock = nil
+						currentBlock = spawnBlock(6)
+						BlockTrans = transition.to( currentBlock, {time=1, delay=250, y=currentBlock.y+70, onComplete=checkRayCast} );
+					elseif(purchasedBlock == 7)then
+						transition.cancel(BlockTrans);
+						--display.remove(event.target)
+						--event.target = nil
+						display.remove(currentBlock)
+						--currentBlock = nil
+						currentBlock = spawnBlock(7)
+						BlockTrans = transition.to( currentBlock, {time=1, delay=250, y=currentBlock.y+70, onComplete=checkRayCast} );
+					elseif(purchasedBlock == 8)then
+						transition.cancel(BlockTrans);
+						--display.remove(event.target)
+						--event.target = nil
+						display.remove(currentBlock)
+						--currentBlock = nil
+						currentBlock = spawnBlock(8)
+						BlockTrans = transition.to( currentBlock, {time=1, delay=250, y=currentBlock.y+70, onComplete=checkRayCast} );
+					elseif(purchasedBlock == 9)then
+						transition.cancel(BlockTrans);
+						--display.remove(event.target)
+						--event.target = nil
+						display.remove(currentBlock)
+						--currentBlock = nil
+						currentBlock = spawnBlock(9)
+						BlockTrans = transition.to( currentBlock, {time=1, delay=250, y=currentBlock.y+70, onComplete=checkRayCast} );
+					end
+				end
+				swapBox:addEventListener("tap", swapBlock)
+
 			else
 				next();
 			end

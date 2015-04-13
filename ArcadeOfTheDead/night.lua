@@ -56,10 +56,9 @@ function scene:show( event )
 
 	if ( phase == "will" ) then
 		--begin music as scene loads 
-		--local bgNight = audio.loadStream("sounds/night.mp3")
-		--sceneGroup:insert(bgNight)
-		--audio.setMaxVolume(0.045, {channel = 1})
-		--local backGroundChan = audio.play(bgNight, {channel = 1, loops = -1, fadein = 500})
+		local bgNight = audio.loadStream("sounds/night.mp3")
+		audio.setMaxVolume(0.045, {channel = 1})
+		local backGroundChan = audio.play(bgNight, {channel = 1, loops = -1, fadein = 500})
 
 	elseif ( phase == "did" ) then	
 		physics.start();
@@ -162,6 +161,7 @@ function scene:show( event )
 								time = 800,
 								params = params
 							}
+							audio.stop(1)
 							timer.performWithDelay( 500, 
 								function () composer.gotoScene( "shop", sceneOpt);	end,1 );							
 						end
@@ -174,6 +174,9 @@ function scene:show( event )
 					if(life > 0)then
 						showHearts();
 					else
+						local scream = audio.loadSound("sounds/scream.mp3")
+						audio.play(scream, {channel = 17})
+						audio.setMaxVolume(0.20, {channel = 17})
 						gameOver();
 					end
 					event.target.pp:hit();
@@ -182,13 +185,15 @@ function scene:show( event )
 		end
 		--handler for the game ending
 		function gameOver (event)	
+
 			removeStuff();
 			local sceneOpt = {
 				effect = "fade",
 				time = 800,
 				params = params
 			}
-			audio.stop(bgNight)
+			audio.stop(17)
+			audio.stop(1)
 			composer.gotoScene( "GameOver", sceneOpt);
 		end	
 		--make the zmobie move

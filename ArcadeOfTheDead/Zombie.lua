@@ -13,6 +13,10 @@ function Zombie:new (o)
 end
 
 function Zombie:spawn( spriteSheet)
+	local growl = audio.loadSound("sounds/zombie.mp3")
+	audio.play(growl, {channel = 10})
+	audio.setMaxVolume(0.10, {channel = 10})
+
 	local zombieSeqData = {
 		{name = "walk", start=19, count= 8, time = 400}
 	}
@@ -24,9 +28,7 @@ function Zombie:spawn( spriteSheet)
 	self.shape.anchorY = 100;
 	self.shape:setSequence( "walk" );
 	self.shape:play();
-	local growl = audio.loadSound("sounds/zombie.mp3")
-	audio.play(growl, {channel = 10})
-	audio.setMaxVolume(0.10, {channel = 10})
+	audio.stop(10)
 	return self.shape;
 end
 
