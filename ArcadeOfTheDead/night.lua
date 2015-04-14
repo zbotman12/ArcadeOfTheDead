@@ -18,6 +18,7 @@ local physics = require("physics");
 local CollisionFilters = require("CollisionFilters");
 local scene = composer.newScene();
 local params,gun;
+local zombieTable={};
 local orphans={};
 
 --scene:create
@@ -239,15 +240,18 @@ function scene:show( event )
 			    test = transition.to( zombie, {time=self.fT, delay=1, y=zombie.y+100, onComplete=go} );
 			end
 		end
-		--make a new zmobie 
+
+		-----------SPAWN ZOMBIES-------------------
+		local i = 0;
 		function spawnZombie( x, y )
-			local zombie = Zombie:new({xPos=x, yPos=y}); table.insert(orphans, zombie);
-			zombie:spawn(params.spriteSheet);
+			i = i + 1;
+			zombieTable[i] = Zombie:new({xPos=x, yPos=y});
+			zombieTable[i]:spawn(params.spriteSheet);
 			local test = {-30,-50,-30,50,30,50,30,-50};
-			physics.addBody( zombie.shape , "dynamic", {filter=CollisionFilters.zombie, shape=test} );
-			sceneGroup:insert( zombie.shape );
-			zombie.shape:addEventListener( "collision", zombieAttackBrick );				
-			moveZombie(zombie.shape);
+			physics.addBody( zombieTable[i].shape , "dynamic", {filter=CollisionFilters.zombie, shape=test} );
+			sceneGroup:insert( zombieTable[i].shape );
+			zombieTable[i].shape:addEventListener( "collision", zombieAttackBrick );				
+			moveZombie(zombieTable[i].shape);
 		end
 		--put random zombie into play
 		function spawnRandomZombie(  )
@@ -317,7 +321,10 @@ function scene:show( event )
 					transition.cancel( orphans[i] );
 					display.remove(orphans[i]);					
 				end
-			end				
+			end		
+			for i = 1, #zombieTable do
+				zombieTable[i]:hit();
+			end						
 			--remove groups		
 			display.remove( heroGuy );
 			display.remove( heartGroup );
@@ -339,6 +346,9 @@ function scene:show( event )
 end
 
 --scene:hide
+function scene:hide(event)
+	
+end
 --scene:destroy
 
 
