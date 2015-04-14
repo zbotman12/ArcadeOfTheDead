@@ -467,7 +467,7 @@ function scene:show( event )
 					
 		end
 
-		local blockCounter =3;
+		local blockCounter =1;
 		function spawnNewBlock( num )
 			if(blockCounter > 0) then
 				blockCounter = blockCounter - 1;
