@@ -72,7 +72,8 @@ function scene:show( event )
 
 		-----------Cross over line------------------
 		local width = display.contentHeight - (display.contentHeight-180);
-		crossLine = display.newRect( sceneGroup, 0, 1050, display.contentWidth, 5 ); table.insert( orphans, crossline );
+		crossLine = display.newRect( sceneGroup, 0, 1050, display.contentWidth, 5 ); 
+		table.insert( orphans, crossline );
 		crossLine.anchorX=0; crossLine.anchorY=0;
 		physics.addBody( crossLine, "static", {filters=CollisionFilters.crossLine} );
 		crossLine:setFillColor( 0,0,0,0.1 );
@@ -321,6 +322,7 @@ function scene:show( event )
 			--remove groups		
 			display.remove( heroGuy );
 			display.remove( heartGroup );
+			display.remove( crossLine );
 			if(isGameOver==true)then
 				for i=1,params.wall.numChildren do
 					local child=params.wall[i];

@@ -14,9 +14,7 @@ local sidebarRight;
 local sidebarLeft;
 local leftArrow;
 local rightArrow;
-
-
-
+local orphans={};
 
 --scene:create
 function scene:create( event )
@@ -55,7 +53,7 @@ function scene:show( event )
 
 		physics.start();
 		physics.setGravity(0,0);
-		--physics.setDrawMode( "hybrid" );
+		physics.setDrawMode( "hybrid" );
 		
 		--make a brick
 		function spawnBrick( x, y, group )
@@ -200,25 +198,29 @@ function scene:show( event )
 
 		-----------Cross over line------------------
 		local height = display.contentHeight - (display.contentHeight-180);
-		crossLine = display.newRect( sceneGroup, 0, 1050, display.contentWidth, 5 );
+		crossLine = display.newRect( sceneGroup, 0, 1050, display.contentWidth, 5 ); 
+		table.insert( orphans, crossline );
 		crossLine.anchorX=0; crossLine.anchorY=0;
 		physics.addBody( crossLine, "static", {filters=CollisionFilters.crossLine} );
 		crossLine:setFillColor( 0,0,0,0.1 );
 
 		-----------Side Bar Right--------------------
-		sidebarRight = display.newRect(sceneGroup, display.contentWidth-5, 0, 5, display.contentHeight);
+		sidebarRight = display.newRect(sceneGroup, display.contentWidth-5, 0, 5, display.contentHeight); 
+		table.insert( orphans, sidebarRight );
 		sidebarRight.anchorX=0; sidebarRight.anchorY=0;
 		physics.addBody( sidebarRight, "static" );
 		sidebarRight:setFillColor( 0,0,0,0.1 );
 
 		-----------Side Bar Left--------------------
-		sidebarLeft = display.newRect(sceneGroup, 0, 0, 5, display.contentHeight);
+		sidebarLeft = display.newRect(sceneGroup, 0, 0, 5, display.contentHeight); 
+		table.insert( orphans, sidebarLeft );
 		sidebarLeft.anchorX=0; sidebarLeft.anchorY=0;
 		physics.addBody( sidebarLeft, "static" );
 		sidebarLeft:setFillColor( 0,0,0,0.1 );
 
 		----------LEFT ARROW---------------------
-		leftArrow = display.newSprite( params.spriteSheet, {{name = "leftarrow", frames={17}}} );
+		leftArrow = display.newSprite( params.spriteSheet, {{name = "leftarrow", frames={17}}} ); 
+		table.insert( orphans, leftArrow );
 		leftArrow.anchorX=0; leftArrow.anchorY=0;
 		leftArrow.x = 0; leftArrow.y = display.contentHeight-180;
 		leftArrow:scale( 0.75, 0.75 );
@@ -227,7 +229,8 @@ function scene:show( event )
 		leftArrow:setSequence( "leftarrow" );
 
 		----------RIGHT ARROW---------------------
-		rightArrow = display.newSprite( params.spriteSheet, {{name = "rightarrow", frames={18}}} );
+		rightArrow = display.newSprite( params.spriteSheet, {{name = "rightarrow", frames={18}}} ); 
+		table.insert( orphans, rightArrow );
 		rightArrow.anchorX=0; rightArrow.anchorY=0;
 		rightArrow.x = display.contentWidth-150;
 		rightArrow.y = display.contentHeight-180;
@@ -367,10 +370,10 @@ function scene:show( event )
 		  		{name = "idle", frames={30}}
 			};
 		end		
-		local playerSpt = display.newSprite(params.spriteSheet, playerSeqData )
+		local playerSpt = display.newSprite(params.spriteSheet, playerSeqData ); table.insert( orphans, playerSpt );
 		playerSpt:setSequence( "idle" );
 		local gun = newGun(params.gunType);
-		local gunSpt = gun:spawn(params.spriteSheet,params.hero);
+		local gunSpt = gun:spawn(params.spriteSheet,params.hero); table.insert( orphans, gunSpt );
 		heroGuy:insert(playerSpt);
 		heroGuy:insert(gunSpt);
 		heroGuy.x = display.contentCenterX;
@@ -382,9 +385,15 @@ function scene:show( event )
 		local function next ()
 			switchingScenes=true;
 			display.remove( heroGuy );
+			display.remove( crossLine );
 			params.heroGuy=heroGuy;
-			display.remove( leftArrow );
-			display.remove( rightArrow );
+			for i, v in ipairs(orphans) do
+				if(orphans[i] ~= nil) then
+					--print(orphans[i]);
+					transition.cancel( orphans[i] );
+					display.remove(orphans[i]);					
+				end
+			end	
 			params.newGame=false;
 			local sceneOpt = {
 				effect = "fade",
@@ -508,7 +517,7 @@ function scene:show( event )
 				blockPicData={{name = "block9", frames={68}}};
 			end
 
-			blockPic= display.newSprite( params.spriteSheet, blockPicData );
+			blockPic= display.newSprite( params.spriteSheet, blockPicData ); table.insert( orphans, blockPic );
 			blockPic.x=display.contentWidth-90; blockPic.y=90;
 			blockPic:toBack( );
 			sceneGroup:insert( blockPic );
@@ -516,7 +525,7 @@ function scene:show( event )
 
 		-----SWAP BUTTON CIRCLE--------------		
 		local swapData={{name = "swapBtn", frames={59}}};
-		local swapBtn = display.newSprite( params.spriteSheet, swapData );
+		local swapBtn = display.newSprite( params.spriteSheet, swapData ); table.insert( orphans, swapBtn );
 		swapBtn.x=display.contentWidth-90; swapBtn.y=90;
 		swapBtn.alpha=0.5;
 		swapBtn:toBack( );
