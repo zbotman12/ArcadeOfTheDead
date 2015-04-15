@@ -10,6 +10,7 @@ local CollisionFilters = require("CollisionFilters");
 local currentBlock=nil;
 local params;
 local crossLine;
+local topCrossLine;
 local sidebarRight;
 local sidebarLeft;
 local leftArrow;
@@ -37,7 +38,6 @@ function scene:show( event )
 	local shiftNum = 0;	
 	local swappedOut=false;	
 	local switchingScenes=false;
-	print(params.newGame);
 	if(params.newGame==false)then
 		sceneGroup:insert(params.wall);	
 	else
@@ -204,6 +204,13 @@ function scene:show( event )
 		physics.addBody( crossLine, "static", {filters=CollisionFilters.crossLine} );
 		crossLine:setFillColor( 0,0,0,0.1 );
 
+		------------WALL HEIGHT LIMIT----------------
+		topCrossLine = display.newRect( sceneGroup, 0, display.contentCenterX, display.contentWidth, 5 );
+		table.insert( orphans, topCrossLine );
+		topCrossLine.anchorX=0; topCrossLine.anchorY=0;
+		physics.addBody( topCrossLine, "static", {filters=CollisionFilters.crossline} );
+		topCrossLine:setFillColor( 0,0,0,0.1 );
+
 		-----------Side Bar Right--------------------
 		sidebarRight = display.newRect(sceneGroup, display.contentWidth-5, 0, 5, display.contentHeight); 
 		table.insert( orphans, sidebarRight );
@@ -369,6 +376,10 @@ function scene:show( event )
 			playerSeqData = {
 		  		{name = "idle", frames={30}}
 			};
+		elseif(params.hero=="Mario")then
+			playerSeqData = {
+		  		{name = "idle", frames={70}}
+			};
 		end		
 		local playerSpt = display.newSprite(params.spriteSheet, playerSeqData ); table.insert( orphans, playerSpt );
 		playerSpt:setSequence( "idle" );
@@ -406,12 +417,24 @@ function scene:show( event )
 	
 		-----------ADD PHYSICS TO BRICKS----------------
 		function addPhysicsToBricks(  )
+			physics.addBody( topCrossLine, "static", {filters=CollisionFilters.crossline} );
 			for i=1,currentBlock.numChildren do
 				local child=currentBlock[i];
 				physics.addBody( child, "static", {filter=CollisionFilters.brick} );
 			end
-			spawnNewBlock();
+			timer.performWithDelay(100, 
+				function() spawnNewBlock(); end);
 		end
+
+		--------CHECK WALL HEIGHT EVENT LISTENER-----------	
+		function checkWallHeight( event )
+			if(event.phase=="began")then
+				print("hit");
+				event.other.pp:hit();
+			end
+		end
+		topCrossLine:addEventListener( "collision", checkWallHeight );
+
 		-----------MOVE BLOCK DOWN--------------
 		local function checkRayCast(  )
 			transition.cancel(currentBlock);
@@ -467,8 +490,9 @@ function scene:show( event )
 					
 		end
 
-		local blockCounter =1;
+		local blockCounter =7;
 		function spawnNewBlock( num )
+			physics.removeBody( topCrossLine );
 			if(blockCounter > 0) then
 				blockCounter = blockCounter - 1;
 				local blockNum = math.random( 1,7 );

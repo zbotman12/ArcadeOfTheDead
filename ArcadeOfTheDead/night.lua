@@ -29,7 +29,6 @@ function scene:create( event )
 	bg.anchorX=0; bg.anchorY=0;
     bg:toBack();
     sceneGroup:insert( bg );
-	print(params.newGame);
 end
 
 
@@ -97,6 +96,10 @@ function scene:show( event )
 		elseif(params.hero=="Link")then
 			playerSeqData = {
 		  		{name = "idle", frames={30}}
+			};
+		elseif(params.hero=="Mario")then
+			playerSeqData = {
+		  		{name = "idle", frames={70}}
 			};
 		end		
 		local playerSpt = display.newSprite(params.spriteSheet, playerSeqData ); table.insert( orphans, playerSpt );

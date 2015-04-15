@@ -711,7 +711,21 @@ function scene:show( event )
 		local square9 = display.newRect(sceneGroup, 600,rowY-155,220,240);
 		square9:setFillColor( 0,0,0,.6 );
 
-		-------------MARIO---------------------
+		-------------MARIO------------------------------
+		local playerSeqData = {
+	  		{name = "idle", frames={70}}
+		};		
+		local playerSpt = display.newSprite(params.spriteSheet, playerSeqData);
+		local gun = Pistol:new();
+		local gunSpt = gun:spawn(params.spriteSheet);
+		mario = display.newGroup( );
+		mario.x=120;
+		mario.y = rowY-155;
+		mario:insert(playerSpt);
+		mario:insert(gunSpt);
+		sceneGroup:insert( mario );
+		mario:scale( 1.5, 1.5 );
+
 		local buyBtn7 = widget.newButton(
 		    {
 		        x = 120,

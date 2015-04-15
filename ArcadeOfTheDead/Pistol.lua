@@ -29,11 +29,6 @@ function Pistol:spawn(spriteSheet, costume)
 	  		{name = "idle", frames={40}},
 	  		{name = "shoot", start=40, count= 9, time = 200}
 		}
-	elseif(costume=="Mario")then
-		pistolSeqData = {
-	  		{name = "idle", frames={40}},
-	  		{name = "shoot", start=40, count= 9, time = 200}
-		}
 	else
 		pistolSeqData = {
 	  		{name = "idle", frames={7}},
