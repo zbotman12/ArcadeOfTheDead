@@ -18,6 +18,7 @@ local params;
 function scene:create( event )
 	local sceneGroup = self.view
 	params = event.params
+	params.ticketNum = params.ticketNum + 3000;
 	local bg = display.newImage ("images/ShopBG.png");
 	bg.anchorX=0; bg.anchorY=0;
     bg:toBack();

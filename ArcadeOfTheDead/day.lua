@@ -53,7 +53,7 @@ function scene:show( event )
 
 		physics.start();
 		physics.setGravity(0,0);
-		physics.setDrawMode( "hybrid" );
+		--physics.setDrawMode( "hybrid" );
 		
 		--make a brick
 		function spawnBrick( x, y, group )
@@ -490,7 +490,7 @@ function scene:show( event )
 					
 		end
 
-		local blockCounter =7;
+		local blockCounter =math.random(2,3);
 		function spawnNewBlock( num )
 			physics.removeBody( topCrossLine );
 			if(blockCounter > 0) then

@@ -20,6 +20,7 @@ local scene = composer.newScene();
 local params,gun;
 local zombieTable={};
 local orphans={};
+local ticketImg;
 
 --scene:create
 function scene:create( event )
@@ -262,8 +263,8 @@ function scene:show( event )
 			spawnZombie((math.random(0,9) * 70) + 10,100) ;
 		end
 
-		local totalNumZombies = 7;
-		zombiesToKill = 7;
+		local totalNumZombies = params.level * math.random(5, 10);
+		zombiesToKill = totalNumZombies;
 		function spawnZombieHorde( )
 			spawnRandomZombie();
 			totalNumZombies = totalNumZombies -1;
@@ -288,7 +289,7 @@ function scene:show( event )
 		end
 
 		local ticketData={{name = "ticket", frames={58}}};
-		local ticketImg = display.newSprite( params.spriteSheet, ticketData ); table.insert( orphans, ticketImg );
+		ticketImg = display.newSprite( params.spriteSheet, ticketData ); table.insert( orphans, ticketImg );
 		ticketImg.x=10; ticketImg.y=5;
 		ticketImg.anchorX=0; ticketImg.anchorY=0;
 		sceneGroup:insert( ticketImg );
@@ -333,6 +334,8 @@ function scene:show( event )
 			display.remove( heroGuy );
 			display.remove( heartGroup );
 			display.remove( crossLine );
+			display.remove( ticketImg );
+			display.remove( ticketText );
 			if(isGameOver==true)then
 				for i=1,params.wall.numChildren do
 					local child=params.wall[i];
