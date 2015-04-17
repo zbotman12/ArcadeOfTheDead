@@ -208,8 +208,8 @@ function scene:show( event )
 		topCrossLine = display.newRect( sceneGroup, 0, display.contentCenterX, display.contentWidth, 5 );
 		table.insert( orphans, topCrossLine );
 		topCrossLine.anchorX=0; topCrossLine.anchorY=0;
-		physics.addBody( topCrossLine, "static", {filters=CollisionFilters.crossline} );
-		topCrossLine:setFillColor( 0,0,0,0.1 );
+		--physics.addBody( topCrossLine, "static", {filters=CollisionFilters.crossline} );
+		topCrossLine:setFillColor( 1,0,0);
 
 		-----------Side Bar Right--------------------
 		sidebarRight = display.newRect(sceneGroup, display.contentWidth-5, 0, 5, display.contentHeight); 
@@ -417,23 +417,23 @@ function scene:show( event )
 	
 		-----------ADD PHYSICS TO BRICKS----------------
 		function addPhysicsToBricks(  )
-			physics.addBody( topCrossLine, "static", {filters=CollisionFilters.crossline} );
-			for i=1,currentBlock.numChildren do
-				local child=currentBlock[i];
-				physics.addBody( child, "static", {filter=CollisionFilters.brick} );
+			--check wall height
+			if(currentBlock.y <= display.contentCenterX) then
+				local function deleteBlock(  )
+					display.remove( currentBlock );
+				end
+				timer.performWithDelay( 255, deleteBlock,1);
+			else
+				for i=1,currentBlock.numChildren do
+					local child=currentBlock[i];
+					physics.addBody( child, "static", {filter=CollisionFilters.brick} );
+				end
 			end
-			timer.performWithDelay(100, 
-				function() spawnNewBlock(); end);
-		end
 
-		--------CHECK WALL HEIGHT EVENT LISTENER-----------	
-		function checkWallHeight( event )
-			if(event.phase=="began")then
-				print("hit");
-				event.other.pp:hit();
-			end
+			timer.performWithDelay(300, 
+					function() spawnNewBlock(); end);
+			
 		end
-		topCrossLine:addEventListener( "collision", checkWallHeight );
 
 		-----------MOVE BLOCK DOWN--------------
 		local function checkRayCast(  )
@@ -492,7 +492,6 @@ function scene:show( event )
 
 		local blockCounter =math.random(2,3);
 		function spawnNewBlock( num )
-			physics.removeBody( topCrossLine );
 			if(blockCounter > 0) then
 				blockCounter = blockCounter - 1;
 				local blockNum = math.random( 1,7 );
