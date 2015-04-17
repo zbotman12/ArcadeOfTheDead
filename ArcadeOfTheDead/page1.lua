@@ -16,14 +16,14 @@ local params;
 
 --locals
 local equipBtn, unequipBtn;
-local equipBtn2, unequipBtn2;
-local equipBtn3, unequipBtn3;
-local equipBtn4, unequipBtn4;
-local equipBtn5, unequipBtn5;
-local equipBtn6, unequipBtn6;
-local equipBtn7, unequipBtn7;
-local equipBtn8, unequipBtn8;
-local equipBtn9, unequipBtn9;
+local equipBtn2, unequipBtn2, buyBtn2;
+local equipBtn3, unequipBtn3, buyBtn3;
+local equipBtn4, unequipBtn4, buyBtn4;
+local equipBtn5, unequipBtn5, buyBtn5;
+local equipBtn6, unequipBtn6, buyBtn6;
+local equipBtn7, unequipBtn7, buyBtn7;
+local equipBtn8, unequipBtn8, buyBtn8;
+local equipBtn9, unequipBtn9, buyBtn9;
 
 --scene:create
 function scene:create( event )
@@ -50,7 +50,7 @@ function scene:show( event )
 	local blockHealth = 0;
 	local totalNumOfBricks = 0;
 	local repairCost=0;
-	local kirby,link,megaMan;
+	local kirby,link,megaMan,newThingToEquip;
 
 	if ( phase == "will" ) then
 		--music for the backgroud
@@ -61,35 +61,61 @@ function scene:show( event )
 		print(params.gunType);
 		print(params.purchasedBlock);
 		--------REMOVE EQUIPPED ITEM----------
-		local function removeEquip( isThingEquipped )
-			if(isThingEquipped == "Equip") then
-				equipBtn.isVisible = true;
-				unequipBtn.isVisible = false;
-			elseif (isThingEquipped== "Equip2") then
-				equipBtn2.isVisible = true;
-				unequipBtn2.isVisible = false;
-			elseif (isThingEquipped == "Equip3") then
-				equipBtn3.isVisible = true;
-				unequipBtn3.isVisible = false;
-			elseif (isThingEquipped == "Equip4") then
-				equipBtn4.isVisible = true;
-				unequipBtn4.isVisible = false;
-			elseif (isThingEquipped == "Equip5") then
-				equipBtn5.isVisible = true;
-				unequipBtn5.isVisible = false;
-			elseif (isThingEquipped == "Equip6") then
-				equipBtn6.isVisible = true;
-				unequipBtn6.isVisible = false;
-			elseif (isThingEquipped == "Equip7") then
-				equipBtn7.isVisible = true;
-				unequipBtn7.isVisible = false;
-			elseif (isThingEquipped == "Equip8") then
-				equipBtn8.isVisible = true;
-				unequipBtn8.isVisible = false;
-			elseif (isThingEquipped == "Equip9") then
-				equipBtn9.isVisible = true;
-				unequipBtn9.isVisible = false;
-			end
+		local function removeEquip( isThingEquipped, newThingToEquip )
+			if(newThingToEquip=="Equip") or (newThingToEquip=="Equip2") or (newThingToEquip=="Equip3")then
+				if(isThingEquipped == "Equip") then
+					equipBtn.isVisible = true;
+					unequipBtn.isVisible = false;
+				elseif (isThingEquipped== "Equip2") then
+					equipBtn2.isVisible = true;
+					unequipBtn2.isVisible = false;
+				elseif (isThingEquipped == "Equip3") then
+					equipBtn3.isVisible = true;
+					unequipBtn3.isVisible = false;
+				else
+					unequipBtn.isVisible=false;					
+					equipBtn.isVisible=true;
+					if (buyBtn2.isVisible~=true) then
+						unequipBtn2.isVisible=false;
+						equipBtn2.isVisible=true;
+					end
+					if (buyBtn3.isVisible~=true) then
+						unequipBtn3.isVisible=false;
+						equipBtn3.isVisible=true;
+					end
+				end
+			else
+				if (isThingEquipped == "Equip4") then
+					equipBtn4.isVisible = true;
+					unequipBtn4.isVisible = false;
+				elseif (isThingEquipped == "Equip5") then
+					equipBtn5.isVisible = true;
+					unequipBtn5.isVisible = false;
+				elseif (isThingEquipped == "Equip6") then
+					equipBtn6.isVisible = true;
+					unequipBtn6.isVisible = false;
+				elseif (isThingEquipped == "Equip7") then
+					equipBtn7.isVisible = true;
+					unequipBtn7.isVisible = false;
+				else
+					if(buyBtn4.isVisible~=true)then
+						unequipBtn4.isVisible=false;
+						equipBtn4.isVisible=true;
+					end
+					if(buyBtn5.isVisible~=true)then
+						unequipBtn5.isVisible=false;
+						equipBtn5.isVisible=true;
+					end
+					if(buyBtn6.isVisible~=true)then
+						unequipBtn6.isVisible=false;
+						equipBtn6.isVisible=true;
+					end
+					if(buyBtn7.isVisible~=true)then
+						unequipBtn7.isVisible=false;
+						equipBtn7.isVisible=true;
+					end
+				end
+			end			
 		end
 
 		---------EQUIP ITEMS-------------------
@@ -99,8 +125,8 @@ function scene:show( event )
 			audio.play(equipz, {channel = 3})
 			audio.setMaxVolume(1, {channel = 3})
 
-
-			removeEquip(isThingEquipped);
+			newThingToEquip = event.target.id;
+			removeEquip(isThingEquipped,newThingToEquip);
 			isThingEquipped = event.target.id;
 			if(event.target.id == "Equip") then
 				event.target.isVisible = false
@@ -346,7 +372,7 @@ function scene:show( event )
 		shotGunText:setFillColor( 1,.5,0 );
 		sceneGroup:insert(shotGunText);
 
-		local buyBtn2 = widget.newButton(
+		buyBtn2 = widget.newButton(
 		    {
 		        x = 360,
 		        y = rowY,    
@@ -417,7 +443,7 @@ function scene:show( event )
 		machineGunText:setFillColor( 1,.5,0 );
 		sceneGroup:insert(machineGunText);
 
-		local buyBtn3 = widget.newButton(
+		buyBtn3 = widget.newButton(
 		    {
 		        x = 600,
 		        y = rowY,    
@@ -509,7 +535,7 @@ function scene:show( event )
 		sceneGroup:insert( kirby );
 		kirby:scale( 1.5, 1.5 );
 
-		local buyBtn4 = widget.newButton(
+		buyBtn4 = widget.newButton(
 		    {
 		        x = 120,
 		        y = rowY,    
@@ -578,7 +604,7 @@ function scene:show( event )
 		sceneGroup:insert( link );
 		link:scale( 1.5, 1.5 );
 
-		local buyBtn5 = widget.newButton(
+		buyBtn5 = widget.newButton(
 		    {
 		        x = 360,
 		        y = rowY,    
@@ -647,7 +673,7 @@ function scene:show( event )
 		sceneGroup:insert( megaMan );
 		megaMan:scale( 1.5, 1.5 );
 
-		local buyBtn6 = widget.newButton(
+		buyBtn6 = widget.newButton(
 		    {
 		        x = 600,
 		        y = rowY,    
@@ -726,7 +752,7 @@ function scene:show( event )
 		sceneGroup:insert( mario );
 		mario:scale( 1.5, 1.5 );
 
-		local buyBtn7 = widget.newButton(
+		buyBtn7 = widget.newButton(
 		    {
 		        x = 120,
 		        y = rowY,    
@@ -788,7 +814,7 @@ function scene:show( event )
 		heart:scale( 3, 3 );
 		sceneGroup:insert( heart );
 
-		local buyBtn8 = widget.newButton(
+		buyBtn8 = widget.newButton(
 		    {
 		        x = 360,
 		        y = rowY,    
@@ -830,7 +856,7 @@ function scene:show( event )
 		repairText:setFillColor( 1,.5,0 );
 		sceneGroup:insert(repairText);
 
-		local buyBtn9 = widget.newButton(
+		buyBtn9 = widget.newButton(
 		    {
 		        x = 600,
 		        y = rowY,    
