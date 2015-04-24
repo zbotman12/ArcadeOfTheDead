@@ -13,12 +13,13 @@ local composer = require( "composer" );
 local widget = require("widget");
 local scene = composer.newScene();
 local params;
+local buyBtn, buyBtn2, buyBtn3, buyBtn4, buyBtn5, buyBtn6, buyBtn7, buyBtn8, buyBtn9, continueBtn, nextPageBtn;
+local moneyAvailable;
 
 --scene:create
 function scene:create( event )
 	local sceneGroup = self.view
-	params = event.params
-	params.ticketNum = params.ticketNum + 3000;
+	params = event.params;
 	local bg = display.newImage ("images/ShopBG.png");
 	bg.anchorX=0; bg.anchorY=0;
     bg:toBack();
@@ -30,17 +31,16 @@ function scene:show( event )
 	local sceneGroup = self.view;
 	local phase = event.phase;
 	local purchasedBlock=0;
-	local moneyAvailable;
 	local isThingBought=false;
-	local buyBtn, buyBtn2, buyBtn3, buyBtn4, buyBtn5, buyBtn6, buyBtn7, buyBtn8, buyBtn9;
 	local refund=0;
-
-
-	if ( phase == "will" ) then
-
+	
+	if (event.phase == " will") then 
+		print("in will phase");
+	elseif ( event.phase == "did" ) then
+		print("in did phase")
 		--music for the backgroud
 		local bgShop = audio.loadStream("sounds/shoply.mp3")
-		audio.setMaxVolume(.015, {channel = 1})
+		audio.setMaxVolume(.15, {channel = 1})
 		local backGroundChan = audio.play(bgShop, {channel = 1, loops = -1, fadein = 500})
 
 		local function reshowBuyBtn( isThingBought )
@@ -171,11 +171,6 @@ function scene:show( event )
 
 		local yTack = ((display.contentCenterY * 2) - 342)/3;
 
-		--sceneGroup:insert(currentlyEquiptedShit)
-		--ticket parameters to pass from scene to scene
-		if(params.ticketNum==nil)then
-			params.ticketNum=10000;
-		end
 
 		local blackBox = display.newRect( sceneGroup, display.contentCenterX-3, display.contentCenterY+600, 300, 75 );
 		blackBox:setFillColor( 0,0,0,0.7 );
@@ -190,7 +185,7 @@ function scene:show( event )
 		function updateMoney(  )
 			moneyAvailable = display.newText(params.ticketNum, display.contentCenterX+50, display.contentCenterY + 600, CompFont, 100)
 			moneyAvailable:setFillColor( 1,1,1 );
-			sceneGroup:insert(moneyAvailable)
+			sceneGroup:insert(moneyAvailable);
 		end
 		updateMoney();
 		-----ROW 1------
@@ -465,8 +460,19 @@ function scene:show( event )
 			display.remove( square7 );
 			display.remove( square8 );
 			display.remove( square9 );
+			display.remove( buyBtn );
+			display.remove( buyBtn2 );
+			display.remove( buyBtn3 );
+			display.remove( buyBtn4 );
+			display.remove( buyBtn5 );
+			display.remove( buyBtn6 );
+			display.remove( buyBtn7 );
+			display.remove( buyBtn8 );
+			display.remove( buyBtn9 );
 			display.remove( blackBox );
 			display.remove( ticketImg );
+			display.remove( continueBtn );
+			display.remove( nextPageBtn );
 		end
 
 		local function nextScene (event)
@@ -494,7 +500,7 @@ function scene:show( event )
 			composer.gotoScene( "page1", sceneOpt);
 		end
 
-		local continueBtn = widget.newButton(
+		continueBtn = widget.newButton(
 		    {
 		        x = display.contentCenterX,
 		        y = display.contentCenterY - 600,    
@@ -511,7 +517,7 @@ function scene:show( event )
 		continueBtn:setFillColor( 0,0.5,0.5 );
 		sceneGroup:insert( continueBtn );
 
-		local nextPageBtn = widget.newButton(
+		nextPageBtn = widget.newButton(
 		    {
 		        x = display.contentCenterX + 300,
 		        y = display.contentCenterY - 550,    
@@ -524,8 +530,6 @@ function scene:show( event )
 		--nextPageBtn:setFillColor( 0,0.5,0.5 );
 		nextPageBtn:scale( 0.5, 0.5 );
 		sceneGroup:insert( nextPageBtn );
-
-	elseif ( phase == "did" ) then	
 
 	end
 end

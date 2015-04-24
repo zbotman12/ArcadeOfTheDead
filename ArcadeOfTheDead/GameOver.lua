@@ -18,6 +18,7 @@ function scene:create( event )
 	local sceneGroup = self.view
 	params = event.params;
 	params.level=0;
+	params.gunType="pistol";
 	params.purchasedBlock=0;
 	params.ticketNum=0;
 	params.hero=nil;

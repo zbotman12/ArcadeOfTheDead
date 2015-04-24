@@ -31,7 +31,7 @@ function scene:show( event )
 
 	if ( phase == "will" ) then
 		local start = audio.loadSound("sounds/what.mp3");
-		audio.setMaxVolume(.015, {channel = 1});
+		audio.setMaxVolume(.1, {channel = 1});
 		local backGroundChan = audio.play(start, {channel = 1, loops = -1, fadein = 500});
 			
 		local function nextScene (event)
