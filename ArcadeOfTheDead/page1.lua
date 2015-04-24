@@ -141,8 +141,8 @@ function scene:show( event )
 			elseif (event.target.id == "Equip3") then
 				event.target.isVisible = false
 				unequipBtn3.isVisible = true
-				--MACHINE GUN
-				params.gunType="machinegun";
+				--RAY GUN
+				params.gunType="RayGun";
 			elseif (event.target.id == "Equip4") then
 				event.target.isVisible = false
 				unequipBtn4.isVisible = true
@@ -438,10 +438,10 @@ function scene:show( event )
 		unequipBtn2:setFillColor( 1,0,0 );
 		sceneGroup:insert( unequipBtn2 );
 
-		--------------MACHINE GUN------------------------
-		local machineGunText = display.newText("Machine\n Gun", 620, rowY-160, CompFont, 70);
-		machineGunText:setFillColor( 1,.5,0 );
-		sceneGroup:insert(machineGunText);
+		--------------RAY GUN------------------------
+		local RayGunText = display.newText("Ray Gun", 620, rowY-160, CompFont, 70);
+		RayGunText:setFillColor( 1,.5,0 );
+		sceneGroup:insert(RayGunText);
 
 		buyBtn3 = widget.newButton(
 		    {
@@ -457,7 +457,7 @@ function scene:show( event )
 		        onPress = buyMe,
 		    }
 		);
-		if(params.gunType=="machinegun")then
+		if(params.gunType=="RayGun")then
 			buyBtn3.isVisible = false;
 		else
 			buyBtn3.isVisible = true;
@@ -479,7 +479,7 @@ function scene:show( event )
 		        onPress = equipMe,
 		    }
 		);
-		if(params.gunType=="machinegun") or (buyBtn3.isVisible==true)then
+		if(params.gunType=="RayGun") or (buyBtn3.isVisible==true)then
 			equipBtn3.isVisible = false;
 		else
 			equipBtn3.isVisible = true;
@@ -501,7 +501,7 @@ function scene:show( event )
 		        onPress = unequipMe,
 		    }
 		);
-		if(params.gunType=="machinegun")then
+		if(params.gunType=="RayGun")then
 			unequipBtn3.isVisible = true;
 		else
 			unequipBtn3.isVisible = false;

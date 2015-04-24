@@ -12,12 +12,12 @@ local widget = require("widget");
 local Brick = require("Brick");
 local Pistol = require("Pistol");
 local Shotgun = require("Shotgun");
-local MachineGun = require( "MachineGun" );
+local RayGun = require( "RayGun" );
 local Zombie = require("Zombie");
 local physics = require("physics");
 local CollisionFilters = require("CollisionFilters");
 local scene = composer.newScene();
-local params,gun;
+local params,gun, shootTimer;
 local zombieTable={};
 local orphans={};
 local ticketImg;
@@ -51,8 +51,8 @@ function scene:show( event )
 			gun = Pistol:new();
 		elseif(gunType == "shotgun") then
 				gun = Shotgun:new();
-		elseif(gunType == "machinegun") then
-			gun = MachineGun:new();
+		elseif(gunType == "RayGun") then
+			gun = RayGun:new();
 		end
 		return gun;
 	end
@@ -60,7 +60,7 @@ function scene:show( event )
 	if ( phase == "will" ) then
 		--begin music as scene loads 
 		local bgNight = audio.loadStream("sounds/night.mp3");
-		audio.setMaxVolume(0.045, {channel = 1});
+		audio.setMaxVolume(0.1, {channel = 1});
 		local backGroundChan = audio.play(bgNight, {channel = 1, loops = -1, fadein = 500});
 
 	elseif ( phase == "did" ) then	
@@ -116,7 +116,7 @@ function scene:show( event )
 		heroGuy.anchorY=0;
 
 		local function movePlayer( event )			
-				heroGuy.x = event.x;
+			heroGuy.x = event.x;
 				gun:shoot(heroGuy);
 		end
 
@@ -136,12 +136,7 @@ function scene:show( event )
 			audio.stop(bgNight)
 			composer.gotoScene( "GameOver", sceneOpt);
 		end	
-
-		if((gunType == "pistol") or (gunType == "shotgun")) then
 			Runtime:addEventListener("tap", movePlayer);
-		elseif(gunType == "machinegun") then
-			Runtime:addEventListener("touch", movePlayer);
-		end
 
 		Runtime:addEventListener( "accelerometer", reloadGun);
 
@@ -159,7 +154,7 @@ function scene:show( event )
 						time = 800,
 						params = params
 					}
-					composer.gotoScene( "shop", sceneOpt);							
+					--composer.gotoScene( "shop", sceneOpt);							
 					audio.stop(1)
 					timer.performWithDelay( 500, 
 						function () composer.gotoScene( "shop", sceneOpt);	end,1 );							
@@ -313,12 +308,7 @@ function scene:show( event )
 
 		function removeStuff( isGameOver )
 			removingStuff=true;
-			if((gun.tag == "Pistol") or (gun.tag == "Shotgun")) then
 				Runtime:removeEventListener("tap", movePlayer);
-
-			elseif(gun.tag == "MachineGun") then
-				Runtime:removeEventListener("touch", movePlayer);
-			end
 			Runtime:removeEventListener(accelerometer, reloadGun);
 			for i, v in ipairs(orphans) do
 				if(orphans[i] ~= nil) then

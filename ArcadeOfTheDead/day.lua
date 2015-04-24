@@ -4,7 +4,7 @@ local scene = composer.newScene();
 local Brick = require("Brick");
 local Pistol = require("Pistol");
 local Shotgun = require("Shotgun");
-local MachineGun = require( "MachineGun" );
+local RayGun = require( "RayGun" );
 local physics = require("physics");
 local CollisionFilters = require("CollisionFilters");
 local currentBlock=nil;
@@ -14,7 +14,7 @@ local topCrossLine;
 local sidebarRight;
 local sidebarLeft;
 local leftArrow;
-local rightArrow;
+local rightArrow, swapBtn, swapData;
 local orphans={};
 
 --scene:create
@@ -48,7 +48,7 @@ function scene:show( event )
 		--background music
 
 		local bgDay = audio.loadStream("sounds/tetris.mp3")
-		audio.setMaxVolume(.015, {channel = 1})
+		audio.setMaxVolume(.15, {channel = 1})
 		local backGroundChan = audio.play(bgDay, {channel = 1, loops = -1, fadein = 500})
 
 		physics.start();
@@ -209,7 +209,7 @@ function scene:show( event )
 		table.insert( orphans, topCrossLine );
 		topCrossLine.anchorX=0; topCrossLine.anchorY=0;
 		--physics.addBody( topCrossLine, "static", {filters=CollisionFilters.crossline} );
-		topCrossLine:setFillColor( 1,0,0);
+		topCrossLine:setFillColor( 0,0,0,0.1 );
 
 		-----------Side Bar Right--------------------
 		sidebarRight = display.newRect(sceneGroup, display.contentWidth-5, 0, 5, display.contentHeight); 
@@ -351,8 +351,8 @@ function scene:show( event )
 				gun = Pistol:new();
 			elseif(gunType == "shotgun") then
 				gun = Shotgun:new();
-			elseif(guntype == "machinegun") then
-				gun = MachineGun:new();
+			elseif(gunType == "RayGun") then
+				gun = RayGun:new();
 			end
 			return gun;
 		end
@@ -421,6 +421,7 @@ function scene:show( event )
 			if(currentBlock.y <= display.contentCenterX) then
 				local function deleteBlock(  )
 					display.remove( currentBlock );
+					params.ticketNum = params.ticketNum + 100;
 				end
 				timer.performWithDelay( 255, deleteBlock,1);
 			else
@@ -546,23 +547,27 @@ function scene:show( event )
 			sceneGroup:insert( blockPic );
 		end
 
-		-----SWAP BUTTON CIRCLE--------------		
-		local swapData={{name = "swapBtn", frames={59}}};
-		local swapBtn = display.newSprite( params.spriteSheet, swapData ); table.insert( orphans, swapBtn );
-		swapBtn.x=display.contentWidth-90; swapBtn.y=90;
-		swapBtn.alpha=0.5;
-		swapBtn:toBack( );
-		sceneGroup:insert( swapBtn );
+		-----SWAP BUTTON CIRCLE--------------
 
 		function switchBlocks( event )
-			if(params.purchasedBlock~=nil)then							
+			if(params.purchasedBlock ~= 0)then							
 				display.remove( blockPic );
 				swapBtn:removeEventListener( "tap", switchBlocks );	
 				swappedOut=true;	
 			end
 		end
 
-		swapBtn:addEventListener( "tap", switchBlocks );
+		if(params.purchasedBlock~=0)then			
+			swapData={{name = "swapBtn", frames={59}}};
+			swapBtn = display.newSprite( params.spriteSheet, swapData ); table.insert( orphans, swapBtn );
+			swapBtn.x=display.contentWidth-90; swapBtn.y=90;
+			swapBtn.alpha=0.5;
+			swapBtn:toBack( );
+			sceneGroup:insert( swapBtn );
+			swapBtn:addEventListener( "tap", switchBlocks );
+		end
+
+
 	end
 end
 
