@@ -28,11 +28,6 @@ function RayGun:spawn(spriteSheet, costume)
 	  		{name = "idle", frames={40}},
 	  		{name = "shoot", start=40, count= 9, time = 200}
 		}
-	elseif(costume=="Mario")then
-		pistolSeqData = {
-	  		{name = "idle", frames={40}},
-	  		{name = "shoot", start=40, count= 9, time = 200}
-		}
 	else
 		RayGunSeqData = {
 	  		{name = "idle", frames={7}},
@@ -62,9 +57,11 @@ function RayGun:shoot(playerGroup)
 			self.spt:play( );
 		if(self and self.spt~=nil) then
 			timer.performWithDelay( 200, 
-				function () 
-					self.spt:setSequence( "idle" );
-					self.spt:play( );
+				function ()
+					if(self and self.spt~=nil) then 
+						self.spt:setSequence( "idle" );
+						self.spt:play( );
+					end
 				end );
 		end
 		timer.performWithDelay(5, function() physics.addBody (bullet, "kinematic", {filter=CollisionFilters.bullet} ); end );

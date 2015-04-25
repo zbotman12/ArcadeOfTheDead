@@ -98,10 +98,10 @@ local MainSheetOpt =
 	}
 }
 
-local spriteSheet = graphics.newImageSheet( "images/spriteSheet.png", MainSheetOpt );
+local spriteSheet = graphics.newImageSheet( "images/spritesheet.png", MainSheetOpt );
 local level = 0;
 local purchasedBlock = 0;
-local ticketNum = 3000;
+local ticketNum = 0;
 local gunType="pistol";
 local sceneOpt = {
 	effect = "fade",

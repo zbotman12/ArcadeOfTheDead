@@ -4,8 +4,8 @@ if "Win" == system.getInfo( "platformName" ) then
     BlockFont = "3D Thirteen Pixel Fonts";
     CompFont = "Computer Pixel-7";
 elseif "Android" == system.getInfo( "platformName" ) then
-    BlockFont = "3D-Thirteen-Pixel-Fonts"
-    CompFont = "computer_pixel-7"
+    BlockFont = "images/3D-Thirteen-Pixel-Fonts"
+    CompFont = "images/computer_pixel-7"
 end
 
 local composer = require( "composer" );
@@ -271,6 +271,7 @@ function scene:show( event )
 								if(brick.pp~=nil)then
 									brick.pp.HP = 4;
 									brick.pp.shape:setSequence("4");
+									brick.pp.shape:play( );
 								end
 							end
 						end
@@ -439,7 +440,7 @@ function scene:show( event )
 		sceneGroup:insert( unequipBtn2 );
 
 		--------------RAY GUN------------------------
-		local RayGunText = display.newText("Ray Gun", 620, rowY-160, CompFont, 70);
+		local RayGunText = display.newText("Ray\n Gun", 620, rowY-160, CompFont, 70);
 		RayGunText:setFillColor( 1,.5,0 );
 		sceneGroup:insert(RayGunText);
 
@@ -886,6 +887,29 @@ function scene:show( event )
 			display.remove( square7 );
 			display.remove( square8 );
 			display.remove( square9 );
+			display.remove(equipBtn);
+			display.remove(unequipBtn);
+			display.remove(unequipBtn2);
+			display.remove(equipBtn3);
+			display.remove(unequipBtn3);
+			display.remove(equipBtn4);
+			display.remove(unequipBtn4);
+			display.remove(buyBtn4);
+			display.remove(equipBtn5);
+			display.remove(unequipBtn5);
+			display.remove(buyBtn5);
+			display.remove(equipBtn6);
+			display.remove(unequipBtn6);
+			display.remove(buyBtn6);
+			display.remove(equipBtn7);
+			display.remove(unequipBtn7);
+			display.remove(buyBtn7);
+			display.remove(equipBtn8);
+			display.remove(unequipBtn8);
+			display.remove(buyBtn8);
+			display.remove(equipBtn9);
+			display.remove(unequipBtn9);
+			display.remove(buyBtn9);
 			display.remove( blackBox );
 			display.remove( ticketImg );
 		end

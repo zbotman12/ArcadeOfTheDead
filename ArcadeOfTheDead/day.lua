@@ -53,7 +53,7 @@ function scene:show( event )
 
 		physics.start();
 		physics.setGravity(0,0);
-		--physics.setDrawMode( "hybrid" );
+		physics.setDrawMode( "hybrid" );
 		
 		--make a brick
 		function spawnBrick( x, y, group )

@@ -3,8 +3,8 @@ if "Win" == system.getInfo( "platformName" ) then
     BlockFont = "3D Thirteen Pixel Fonts";
     CompFont = "Computer Pixel-7";
 elseif "Android" == system.getInfo( "platformName" ) then
-    BlockFont = "3D-Thirteen-Pixel-Fonts"
-    CompFont = "computer_pixel-7"
+    BlockFont = "images/3D-Thirteen-Pixel-Fonts"
+    CompFont = "images/computer_pixel-7"
 end
 
 local composer = require( "composer" );

@@ -12,7 +12,7 @@ function Zombie:new (o)
 	return o;
 end
 
-function Zombie:spawn( spriteSheet)
+function Zombie:spawn( spritesheet)
 	local growl = audio.loadSound("sounds/zombie.mp3")
 	audio.play(growl, {channel = 10})
 	audio.setMaxVolume(0.10, {channel = 10})
@@ -20,7 +20,7 @@ function Zombie:spawn( spriteSheet)
 	local zombieSeqData = {
 		{name = "walk", start=19, count= 8, time = 400}
 	}
-	self.shape=display.newSprite( spriteSheet, zombieSeqData )
+	self.shape=display.newSprite( spritesheet, zombieSeqData )
 	self.shape.x = self.xPos;self.shape.y = self.yPos;
 	self.shape.pp = self; -- parent object
 	self.shape.tag = self.tag; -- “Zombie”

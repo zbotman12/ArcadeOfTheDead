@@ -66,7 +66,7 @@ function scene:show( event )
 	elseif ( phase == "did" ) then	
 		physics.start();
 		physics.setGravity(0,0);
-		--physics.setDrawMode( "hybrid" );
+		physics.setDrawMode( "hybrid" );
 		if(params.wall~=nil)then			
 			sceneGroup:insert(params.wall);
 		end
